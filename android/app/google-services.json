@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "181568099066",
+    "project_id": "stenofied",
+    "storage_bucket": "stenofied.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:181568099066:android:55b35a521856dbd1c42f43",
+        "android_client_info": {
+          "package_name": "com.example.stenofied"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoAbN4ECc-mcPZcWqCVv8cLmt-po2qZd4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

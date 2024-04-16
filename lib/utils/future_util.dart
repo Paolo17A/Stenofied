@@ -1,0 +1,420 @@
+// ignore_for_file: unnecessary_cast
+
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:stenofied/providers/proof_of_enrollment_provider.dart';
+
+import '../providers/loading_provider.dart';
+import '../providers/user_data_provider.dart';
+import 'navigator_util.dart';
+import 'string_util.dart';
+
+//==============================================================================
+//USERS=========================================================================
+//==============================================================================
+bool hasLoggedInUser() {
+  return FirebaseAuth.instance.currentUser != null;
+}
+
+Future registerNewUser(BuildContext context, WidgetRef ref,
+    {required String userType,
+    required TextEditingController emailController,
+    required TextEditingController passwordController,
+    required TextEditingController confirmPasswordController,
+    required TextEditingController firstNameController,
+    required TextEditingController lastNameController}) async {
+  final scaffoldMessenger = ScaffoldMessenger.of(context);
+  final navigator = Navigator.of(context);
+  try {
+    if (emailController.text.isEmpty ||
+        passwordController.text.isEmpty ||
+        confirmPasswordController.text.isEmpty ||
+        firstNameController.text.isEmpty ||
+        lastNameController.text.isEmpty) {
+      scaffoldMessenger.showSnackBar(
+          const SnackBar(content: Text('Please fill up all given fields.')));
+      return;
+    }
+    if (!emailController.text.contains('@') ||
+        !emailController.text.contains('.com')) {
+      scaffoldMessenger.showSnackBar(
+          const SnackBar(content: Text('Please input a valid email address')));
+      return;
+    }
+    if (passwordController.text != confirmPasswordController.text) {
+      scaffoldMessenger.showSnackBar(
+          const SnackBar(content: Text('The passwords do not match')));
+      return;
+    }
+    if (passwordController.text.length < 6) {
+      scaffoldMessenger.showSnackBar(const SnackBar(
+          content: Text('The password must be at least six characters long')));
+      return;
+    }
+
+    if (ref.read(proofOfEnrollmentProvider).proofOfEnrollmentFile == null) {
+      scaffoldMessenger.showSnackBar(const SnackBar(
+          content: Text('Please upload a proof of enrollment image.')));
+      return;
+    }
+    //  Create user with Firebase Auth
+    ref.read(loadingProvider.notifier).toggleLoading(true);
+    await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailController.text.trim(), password: passwordController.text);
+
+    //  Create new document is Firestore database
+    await FirebaseFirestore.instance
+        .collection(Collections.users)
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .set({
+      UserFields.email: emailController.text.trim(),
+      UserFields.password: passwordController.text,
+      UserFields.firstName: firstNameController.text.trim(),
+      UserFields.lastName: lastNameController.text.trim(),
+      UserFields.userType: userType,
+      UserFields.profileImageURL: '',
+      UserFields.accountVerified: false
+    });
+
+    //  Upload proof of employment to Firebase Storage
+    final storageRef = FirebaseStorage.instance
+        .ref()
+        .child(StorageFields.proofOfEnrollments)
+        .child(FirebaseAuth.instance.currentUser!.uid);
+    final uploadTask = storageRef
+        .putFile(ref.read(proofOfEnrollmentProvider).proofOfEnrollmentFile!);
+    final taskSnapshot = await uploadTask;
+    final String downloadURL = await taskSnapshot.ref.getDownloadURL();
+
+    await FirebaseFirestore.instance
+        .collection(Collections.users)
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .update({
+      UserFields.proofOfEnrollment: downloadURL,
+    });
+
+    scaffoldMessenger.showSnackBar(
+        const SnackBar(content: Text('Successfully registered new user.')));
+    await FirebaseAuth.instance.signOut();
+    ref.read(proofOfEnrollmentProvider).resetProofOfEmployment();
+
+    ref.read(loadingProvider.notifier).toggleLoading(false);
+    if (userType == UserTypes.student) {
+      navigator.pushReplacementNamed(NavigatorRoutes.studentLogin);
+    } else if (userType == UserTypes.teacher) {
+      navigator.pushReplacementNamed(NavigatorRoutes.teacherLogin);
+    }
+  } catch (error) {
+    scaffoldMessenger.showSnackBar(
+        SnackBar(content: Text('Error registering new user: $error')));
+    ref.read(loadingProvider.notifier).toggleLoading(false);
+  }
+}
+
+Future logInUser(BuildContext context, WidgetRef ref,
+    {required String userType,
+    required TextEditingController emailController,
+    required TextEditingController passwordController}) async {
+  final scaffoldMessenger = ScaffoldMessenger.of(context);
+  final navigator = Navigator.of(context);
+  try {
+    if (emailController.text.isEmpty || passwordController.text.isEmpty) {
+      scaffoldMessenger.showSnackBar(
+          const SnackBar(content: Text('Please fill up all given fields.')));
+      return;
+    }
+    ref.read(loadingProvider.notifier).toggleLoading(true);
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text, password: passwordController.text);
+    final userDoc = await getCurrentUserDoc();
+    final userData = userDoc.data() as Map<dynamic, dynamic>;
+
+    //  reset the password in firebase in case client reset it using an email link.
+    if (userData[UserFields.password] != passwordController.text) {
+      await FirebaseFirestore.instance
+          .collection(Collections.users)
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .update({UserFields.password: passwordController.text});
+    }
+
+    if (userData[UserFields.userType] != userType) {
+      emailController.clear();
+      passwordController.clear();
+      ref.read(loadingProvider.notifier).toggleLoading(false);
+      scaffoldMessenger.showSnackBar(SnackBar(
+          content:
+              Text('This log-in is for ${userType.toLowerCase()}s only.')));
+      return;
+    }
+
+    if (userData[UserFields.accountVerified] == false) {
+      scaffoldMessenger.showSnackBar(SnackBar(
+          content:
+              Text('Your account has not yet been verified by the admin.')));
+      ref.read(loadingProvider.notifier).toggleLoading(false);
+      return;
+    }
+    ref.read(loadingProvider.notifier).toggleLoading(false);
+    ref
+        .read(userDataProvider)
+        .setProfileImage(userData[UserFields.profileImageURL]);
+    ref.read(userDataProvider).setUserType(userData[UserFields.userType]);
+    if (userData[UserFields.userType] == UserTypes.student) {
+      navigator.pushNamed(NavigatorRoutes.userHome);
+    } else if (userData[UserFields.userType] == UserTypes.teacher) {
+      navigator.pushNamed(NavigatorRoutes.teacherHome);
+    }
+    if (userData[UserFields.userType] == UserTypes.admin) {
+      navigator.pushNamed(NavigatorRoutes.adminHome);
+    }
+  } catch (error) {
+    scaffoldMessenger
+        .showSnackBar(SnackBar(content: Text('Error logging in: $error')));
+    ref.read(loadingProvider.notifier).toggleLoading(false);
+  }
+}
+
+Future sendResetPasswordEmail(BuildContext context, WidgetRef ref,
+    {required TextEditingController emailController}) async {
+  final scaffoldMessenger = ScaffoldMessenger.of(context);
+  final navigator = Navigator.of(context);
+  if (!emailController.text.contains('@') ||
+      !emailController.text.contains('.com')) {
+    scaffoldMessenger.showSnackBar(
+        const SnackBar(content: Text('Please input a valid email address.')));
+    return;
+  }
+  try {
+    ref.read(loadingProvider.notifier).toggleLoading(true);
+    final filteredUsers = await FirebaseFirestore.instance
+        .collection(Collections.users)
+        .where(UserFields.email, isEqualTo: emailController.text.trim())
+        .get();
+
+    if (filteredUsers.docs.isEmpty) {
+      scaffoldMessenger.showSnackBar(const SnackBar(
+          content: Text('There is no user with that email address.')));
+      ref.read(loadingProvider.notifier).toggleLoading(false);
+      return;
+    }
+    if (filteredUsers.docs.first.data()[UserFields.userType] ==
+        UserTypes.admin) {
+      scaffoldMessenger.showSnackBar(const SnackBar(
+          content: Text('This feature is for users and collectors only.')));
+      ref.read(loadingProvider.notifier).toggleLoading(false);
+      return;
+    }
+    await FirebaseAuth.instance
+        .sendPasswordResetEmail(email: emailController.text.trim());
+    ref.read(loadingProvider.notifier).toggleLoading(false);
+    scaffoldMessenger.showSnackBar(const SnackBar(
+        content: Text('Successfully sent password reset email!')));
+    navigator.pop();
+  } catch (error) {
+    scaffoldMessenger.showSnackBar(
+        SnackBar(content: Text('Error sending password reset email: $error')));
+    ref.read(loadingProvider.notifier).toggleLoading(false);
+  }
+}
+
+Future approveThisUser(BuildContext context, WidgetRef ref,
+    {required String userID}) async {
+  try {
+    ref.read(loadingProvider).toggleLoading(true);
+    FirebaseFirestore.instance
+        .collection(Collections.users)
+        .doc(userID)
+        .update({UserFields.accountVerified: true});
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Successfully approved this user.')));
+    Navigator.of(context).pop();
+    Navigator.of(context)
+        .pushReplacementNamed(NavigatorRoutes.adminViewCollectors);
+  } catch (error) {
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error approving this collector: $error')));
+    ref.read(loadingProvider).toggleLoading(false);
+  }
+}
+
+Future denyThisUser(BuildContext context, WidgetRef ref,
+    {required String userID}) async {
+  try {
+    ref.read(loadingProvider).toggleLoading(true);
+
+    //  Store admin's current data locally then sign out
+    final currentUser = await FirebaseFirestore.instance
+        .collection(Collections.users)
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get();
+    final currentUserData = currentUser.data() as Map<dynamic, dynamic>;
+    String userEmail = currentUserData[UserFields.email];
+    String userPassword = currentUserData[UserFields.password];
+    await FirebaseAuth.instance.signOut();
+
+    //  Log-in to the collector account to be deleted
+    final collector = await FirebaseFirestore.instance
+        .collection(Collections.users)
+        .doc(userID)
+        .get();
+    final collectorData = collector.data() as Map<dynamic, dynamic>;
+    String collectorEmail = collectorData[UserFields.email];
+    String collectorPassword = collectorData[UserFields.password];
+    final collectorToDelete = await FirebaseAuth.instance
+        .signInWithEmailAndPassword(
+            email: collectorEmail, password: collectorPassword);
+    await collectorToDelete.user!.delete();
+
+    //  Log-back in to admin account
+    await FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: userEmail, password: userPassword);
+
+    //  Delete collector entry from Firebase Storage
+    await FirebaseStorage.instance
+        .ref()
+        .child(StorageFields.proofOfEnrollments)
+        .child(userID)
+        .delete();
+
+    //  Delete collector document from users Firestore collection
+    await FirebaseFirestore.instance
+        .collection(Collections.users)
+        .doc(userID)
+        .delete();
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Successfully denied this collector.')));
+    Navigator.of(context).pop();
+    Navigator.of(context)
+        .pushReplacementNamed(NavigatorRoutes.adminViewCollectors);
+  } catch (error) {
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error denying this collector: $error')));
+    ref.read(loadingProvider).toggleLoading(false);
+  }
+}
+
+Future uploadProfilePicture(BuildContext context, WidgetRef ref) async {
+  try {
+    ImagePicker imagePicker = ImagePicker();
+    final selectedXFile =
+        await imagePicker.pickImage(source: ImageSource.gallery);
+    if (selectedXFile == null) {
+      return;
+    }
+    //  Upload proof of employment to Firebase Storage
+    ref.read(loadingProvider).toggleLoading(true);
+    final storageRef = FirebaseStorage.instance
+        .ref()
+        .child(StorageFields.profilePics)
+        .child(FirebaseAuth.instance.currentUser!.uid);
+    final uploadTask = storageRef.putFile(File(selectedXFile.path));
+    final taskSnapshot = await uploadTask;
+    final String downloadURL = await taskSnapshot.ref.getDownloadURL();
+    await FirebaseFirestore.instance
+        .collection(Collections.users)
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .update({UserFields.profileImageURL: downloadURL});
+    ref.read(userDataProvider).setProfileImage(downloadURL);
+    ref.read(loadingProvider).toggleLoading(false);
+  } catch (error) {
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error uploading new profile picture: $error')));
+    ref.read(loadingProvider).toggleLoading(false);
+  }
+}
+
+Future removeProfilePicture(BuildContext context, WidgetRef ref) async {
+  try {
+    //  Remove profile pic from cloud storage
+    ref.read(loadingProvider).toggleLoading(true);
+    await FirebaseStorage.instance
+        .ref()
+        .child(StorageFields.profilePics)
+        .child(FirebaseAuth.instance.currentUser!.uid)
+        .delete();
+
+    //Set profileImageURL paramter to ''
+    await FirebaseFirestore.instance
+        .collection(Collections.users)
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .update({UserFields.profileImageURL: ''});
+    ref.read(userDataProvider).setProfileImage('');
+    ref.read(loadingProvider).toggleLoading(false);
+  } catch (error) {
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error uploading new profile picture: $error')));
+    ref.read(loadingProvider).toggleLoading(false);
+  }
+}
+
+Future updateProfile(BuildContext context, WidgetRef ref,
+    {required TextEditingController firstNameController,
+    required TextEditingController lastNameController,
+    required String userType}) async {
+  if (firstNameController.text.isEmpty || lastNameController.text.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please fill up all given fields.')));
+    return;
+  }
+  try {
+    ref.read(loadingProvider).toggleLoading(true);
+    FirebaseFirestore.instance
+        .collection(Collections.users)
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .update({
+      UserFields.firstName: firstNameController.text.trim(),
+      UserFields.lastName: lastNameController.text.trim()
+    });
+    ref.read(loadingProvider).toggleLoading(false);
+    Navigator.of(context).pop();
+    if (userType == UserTypes.student) {
+      Navigator.of(context).pushReplacementNamed(NavigatorRoutes.userProfile);
+    } else if (userType == UserTypes.teacher) {
+      Navigator.of(context)
+          .pushReplacementNamed(NavigatorRoutes.collectorProfile);
+    }
+  } catch (error) {
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error updating profile: ${error.toString()}')));
+    ref.read(loadingProvider).toggleLoading(false);
+  }
+}
+
+Future<DocumentSnapshot> getCurrentUserDoc() async {
+  return await getThisUserDoc(FirebaseAuth.instance.currentUser!.uid);
+}
+
+Future<String> getCurrentUserType() async {
+  final userDoc = await getCurrentUserDoc();
+  final userData = userDoc.data() as Map<dynamic, dynamic>;
+  return userData[UserFields.userType];
+}
+
+Future<DocumentSnapshot> getThisUserDoc(String userID) async {
+  return await FirebaseFirestore.instance
+      .collection(Collections.users)
+      .doc(userID)
+      .get();
+}
+
+Future<List<DocumentSnapshot>> getAllStudentDocs() async {
+  final users = await FirebaseFirestore.instance
+      .collection(Collections.users)
+      .where(UserFields.userType, isEqualTo: UserTypes.student)
+      .get();
+  return users.docs.map((user) => user as DocumentSnapshot).toList();
+}
+
+Future<List<DocumentSnapshot>> getAllTeacherDocs() async {
+  final users = await FirebaseFirestore.instance
+      .collection(Collections.users)
+      .where(UserFields.userType, isEqualTo: UserTypes.teacher)
+      .get();
+  return users.docs.map((user) => user as DocumentSnapshot).toList();
+}
