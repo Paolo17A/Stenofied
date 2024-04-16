@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:stenofied/providers/proof_of_enrollment_provider.dart';
 import 'package:stenofied/utils/future_util.dart';
+import 'package:stenofied/utils/string_util.dart';
 
 import '../utils/color_util.dart';
 import 'custom_button_widgets.dart';
@@ -68,8 +70,7 @@ Widget registerFieldsContainer(BuildContext context, WidgetRef ref,
     required TextEditingController passwordController,
     required TextEditingController confirmPasswordController,
     required TextEditingController firstNameController,
-    required TextEditingController lastNameController,
-    bool hasProofOfEmployment = false}) {
+    required TextEditingController lastNameController}) {
   return Container(
       width: MediaQuery.of(context).size.width * 0.8,
       decoration: BoxDecoration(
@@ -89,7 +90,7 @@ Widget registerFieldsContainer(BuildContext context, WidgetRef ref,
               label: 'First Name', textController: firstNameController),
           regularTextField(
               label: 'Last Name', textController: lastNameController),
-          if (hasProofOfEmployment) proofOfEnrollmentUploadWidget(context, ref),
+          proofOfEnrollmentUploadWidget(context, ref, userType: userType),
           registerButton(
               onPress: () => registerNewUser(context, ref,
                   userType: userType,
@@ -141,7 +142,7 @@ Widget regularTextField(
       child: Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      blackInterBold(label, fontSize: 18),
+      whiteInterBold(label, fontSize: 18),
       CustomTextField(
           text: label,
           controller: textController,
@@ -151,19 +152,22 @@ Widget regularTextField(
   ));
 }
 
-Widget proofOfEnrollmentUploadWidget(BuildContext context, WidgetRef ref) {
+Widget proofOfEnrollmentUploadWidget(BuildContext context, WidgetRef ref,
+    {required String userType}) {
   return SizedBox(
     width: double.infinity,
     child: Column(
       children: [
-        Row(children: [blackInterBold('Proof of Enrollment', fontSize: 18)]),
+        Row(children: [whiteInterBold('Proof of Enrollment', fontSize: 18)]),
         if (ref.read(proofOfEnrollmentProvider).proofOfEnrollmentFile != null)
           Image.file(ref.read(proofOfEnrollmentProvider).proofOfEnrollmentFile!,
               width: MediaQuery.of(context).size.width * 0.3),
         ElevatedButton(
             onPressed: () =>
                 ref.read(proofOfEnrollmentProvider).setProofOfEmployment(),
-            child: whiteInterBold('UPLOAD PROOF\ OF EMPLOYMENT', fontSize: 12))
+            child: whiteInterBold(
+                'UPLOAD PROOF\ OF ${userType == UserTypes.student ? 'ENROLLMENT' : 'EMPLOYMENT'}',
+                fontSize: 12))
       ],
     ),
   );
@@ -172,7 +176,7 @@ Widget proofOfEnrollmentUploadWidget(BuildContext context, WidgetRef ref) {
 Widget welcomeWidgets(
     {required String userType,
     required String profileImageURL,
-    required containerColor}) {
+    required Color containerColor}) {
   return SizedBox(
     width: double.infinity,
     child: Column(
@@ -191,7 +195,7 @@ Widget welcomeWidgets(
 }
 
 Widget buildProfileImageWidget(
-    {required String profileImageURL, double radius = 40}) {
+    {required String profileImageURL, double radius = 30}) {
   return Column(children: [
     profileImageURL.isNotEmpty
         ? CircleAvatar(
@@ -207,7 +211,7 @@ Widget buildProfileImageWidget(
   ]);
 }
 
-/*Widget userRecordEntry(
+Widget userRecordEntry(
     {required DocumentSnapshot userDoc,
     required Function onTap,
     bool displayVerificationStatus = false}) {
@@ -220,8 +224,8 @@ Widget buildProfileImageWidget(
     onTap: () => onTap(),
     child: Container(
       decoration: BoxDecoration(
-          color: CustomColors.peachyBlush,
-          border: Border.all(color: Colors.black, width: 1)),
+          color: CustomColors.bermuda,
+          border: Border.all(color: Colors.white, width: 1)),
       height: displayVerificationStatus ? 60 : 50,
       padding: const EdgeInsets.all(8),
       child: Row(children: [
@@ -231,7 +235,7 @@ Widget buildProfileImageWidget(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            blackInterBold(formattedName, fontSize: 16),
+            whiteInterBold(formattedName, fontSize: 16),
             if (displayVerificationStatus)
               interText('Account Verified: $adminApproved', fontSize: 12)
           ],
@@ -239,7 +243,7 @@ Widget buildProfileImageWidget(
       ]),
     ),
   );
-}*/
+}
 
 Widget userNameContainer(String formattedName) {
   return vertical20Pix(

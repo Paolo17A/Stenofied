@@ -56,8 +56,8 @@ class _UserLoginScreenState extends ConsumerState<StudentLoginScreen> {
                       onPress: () => Navigator.of(context)
                           .pushNamed(NavigatorRoutes.forgotPassword)),
                   dontHaveAccountButton(
-                      onPress: () => Navigator.of(context)
-                          .pushReplacementNamed(NavigatorRoutes.userRegister))
+                      onPress: () => Navigator.of(context).pushReplacementNamed(
+                          NavigatorRoutes.studentRegister))
                 ],
               ))),
             )),

@@ -79,6 +79,7 @@ Future registerNewUser(BuildContext context, WidgetRef ref,
       UserFields.lastName: lastNameController.text.trim(),
       UserFields.userType: userType,
       UserFields.profileImageURL: '',
+      UserFields.sectionID: '',
       UserFields.accountVerified: false
     });
 
@@ -148,8 +149,7 @@ Future logInUser(BuildContext context, WidgetRef ref,
       passwordController.clear();
       ref.read(loadingProvider.notifier).toggleLoading(false);
       scaffoldMessenger.showSnackBar(SnackBar(
-          content:
-              Text('This log-in is for ${userType.toLowerCase()}s only.')));
+          content: Text('This log-in is for students and teachers only.')));
       return;
     }
 
@@ -160,13 +160,21 @@ Future logInUser(BuildContext context, WidgetRef ref,
       ref.read(loadingProvider.notifier).toggleLoading(false);
       return;
     }
+
+    if (userData[UserFields.sectionID].toString().isEmpty) {
+      scaffoldMessenger.showSnackBar(SnackBar(
+          content: Text(
+              'Your have not yet been assigned to a section by the admin.')));
+      ref.read(loadingProvider.notifier).toggleLoading(false);
+      return;
+    }
     ref.read(loadingProvider.notifier).toggleLoading(false);
     ref
         .read(userDataProvider)
         .setProfileImage(userData[UserFields.profileImageURL]);
     ref.read(userDataProvider).setUserType(userData[UserFields.userType]);
     if (userData[UserFields.userType] == UserTypes.student) {
-      navigator.pushNamed(NavigatorRoutes.userHome);
+      navigator.pushNamed(NavigatorRoutes.studentHome);
     } else if (userData[UserFields.userType] == UserTypes.teacher) {
       navigator.pushNamed(NavigatorRoutes.teacherHome);
     }
@@ -224,7 +232,7 @@ Future sendResetPasswordEmail(BuildContext context, WidgetRef ref,
 }
 
 Future approveThisUser(BuildContext context, WidgetRef ref,
-    {required String userID}) async {
+    {required String userID, required String userType}) async {
   try {
     ref.read(loadingProvider).toggleLoading(true);
     FirebaseFirestore.instance
@@ -234,17 +242,22 @@ Future approveThisUser(BuildContext context, WidgetRef ref,
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Successfully approved this user.')));
     Navigator.of(context).pop();
-    Navigator.of(context)
-        .pushReplacementNamed(NavigatorRoutes.adminViewCollectors);
+    if (userType == UserTypes.student) {
+      Navigator.of(context)
+          .pushReplacementNamed(NavigatorRoutes.adminViewStudents);
+    } else if (userType == UserTypes.teacher) {
+      Navigator.of(context)
+          .pushReplacementNamed(NavigatorRoutes.adminViewTeachers);
+    }
   } catch (error) {
     ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error approving this collector: $error')));
+        SnackBar(content: Text('Error approving this user: $error')));
     ref.read(loadingProvider).toggleLoading(false);
   }
 }
 
 Future denyThisUser(BuildContext context, WidgetRef ref,
-    {required String userID}) async {
+    {required String userID, required String userType}) async {
   try {
     ref.read(loadingProvider).toggleLoading(true);
 
@@ -290,8 +303,13 @@ Future denyThisUser(BuildContext context, WidgetRef ref,
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Successfully denied this collector.')));
     Navigator.of(context).pop();
-    Navigator.of(context)
-        .pushReplacementNamed(NavigatorRoutes.adminViewCollectors);
+    if (userType == UserTypes.student) {
+      Navigator.of(context)
+          .pushReplacementNamed(NavigatorRoutes.adminViewStudents);
+    } else if (userType == UserTypes.teacher) {
+      Navigator.of(context)
+          .pushReplacementNamed(NavigatorRoutes.adminViewTeachers);
+    }
   } catch (error) {
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error denying this collector: $error')));
@@ -374,10 +392,11 @@ Future updateProfile(BuildContext context, WidgetRef ref,
     ref.read(loadingProvider).toggleLoading(false);
     Navigator.of(context).pop();
     if (userType == UserTypes.student) {
-      Navigator.of(context).pushReplacementNamed(NavigatorRoutes.userProfile);
+      Navigator.of(context)
+          .pushReplacementNamed(NavigatorRoutes.studentProfile);
     } else if (userType == UserTypes.teacher) {
       Navigator.of(context)
-          .pushReplacementNamed(NavigatorRoutes.collectorProfile);
+          .pushReplacementNamed(NavigatorRoutes.teacherProfile);
     }
   } catch (error) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -417,4 +436,14 @@ Future<List<DocumentSnapshot>> getAllTeacherDocs() async {
       .where(UserFields.userType, isEqualTo: UserTypes.teacher)
       .get();
   return users.docs.map((user) => user as DocumentSnapshot).toList();
+}
+
+//==============================================================================
+//SECTIONS======================================================================
+//==============================================================================
+
+Future<List<DocumentSnapshot>> getAllSectionDocs() async {
+  final sections =
+      await FirebaseFirestore.instance.collection(Collections.sections).get();
+  return sections.docs.map((user) => user as DocumentSnapshot).toList();
 }

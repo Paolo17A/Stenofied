@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:stenofied/providers/proof_of_enrollment_provider.dart';
 import 'package:stenofied/utils/string_util.dart';
 
 import '../providers/loading_provider.dart';
@@ -37,32 +38,37 @@ class _StudentRegisterScreenState extends ConsumerState<StudentRegisterScreen> {
   @override
   Widget build(BuildContext context) {
     ref.watch(loadingProvider);
-    return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
-      child: Scaffold(
-        appBar: appBarWidget(mayGoBack: true),
-        body: stackedLoadingContainer(
-            context,
-            ref.read(loadingProvider).isLoading,
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: SingleChildScrollView(
-                  child: all20Pix(
-                      child: Column(
-                children: [
-                  blackInterBold('USER REGISTER', fontSize: 35),
-                  authenticationIcon(context, iconData: Icons.person),
-                  const Gap(20),
-                  registerFieldsContainer(context, ref,
-                      userType: UserTypes.student,
-                      emailController: emailController,
-                      passwordController: passwordController,
-                      confirmPasswordController: confirmPasswordController,
-                      firstNameController: firstNameController,
-                      lastNameController: lastNameController),
-                ],
-              ))),
-            )),
+    ref.watch(proofOfEnrollmentProvider);
+    return PopScope(
+      onPopInvoked: (didPop) =>
+          ref.read(proofOfEnrollmentProvider).resetProofOfEmployment(),
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Scaffold(
+          appBar: appBarWidget(mayGoBack: true),
+          body: stackedLoadingContainer(
+              context,
+              ref.read(loadingProvider).isLoading,
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: SingleChildScrollView(
+                    child: all20Pix(
+                        child: Column(
+                  children: [
+                    blackInterBold('USER REGISTER', fontSize: 35),
+                    authenticationIcon(context, iconData: Icons.person),
+                    const Gap(20),
+                    registerFieldsContainer(context, ref,
+                        userType: UserTypes.student,
+                        emailController: emailController,
+                        passwordController: passwordController,
+                        confirmPasswordController: confirmPasswordController,
+                        firstNameController: firstNameController,
+                        lastNameController: lastNameController),
+                  ],
+                ))),
+              )),
+        ),
       ),
     );
   }

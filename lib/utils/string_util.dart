@@ -18,7 +18,7 @@ class UserTypes {
 class Collections {
   static const String users = 'users';
   static const String faqs = 'faqs';
-  static const String collections = 'collections';
+  static const String sections = 'sections';
 }
 
 class UserFields {
@@ -30,6 +30,7 @@ class UserFields {
   static const String profileImageURL = 'profileImageURL';
   static const String proofOfEnrollment = 'proofOfEnrollment';
   static const String accountVerified = 'accountVerified';
+  static const String sectionID = 'sectionID';
 }
 
 class FAQFields {
