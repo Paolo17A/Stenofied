@@ -10,6 +10,7 @@ import 'package:stenofied/screens/admin_view_students_screen.dart';
 import 'package:stenofied/screens/admin_view_teachers_screen.dart';
 import 'package:stenofied/screens/student_selected_lesson_screen.dart';
 import 'package:stenofied/screens/student_view_lessons_screen.dart';
+import 'package:stenofied/screens/teacher_assigned_section_screen.dart';
 
 import '../screens/admin_home_screen.dart';
 import '../screens/admin_login_screen.dart';
@@ -48,6 +49,7 @@ class NavigatorRoutes {
   static const teacherRegister = 'teacherRegister';
   static const teacherHome = 'teacherHome';
   static const teacherProfile = 'teacherProfile';
+  static const teacherAssignedSection = 'teacherAssignedSection';
 
   //  ADMINS
   static const adminLogin = 'adminLogin';
@@ -93,18 +95,20 @@ final Map<String, WidgetBuilder> routes = {
   NavigatorRoutes.forgotPassword: (context) => const ForgotPasswordScreen(),
   NavigatorRoutes.editProfile: (context) => const EditProfileScreen(),
 
-  //  USERS
+  //  STUDENTS
   NavigatorRoutes.studentLogin: (context) => const StudentLoginScreen(),
   NavigatorRoutes.studentRegister: (context) => const StudentRegisterScreen(),
   NavigatorRoutes.studentHome: (context) => const StudentHomeScreen(),
   NavigatorRoutes.studentProfile: (context) => const StudentProfileScreen(),
   NavigatorRoutes.studentLessons: (context) => const StudentLessonsScreen(),
 
-  //  COLLECTORS
+  //  TEACHERS
   NavigatorRoutes.teacherLogin: (context) => const TeacherLoginScreen(),
   NavigatorRoutes.teacherRegister: (context) => const TeacherRegisterScreen(),
   NavigatorRoutes.teacherHome: (context) => const TeacherHomeScreen(),
   NavigatorRoutes.teacherProfile: (context) => const TeacherProfileScreen(),
+  NavigatorRoutes.teacherAssignedSection: (context) =>
+      const TeacherAssignedSectionScreen(),
 
   //  ADMIN
   NavigatorRoutes.adminLogin: (context) => const AdminLoginScreen(),

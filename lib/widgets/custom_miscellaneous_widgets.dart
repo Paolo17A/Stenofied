@@ -229,8 +229,8 @@ Widget userRecordEntry(
     onTap: () => onTap(),
     child: Container(
       decoration: BoxDecoration(
-          color: CustomColors.bermuda,
-          border: Border.all(color: CustomColors.turquoise, width: 1)),
+          color: CustomColors.turquoise,
+          border: Border.all(color: CustomColors.mintGreen, width: 1)),
       height: displayVerificationStatus ? 60 : 50,
       padding: const EdgeInsets.all(8),
       child: Row(children: [

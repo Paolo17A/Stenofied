@@ -8,86 +8,87 @@ Widget studentBottomNavBar(BuildContext context, {required String path}) {
   return BottomAppBar(
     color: CustomColors.turquoise,
     height: 85,
-    notchMargin: 0,
-    shape: CircularNotchedRectangle(),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         SizedBox(
-          width: MediaQuery.of(context).size.width * 0.2,
-          child: Column(
-            children: [
-              IconButton(
-                  onPressed: () => path == NavigatorRoutes.studentHome
-                      ? null
-                      : Navigator.of(context)
-                          .pushNamed(NavigatorRoutes.studentHome),
-                  icon: Icon(Icons.home,
-                      color: path == NavigatorRoutes.studentHome
-                          ? Colors.white
-                          : CustomColors.mintGreen)),
-              interText('HOME',
-                  fontSize: 8,
-                  color: path == NavigatorRoutes.studentHome
-                      ? Colors.white
-                      : CustomColors.mintGreen)
-            ],
-          ),
-        ),
+            width: MediaQuery.of(context).size.width * 0.2,
+            child: bottomButton(context,
+                iconData: Icons.home,
+                label: 'HOME',
+                thisPath: NavigatorRoutes.studentHome,
+                currentPath: path)),
         SizedBox(
-          width: MediaQuery.of(context).size.width * 0.2,
-          child: Column(
-            children: [
-              IconButton(
-                  onPressed: () => path == NavigatorRoutes.studentLessons
-                      ? null
-                      : Navigator.of(context)
-                          .pushNamed(NavigatorRoutes.studentLessons),
-                  icon: Icon(Icons.library_books_rounded,
-                      color: path == NavigatorRoutes.studentLessons
-                          ? Colors.white
-                          : CustomColors.mintGreen)),
-              interText('LESSONS',
-                  fontSize: 8,
-                  color: path == NavigatorRoutes.studentLessons
-                      ? Colors.white
-                      : CustomColors.mintGreen)
-            ],
-          ),
-        ),
+            width: MediaQuery.of(context).size.width * 0.2,
+            child: bottomButton(context,
+                iconData: Icons.library_books_rounded,
+                label: 'LESSONS',
+                thisPath: NavigatorRoutes.studentLessons,
+                currentPath: path)),
         SizedBox(
-          width: MediaQuery.of(context).size.width * 0.2,
-          child: Column(
-            children: [
-              IconButton(
-                  onPressed: () => path == 'aaa' ? null : () {},
-                  icon: Icon(Icons.quiz,
-                      color: path == 'aaa'
-                          ? Colors.white
-                          : CustomColors.mintGreen)),
-              interText('EXERCISES',
-                  fontSize: 8,
-                  color: path == 'aaa' ? Colors.white : CustomColors.mintGreen)
-            ],
-          ),
-        ),
+            width: MediaQuery.of(context).size.width * 0.2,
+            child: bottomButton(context,
+                iconData: Icons.quiz,
+                label: 'EXERCISES',
+                thisPath: 'aaa',
+                currentPath: path)),
         SizedBox(
-          width: MediaQuery.of(context).size.width * 0.2,
-          child: Column(
-            children: [
-              IconButton(
-                  onPressed: () => path == 'aaa' ? null : () {},
-                  icon: Icon(Icons.edit_document,
-                      color: path == 'aaa'
-                          ? Colors.white
-                          : CustomColors.mintGreen)),
-              interText('QUIZZES',
-                  fontSize: 8,
-                  color: path == 'aaa' ? Colors.white : CustomColors.mintGreen)
-            ],
-          ),
-        ),
+            width: MediaQuery.of(context).size.width * 0.2,
+            child: bottomButton(context,
+                iconData: Icons.edit_document,
+                label: 'QUIZZES',
+                thisPath: 'aaaa',
+                currentPath: path))
       ],
     ),
+  );
+}
+
+Widget teacherBottomNavBar(BuildContext context, {required String path}) {
+  return BottomAppBar(
+    color: CustomColors.turquoise,
+    height: 85,
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        SizedBox(
+            width: MediaQuery.of(context).size.width * 0.45,
+            child: bottomButton(context,
+                iconData: Icons.home,
+                label: 'HOME',
+                thisPath: NavigatorRoutes.teacherHome,
+                currentPath: path)),
+        SizedBox(
+            width: MediaQuery.of(context).size.width * 0.45,
+            child: bottomButton(context,
+                iconData: Icons.people,
+                label: 'MY SECTION',
+                thisPath: NavigatorRoutes.teacherAssignedSection,
+                currentPath: path))
+      ],
+    ),
+  );
+}
+
+Widget bottomButton(BuildContext context,
+    {required IconData iconData,
+    required String label,
+    required String thisPath,
+    required String currentPath}) {
+  return Column(
+    children: [
+      IconButton(
+          onPressed: () => thisPath == currentPath
+              ? null
+              : Navigator.of(context).pushNamed(thisPath),
+          icon: Icon(iconData,
+              color: thisPath == currentPath
+                  ? Colors.white
+                  : CustomColors.mintGreen)),
+      interText(label,
+          fontSize: 8,
+          color:
+              thisPath == currentPath ? Colors.white : CustomColors.mintGreen)
+    ],
   );
 }
