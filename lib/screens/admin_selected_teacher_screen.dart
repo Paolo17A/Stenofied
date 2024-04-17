@@ -109,7 +109,7 @@ class _AdminSelectedTeacherScreenState
                     ),
                   Divider(color: CustomColors.turquoise),
                   Gap(40),
-                  Container(
+                  /*Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
                         border: Border.all(color: CustomColors.turquoise)),
@@ -117,7 +117,7 @@ class _AdminSelectedTeacherScreenState
                     child: Column(
                       children: [blackInterBold('COLLECTED LINO HISTORY')],
                     ),
-                  )
+                  )*/
                 ],
               )),
             ),

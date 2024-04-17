@@ -554,6 +554,16 @@ Future assignUserToSection(BuildContext context, WidgetRef ref,
     {required String sectionID, required userID}) async {
   try {
     ref.read(loadingProvider).toggleLoading(true);
+
+    List<DocumentSnapshot> sectionTeacher =
+        await getSectionTeacherDoc(sectionID);
+    if (sectionTeacher.isNotEmpty) {
+      final oldTeacherID = sectionTeacher.first.id;
+      await FirebaseFirestore.instance
+          .collection(Collections.users)
+          .doc(oldTeacherID)
+          .update({UserFields.sectionID: ''});
+    }
     await FirebaseFirestore.instance
         .collection(Collections.users)
         .doc(userID)

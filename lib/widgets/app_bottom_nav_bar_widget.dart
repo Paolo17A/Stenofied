@@ -30,14 +30,14 @@ Widget studentBottomNavBar(BuildContext context, {required String path}) {
             child: bottomButton(context,
                 iconData: Icons.quiz,
                 label: 'EXERCISES',
-                thisPath: 'aaa',
+                thisPath: '',
                 currentPath: path)),
         SizedBox(
             width: MediaQuery.of(context).size.width * 0.2,
             child: bottomButton(context,
                 iconData: Icons.edit_document,
                 label: 'QUIZZES',
-                thisPath: 'aaaa',
+                thisPath: '',
                 currentPath: path))
       ],
     ),
@@ -78,7 +78,7 @@ Widget bottomButton(BuildContext context,
   return Column(
     children: [
       IconButton(
-          onPressed: () => thisPath == currentPath
+          onPressed: () => thisPath == currentPath || thisPath.isEmpty
               ? null
               : Navigator.of(context).pushNamed(thisPath),
           icon: Icon(iconData,

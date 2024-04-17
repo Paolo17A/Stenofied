@@ -5,12 +5,17 @@ class LessonModel {
 }
 
 final allLessonModels = [
-  LessonModel(lessonIndex: 1, modulePath: 'assets/documents/testDoc.pdf'),
-  LessonModel(lessonIndex: 2, modulePath: 'assets/documents/testDoc.pdf'),
-  LessonModel(lessonIndex: 3, modulePath: 'assets/documents/testDoc.pdf'),
-  LessonModel(lessonIndex: 4, modulePath: 'assets/documents/testDoc.pdf'),
-  LessonModel(lessonIndex: 5, modulePath: 'assets/documents/testDoc.pdf'),
-  LessonModel(lessonIndex: 6, modulePath: 'assets/documents/testDoc.pdf'),
+  LessonModel(
+      lessonIndex: 1, modulePath: 'assets/documents/Unit-1_Lesson-1.pdf'),
+  LessonModel(
+      lessonIndex: 2, modulePath: 'assets/documents/Unit-1_Lesson-2.pdf'),
+  LessonModel(
+      lessonIndex: 3, modulePath: 'assets/documents/Unit-1_Lesson-3.pdf'),
+  LessonModel(
+      lessonIndex: 4, modulePath: 'assets/documents/Unit-1_Lesson-4.pdf'),
+  LessonModel(
+      lessonIndex: 5, modulePath: 'assets/documents/Unit-1_Lesson-5.pdf'),
+  /*LessonModel(lessonIndex: 6, modulePath: 'assets/documents/testDoc.pdf'),
   LessonModel(lessonIndex: 7, modulePath: 'assets/documents/testDoc.pdf'),
   LessonModel(lessonIndex: 8, modulePath: 'assets/documents/testDoc.pdf'),
   LessonModel(lessonIndex: 9, modulePath: 'assets/documents/testDoc.pdf'),
@@ -29,5 +34,5 @@ final allLessonModels = [
   LessonModel(lessonIndex: 22, modulePath: 'assets/documents/testDoc.pdf'),
   LessonModel(lessonIndex: 23, modulePath: 'assets/documents/testDoc.pdf'),
   LessonModel(lessonIndex: 24, modulePath: 'assets/documents/testDoc.pdf'),
-  LessonModel(lessonIndex: 25, modulePath: 'assets/documents/testDoc.pdf'),
+  LessonModel(lessonIndex: 25, modulePath: 'assets/documents/testDoc.pdf'),*/
 ];
