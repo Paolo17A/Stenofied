@@ -6,6 +6,7 @@ import '../utils/string_util.dart';
 class UserDataNotifier extends ChangeNotifier {
   String userType = UserTypes.student;
   String profileImageURL = '';
+  int lessonIndex = 1;
 
   void setUserType(String type) {
     userType = type;
@@ -14,6 +15,11 @@ class UserDataNotifier extends ChangeNotifier {
 
   void setProfileImage(String imageURL) {
     profileImageURL = imageURL;
+    notifyListeners();
+  }
+
+  void setLessonIndex(int index) {
+    lessonIndex = index;
     notifyListeners();
   }
 }

@@ -158,7 +158,11 @@ Widget proofOfEnrollmentUploadWidget(BuildContext context, WidgetRef ref,
     width: double.infinity,
     child: Column(
       children: [
-        Row(children: [whiteInterBold('Proof of Enrollment', fontSize: 18)]),
+        Row(children: [
+          whiteInterBold(
+              'Proof of ${userType == UserTypes.student ? 'Enrollment' : 'Employment'}',
+              fontSize: 18)
+        ]),
         if (ref.read(proofOfEnrollmentProvider).proofOfEnrollmentFile != null)
           Image.file(ref.read(proofOfEnrollmentProvider).proofOfEnrollmentFile!,
               width: MediaQuery.of(context).size.width * 0.3),
@@ -184,7 +188,8 @@ Widget welcomeWidgets(
         all10Pix(
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-            interText('WELCOME,\n$userType', fontSize: 30),
+            interText('WELCOME,\n$userType',
+                fontSize: 30, textAlign: TextAlign.center),
             buildProfileImageWidget(profileImageURL: profileImageURL)
           ]),
         ),
@@ -225,7 +230,7 @@ Widget userRecordEntry(
     child: Container(
       decoration: BoxDecoration(
           color: CustomColors.bermuda,
-          border: Border.all(color: Colors.white, width: 1)),
+          border: Border.all(color: CustomColors.turquoise, width: 1)),
       height: displayVerificationStatus ? 60 : 50,
       padding: const EdgeInsets.all(8),
       child: Row(children: [
@@ -237,7 +242,8 @@ Widget userRecordEntry(
           children: [
             whiteInterBold(formattedName, fontSize: 16),
             if (displayVerificationStatus)
-              interText('Account Verified: $adminApproved', fontSize: 12)
+              interText('Account Verified: $adminApproved',
+                  fontSize: 12, color: Colors.white)
           ],
         )
       ]),

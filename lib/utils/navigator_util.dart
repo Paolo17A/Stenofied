@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:stenofied/models/lesson_model.dart';
+import 'package:stenofied/screens/admin_add_section_screen.dart';
+import 'package:stenofied/screens/admin_edit_section_screen.dart';
+import 'package:stenofied/screens/admin_selected_section_screen.dart';
+import 'package:stenofied/screens/admin_selected_student_screen.dart';
+import 'package:stenofied/screens/admin_selected_teacher_screen.dart';
+import 'package:stenofied/screens/admin_view_sections_screen.dart';
 import 'package:stenofied/screens/admin_view_students_screen.dart';
 import 'package:stenofied/screens/admin_view_teachers_screen.dart';
+import 'package:stenofied/screens/student_selected_lesson_screen.dart';
+import 'package:stenofied/screens/student_view_lessons_screen.dart';
 
 import '../screens/admin_home_screen.dart';
 import '../screens/admin_login_screen.dart';
@@ -21,13 +30,20 @@ class NavigatorRoutes {
   static const forgotPassword = 'forgotPassword';
   static const editProfile = 'editProfile';
 
-  //  USERS
+  //  STUDENTS
   static const studentLogin = 'studentLogin';
   static const studentRegister = 'studentRegister';
   static const studentHome = 'studentHome';
   static const studentProfile = 'studentProfile';
+  static const studentLessons = 'studentLessons';
+  static void studentSelectedLesson(BuildContext context,
+      {required LessonModel lessonModel}) {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>
+            StudentSelectedLessonScreen(lessonModel: lessonModel)));
+  }
 
-  //  COLLECTORS
+  //  TEACHERS
   static const teacherLogin = 'teacherLogin';
   static const teacherRegister = 'teacherRegister';
   static const teacherHome = 'teacherHome';
@@ -37,19 +53,39 @@ class NavigatorRoutes {
   static const adminLogin = 'adminLogin';
   static const adminHome = 'adminHome';
   static const adminViewStudents = 'adminViewStudents';
-  /*static void adminSelectedUser(BuildContext context,
+  static void adminSelectedStudent(BuildContext context,
       {required String userID}) {
     Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => AdminSelectedUserScreen(userID: userID)));
-  }*/
+        builder: (context) => AdminSelectedStudentScreen(userID: userID)));
+  }
 
   static const adminViewTeachers = 'adminViewTeachers';
-  /*static void adminSelectedCollector(BuildContext context,
-      {required String collectorID}) {
+  static void adminSelectedTeacher(BuildContext context,
+      {required String userID}) {
     Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) =>
-            AdminSelectedCollectorScreen(collectorID: collectorID)));
-  }*/
+        builder: (context) => AdminSelectedTeacherScreen(userID: userID)));
+  }
+
+  static const adminViewSections = 'adminViewSections';
+  static void adminSelectedSection(BuildContext context,
+      {required String sectionID, bool isReplacing = false}) {
+    if (isReplacing) {
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) =>
+              AdminSelectedSectionScreen(sectionID: sectionID)));
+    } else {
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) =>
+              AdminSelectedSectionScreen(sectionID: sectionID)));
+    }
+  }
+
+  static const adminAddSection = 'adminAddSection';
+  static void adminEditSection(BuildContext context,
+      {required String sectionID}) {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => AdminEditSectionScreen(sectionID: sectionID)));
+  }
 }
 
 final Map<String, WidgetBuilder> routes = {
@@ -62,6 +98,7 @@ final Map<String, WidgetBuilder> routes = {
   NavigatorRoutes.studentRegister: (context) => const StudentRegisterScreen(),
   NavigatorRoutes.studentHome: (context) => const StudentHomeScreen(),
   NavigatorRoutes.studentProfile: (context) => const StudentProfileScreen(),
+  NavigatorRoutes.studentLessons: (context) => const StudentLessonsScreen(),
 
   //  COLLECTORS
   NavigatorRoutes.teacherLogin: (context) => const TeacherLoginScreen(),
@@ -75,5 +112,8 @@ final Map<String, WidgetBuilder> routes = {
   NavigatorRoutes.adminViewStudents: (context) =>
       const AdminViewStudentsScreen(),
   NavigatorRoutes.adminViewTeachers: (context) =>
-      const AdminViewTeachersScreen()
+      const AdminViewTeachersScreen(),
+  NavigatorRoutes.adminViewSections: (context) =>
+      const AdminViewSectionsScreen(),
+  NavigatorRoutes.adminAddSection: (context) => const AdminAddSectionScreen()
 };

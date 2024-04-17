@@ -83,7 +83,10 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen> {
             onPress: () => Navigator.of(context)
                 .pushNamed(NavigatorRoutes.adminViewTeachers)),
         homeButton(context,
-            label: 'SECTION RECORDS', count: sectionsCount, onPress: () {})
+            label: 'SECTION RECORDS',
+            count: sectionsCount,
+            onPress: () => Navigator.of(context)
+                .pushNamed(NavigatorRoutes.adminViewSections))
       ],
     ));
   }

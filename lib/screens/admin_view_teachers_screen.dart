@@ -66,7 +66,11 @@ class _AdminViewTeachersScreenState
             shrinkWrap: true,
             itemCount: teacherDocs.length,
             itemBuilder: (context, index) {
-              return userRecordEntry(userDoc: teacherDocs[index], onTap: () {});
+              return userRecordEntry(
+                  userDoc: teacherDocs[index],
+                  onTap: () => NavigatorRoutes.adminSelectedTeacher(context,
+                      userID: teacherDocs[index].id),
+                  displayVerificationStatus: true);
             })
         : all20Pix(
             child: blackInterBold('NO REGISTERED TEACHERS AVAILABLE',

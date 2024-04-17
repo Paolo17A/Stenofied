@@ -66,7 +66,11 @@ class _AdminViewStudentsScreenState
             shrinkWrap: true,
             itemCount: studentDocs.length,
             itemBuilder: (context, index) {
-              return userRecordEntry(userDoc: studentDocs[index], onTap: () {});
+              return userRecordEntry(
+                  userDoc: studentDocs[index],
+                  onTap: () => NavigatorRoutes.adminSelectedStudent(context,
+                      userID: studentDocs[index].id),
+                  displayVerificationStatus: true);
             })
         : all20Pix(
             child: blackInterBold('NO REGISTERED STUDENTS AVAILABLE',

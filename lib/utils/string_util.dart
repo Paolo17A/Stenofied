@@ -7,6 +7,8 @@ class ImagePaths {
 class StorageFields {
   static const String profilePics = 'profilePics';
   static const String proofOfEnrollments = 'proofOfEnrollments';
+  static const String exerciseImages = 'exerciseImages';
+  static const String quizImages = 'quizImages';
 }
 
 class UserTypes {
@@ -17,8 +19,8 @@ class UserTypes {
 
 class Collections {
   static const String users = 'users';
-  static const String faqs = 'faqs';
   static const String sections = 'sections';
+  static const String faqs = 'faqs';
 }
 
 class UserFields {
@@ -31,6 +33,27 @@ class UserFields {
   static const String proofOfEnrollment = 'proofOfEnrollment';
   static const String accountVerified = 'accountVerified';
   static const String sectionID = 'sectionID';
+  static const String currentLessonIndex = 'currentLessonIndex';
+}
+
+class SectionFields {
+  static const String name = 'name';
+  static const String teacherIDs = 'teacherIDs';
+  static const String studentIDs = 'studentIDs';
+}
+
+class ExerciseResultFields {
+  static const String studentID = 'studentID';
+  static const String exerciseIndex = 'exerciseIndex';
+  static const String imageURLs = 'imageURLs';
+  static const String exerciseResults = 'exerciserResults';
+}
+
+class QuizResultFields {
+  static const String studentID = 'studentID';
+  static const String quizIndex = 'quizIndex';
+  static const String imageURLs = 'imageURLs';
+  static const String quizResults = 'quizResults';
 }
 
 class FAQFields {

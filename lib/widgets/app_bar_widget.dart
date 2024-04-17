@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:stenofied/utils/string_util.dart';
-import 'package:stenofied/widgets/custom_text_widgets.dart';
 
 PreferredSizeWidget appBarWidget(
     {bool mayGoBack = false, List<Widget>? actions}) {
@@ -11,9 +10,7 @@ PreferredSizeWidget appBarWidget(
         children: [
           Image.asset(ImagePaths.logo, scale: 9),
           Gap(10),
-          whiteInterBold(
-            'STENOFIED',
-          )
+          //whiteInterBold('STENOFIED')
         ],
       ),
       iconTheme: const IconThemeData(color: Colors.white),

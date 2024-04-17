@@ -85,3 +85,14 @@ Widget homeButton(BuildContext context,
                 ],
               ))));
 }
+
+Widget studentHomeButton(BuildContext context,
+    {required String label, required Function onPress}) {
+  return vertical20Pix(
+      child: SizedBox(
+    width: MediaQuery.of(context).size.width * 0.8,
+    height: 80,
+    child: ElevatedButton(
+        onPressed: () => onPress(), child: whiteInterBold(label, fontSize: 24)),
+  ));
+}
