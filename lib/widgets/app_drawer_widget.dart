@@ -13,7 +13,7 @@ import 'custom_text_widgets.dart';
 Drawer appDrawer(BuildContext context, WidgetRef ref,
     {required String userType,
     bool isHome = false,
-    Color backgroundColor = CustomColors.turquoise}) {
+    Color backgroundColor = CustomColors.ketchup}) {
   return Drawer(
     backgroundColor: backgroundColor,
     child: Column(
@@ -102,7 +102,7 @@ Widget _logOutButton(BuildContext context) {
     child: Container(
       decoration: BoxDecoration(
           color: CustomColors.ketchup,
-          border: Border.all(color: CustomColors.ketchup),
+          border: Border.all(color: CustomColors.sangria, width: 3),
           borderRadius: BorderRadius.circular(50)),
       child: ListTile(
         leading: const Icon(Icons.logout, color: Colors.white),

@@ -6,7 +6,7 @@ import 'custom_text_widgets.dart';
 
 Widget studentBottomNavBar(BuildContext context, {required String path}) {
   return BottomAppBar(
-    color: CustomColors.turquoise,
+    color: CustomColors.latte,
     height: 85,
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -30,7 +30,7 @@ Widget studentBottomNavBar(BuildContext context, {required String path}) {
             child: bottomButton(context,
                 iconData: Icons.quiz,
                 label: 'EXERCISES',
-                thisPath: '',
+                thisPath: NavigatorRoutes.studentExercises,
                 currentPath: path)),
         SizedBox(
             width: MediaQuery.of(context).size.width * 0.2,
@@ -46,7 +46,7 @@ Widget studentBottomNavBar(BuildContext context, {required String path}) {
 
 Widget teacherBottomNavBar(BuildContext context, {required String path}) {
   return BottomAppBar(
-    color: CustomColors.turquoise,
+    color: CustomColors.latte,
     height: 85,
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -84,11 +84,11 @@ Widget bottomButton(BuildContext context,
           icon: Icon(iconData,
               color: thisPath == currentPath
                   ? Colors.white
-                  : CustomColors.mintGreen)),
+                  : CustomColors.parchment)),
       interText(label,
           fontSize: 8,
           color:
-              thisPath == currentPath ? Colors.white : CustomColors.mintGreen)
+              thisPath == currentPath ? Colors.white : CustomColors.parchment)
     ],
   );
 }

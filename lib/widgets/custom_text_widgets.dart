@@ -29,6 +29,16 @@ Text whiteInterBold(String label,
           fontWeight: FontWeight.bold));
 }
 
+Text whiteInterRegular(String label,
+    {double? fontSize,
+    TextAlign textAlign = TextAlign.center,
+    TextDecoration? textDecoration}) {
+  return Text(label,
+      textAlign: textAlign,
+      style: GoogleFonts.inter(
+          fontSize: fontSize, color: Colors.white, decoration: textDecoration));
+}
+
 Text blackInterBold(String label,
     {double? fontSize,
     TextAlign textAlign = TextAlign.center,

@@ -83,7 +83,7 @@ class _AdminSelectedSectionScreenState
               children: [
                 _selectedSectionHeader(),
                 _sectionTeacher(),
-                Divider(color: CustomColors.turquoise),
+                Divider(color: CustomColors.ketchup),
                 _expandableStudents()
               ],
             )),
@@ -122,10 +122,11 @@ class _AdminSelectedSectionScreenState
   Widget _expandableStudents() {
     return vertical20Pix(
       child: ExpansionTile(
-        collapsedBackgroundColor: CustomColors.turquoise,
-        backgroundColor: CustomColors.turquoise,
+        collapsedBackgroundColor: CustomColors.sangria,
+        backgroundColor: CustomColors.ketchup,
         textColor: Colors.white,
         iconColor: Colors.white,
+        collapsedIconColor: Colors.white,
         collapsedShape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10), side: BorderSide()),
         shape: RoundedRectangleBorder(
@@ -139,7 +140,9 @@ class _AdminSelectedSectionScreenState
                     : ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('No available students.')));
               },
-              child: whiteInterBold('ASSIGN NEW STUDENT')),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: CustomColors.parchment),
+              child: blackInterBold('ASSIGN NEW STUDENT')),
           vertical20Pix(
             child: sectionStudentDocs.isNotEmpty
                 ? SizedBox(
@@ -148,10 +151,8 @@ class _AdminSelectedSectionScreenState
                       shrinkWrap: false,
                       physics: NeverScrollableScrollPhysics(),
                       itemCount: sectionStudentDocs.length,
-                      itemBuilder: (context, index) => all10Pix(
-                        child: userRecordEntry(
-                            userDoc: sectionStudentDocs[index], onTap: () {}),
-                      ),
+                      itemBuilder: (context, index) => userRecordEntry(
+                          userDoc: sectionStudentDocs[index], onTap: () {}),
                     ))
                 : whiteInterBold('NO AVAILABLE STUDENTS', fontSize: 16),
           )

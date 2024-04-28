@@ -107,11 +107,8 @@ Future registerNewUser(BuildContext context, WidgetRef ref,
     ref.read(proofOfEnrollmentProvider).resetProofOfEmployment();
 
     ref.read(loadingProvider.notifier).toggleLoading(false);
-    if (userType == UserTypes.student) {
-      navigator.pushReplacementNamed(NavigatorRoutes.studentLogin);
-    } else if (userType == UserTypes.teacher) {
-      navigator.pushReplacementNamed(NavigatorRoutes.teacherLogin);
-    }
+
+    navigator.pushReplacementNamed(NavigatorRoutes.login);
   } catch (error) {
     scaffoldMessenger.showSnackBar(
         SnackBar(content: Text('Error registering new user: $error')));
@@ -120,8 +117,7 @@ Future registerNewUser(BuildContext context, WidgetRef ref,
 }
 
 Future logInUser(BuildContext context, WidgetRef ref,
-    {required String userType,
-    required TextEditingController emailController,
+    {required TextEditingController emailController,
     required TextEditingController passwordController}) async {
   final scaffoldMessenger = ScaffoldMessenger.of(context);
   final navigator = Navigator.of(context);
@@ -145,15 +141,6 @@ Future logInUser(BuildContext context, WidgetRef ref,
           .update({UserFields.password: passwordController.text});
     }
 
-    if (userData[UserFields.userType] != userType) {
-      emailController.clear();
-      passwordController.clear();
-      ref.read(loadingProvider.notifier).toggleLoading(false);
-      scaffoldMessenger.showSnackBar(SnackBar(
-          content: Text('This log-in is for students and teachers only.')));
-      return;
-    }
-
     if (userData[UserFields.accountVerified] == false) {
       scaffoldMessenger.showSnackBar(SnackBar(
           content:
@@ -174,6 +161,8 @@ Future logInUser(BuildContext context, WidgetRef ref,
         .read(userDataProvider)
         .setProfileImage(userData[UserFields.profileImageURL]);
     ref.read(userDataProvider).setUserType(userData[UserFields.userType]);
+    emailController.clear();
+    passwordController.clear();
     if (userData[UserFields.userType] == UserTypes.student) {
       ref
           .read(userDataProvider)

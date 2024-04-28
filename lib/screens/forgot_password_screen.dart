@@ -8,7 +8,6 @@ import '../utils/color_util.dart';
 import '../widgets/app_bar_widget.dart';
 import '../widgets/custom_button_widgets.dart';
 import '../widgets/custom_miscellaneous_widgets.dart';
-import '../widgets/custom_padding_widgets.dart';
 import '../widgets/custom_text_widgets.dart';
 
 class ForgotPasswordScreen extends ConsumerStatefulWidget {
@@ -34,39 +33,37 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        appBar: appBarWidget(),
-        body: stackedLoadingContainer(
+          appBar: appBarWidget(mayGoBack: true),
+          body: stackedLoadingContainer(
             context,
             ref.read(loadingProvider).isLoading,
             SizedBox(
               width: MediaQuery.of(context).size.width,
               child: SingleChildScrollView(
-                child: all20Pix(
-                    child: Column(
-                  children: [
-                    blackInterBold('RESET PASSWORD', fontSize: 35),
-                    const Gap(20),
-                    Container(
-                        width: MediaQuery.of(context).size.width * 0.8,
-                        decoration: BoxDecoration(
-                            color: CustomColors.turquoise,
-                            borderRadius: BorderRadius.circular(30)),
-                        padding: const EdgeInsets.all(20),
-                        child: Column(
-                          children: [
-                            emailAddressTextField(
-                                emailController: emailController),
-                            sendPasswordResetEmailButton(
-                                onPress: () => sendResetPasswordEmail(
-                                    context, ref,
-                                    emailController: emailController)),
-                          ],
-                        ))
-                  ],
-                )),
-              ),
-            )),
-      ),
+                  child: Column(
+                children: [
+                  blackInterBold('RESET PASSWORD', fontSize: 35),
+                  const Gap(20),
+                  Container(
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                          color: CustomColors.ketchup,
+                          borderRadius: BorderRadius.circular(10)),
+                      padding: const EdgeInsets.all(10),
+                      child: Column(
+                        children: [
+                          emailAddressTextField(
+                              emailController: emailController),
+                          sendPasswordResetEmailButton(
+                              onPress: () => sendResetPasswordEmail(
+                                  context, ref,
+                                  emailController: emailController)),
+                        ],
+                      ))
+                ],
+              )),
+            ),
+          )),
     );
   }
 }

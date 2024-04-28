@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
+import 'package:stenofied/utils/color_util.dart';
 import 'package:stenofied/utils/future_util.dart';
 import '../providers/loading_provider.dart';
 import '../providers/user_data_provider.dart';
-import '../utils/color_util.dart';
 import '../utils/navigator_util.dart';
 import '../utils/string_util.dart';
 import '../widgets/app_bar_widget.dart';
@@ -57,8 +58,9 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen> {
               children: [
                 welcomeWidgets(
                     userType: ref.read(userDataProvider).userType,
-                    profileImageURL: ref.read(userDataProvider).profileImageURL,
-                    containerColor: CustomColors.turquoise),
+                    profileImageURL:
+                        ref.read(userDataProvider).profileImageURL),
+                Gap(60),
                 _homeButtons()
               ],
             )),
@@ -69,25 +71,42 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen> {
   }
 
   Widget _homeButtons() {
-    return all20Pix(
-        child: Column(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         homeButton(context,
             label: 'STUDENT RECORDS',
+            width: MediaQuery.of(context).size.width * 0.4,
+            height: MediaQuery.of(context).size.width * 0.8,
             count: studentsCount,
+            willDisplayCount: true,
+            color: CustomColors.ketchup,
             onPress: () => Navigator.of(context)
                 .pushNamed(NavigatorRoutes.adminViewStudents)),
-        homeButton(context,
-            label: 'TEACHER RECORDS',
-            count: teachersCount,
-            onPress: () => Navigator.of(context)
-                .pushNamed(NavigatorRoutes.adminViewTeachers)),
-        homeButton(context,
-            label: 'SECTION RECORDS',
-            count: sectionsCount,
-            onPress: () => Navigator.of(context)
-                .pushNamed(NavigatorRoutes.adminViewSections))
+        Column(
+          children: [
+            homeButton(context,
+                label: 'TEACHER RECORDS',
+                count: teachersCount,
+                willDisplayCount: true,
+                width: MediaQuery.of(context).size.width * 0.4,
+                height: MediaQuery.of(context).size.width * 0.4 - 10,
+                color: CustomColors.sangria,
+                onPress: () => Navigator.of(context)
+                    .pushNamed(NavigatorRoutes.adminViewTeachers)),
+            Gap(20),
+            homeButton(context,
+                label: 'SECTION RECORDS',
+                width: MediaQuery.of(context).size.width * 0.4,
+                height: MediaQuery.of(context).size.width * 0.4 - 10,
+                count: sectionsCount,
+                color: CustomColors.blush,
+                willDisplayCount: true,
+                onPress: () => Navigator.of(context)
+                    .pushNamed(NavigatorRoutes.adminViewSections))
+          ],
+        ),
       ],
-    ));
+    );
   }
 }

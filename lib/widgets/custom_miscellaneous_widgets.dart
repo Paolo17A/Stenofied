@@ -7,6 +7,7 @@ import 'package:stenofied/utils/future_util.dart';
 import 'package:stenofied/utils/string_util.dart';
 
 import '../utils/color_util.dart';
+import '../utils/navigator_util.dart';
 import 'custom_button_widgets.dart';
 import 'custom_padding_widgets.dart';
 import 'custom_text_field_widget.dart';
@@ -34,8 +35,7 @@ Widget authenticationIcon(BuildContext context, {required IconData iconData}) {
       width: MediaQuery.of(context).size.width * 0.45,
       height: 150,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: CustomColors.turquoise),
+          borderRadius: BorderRadius.circular(20), color: CustomColors.ketchup),
       child: Transform.scale(
           scale: 5, child: Icon(iconData, color: Colors.white)));
 }
@@ -45,21 +45,28 @@ Widget loginFieldsContainer(BuildContext context, WidgetRef ref,
     required TextEditingController emailController,
     required TextEditingController passwordController}) {
   return Container(
-      width: MediaQuery.of(context).size.width * 0.8,
+      width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
-          color: CustomColors.turquoise,
-          borderRadius: BorderRadius.circular(30)),
+          color: CustomColors.ketchup, borderRadius: BorderRadius.circular(20)),
       padding: const EdgeInsets.all(20),
       child: Column(
         children: [
+          Row(children: [whiteInterBold('Log-In', fontSize: 32)]),
           emailAddressTextField(emailController: emailController),
           passwordTextField(
               label: 'Password', passwordController: passwordController),
+          Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+            forgotPasswordButton(
+                onPress: () => Navigator.of(context)
+                    .pushNamed(NavigatorRoutes.forgotPassword))
+          ]),
           loginButton(
               onPress: () => logInUser(context, ref,
-                  userType: userType,
                   emailController: emailController,
                   passwordController: passwordController)),
+          dontHaveAccountButton(
+              onPress: () => Navigator.of(context)
+                  .pushNamed(NavigatorRoutes.selectUserType))
         ],
       ));
 }
@@ -72,10 +79,9 @@ Widget registerFieldsContainer(BuildContext context, WidgetRef ref,
     required TextEditingController firstNameController,
     required TextEditingController lastNameController}) {
   return Container(
-      width: MediaQuery.of(context).size.width * 0.8,
+      width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
-          color: CustomColors.turquoise,
-          borderRadius: BorderRadius.circular(30)),
+          color: CustomColors.ketchup, borderRadius: BorderRadius.circular(20)),
       padding: const EdgeInsets.all(20),
       child: Column(
         children: [
@@ -169,7 +175,9 @@ Widget proofOfEnrollmentUploadWidget(BuildContext context, WidgetRef ref,
         ElevatedButton(
             onPressed: () =>
                 ref.read(proofOfEnrollmentProvider).setProofOfEmployment(),
-            child: whiteInterBold(
+            style: ElevatedButton.styleFrom(
+                backgroundColor: CustomColors.parchment),
+            child: blackInterBold(
                 'UPLOAD PROOF\ OF ${userType == UserTypes.student ? 'ENROLLMENT' : 'EMPLOYMENT'}',
                 fontSize: 12))
       ],
@@ -178,9 +186,7 @@ Widget proofOfEnrollmentUploadWidget(BuildContext context, WidgetRef ref,
 }
 
 Widget welcomeWidgets(
-    {required String userType,
-    required String profileImageURL,
-    required Color containerColor}) {
+    {required String userType, required String profileImageURL}) {
   return SizedBox(
     width: double.infinity,
     child: Column(
@@ -188,12 +194,11 @@ Widget welcomeWidgets(
         all10Pix(
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-            interText('WELCOME,\n$userType',
-                fontSize: 30, textAlign: TextAlign.center),
-            buildProfileImageWidget(profileImageURL: profileImageURL)
+            buildProfileImageWidget(
+                profileImageURL: profileImageURL, radius: 40),
+            blackInterBold('WELCOME,\n$userType', fontSize: 28)
           ]),
         ),
-        Container(height: 15, color: containerColor)
       ],
     ),
   );
@@ -207,7 +212,7 @@ Widget buildProfileImageWidget(
             radius: radius, backgroundImage: NetworkImage(profileImageURL))
         : CircleAvatar(
             radius: radius,
-            backgroundColor: CustomColors.turquoise,
+            backgroundColor: CustomColors.ketchup,
             child: Icon(
               Icons.person,
               size: radius * 1.5,
@@ -227,35 +232,37 @@ Widget userRecordEntry(
   bool adminApproved = userData[UserFields.accountVerified];
   return GestureDetector(
     onTap: () => onTap(),
-    child: Container(
-      decoration: BoxDecoration(
-          color: CustomColors.turquoise,
-          border: Border.all(color: CustomColors.mintGreen, width: 1)),
-      height: displayVerificationStatus ? 60 : 50,
-      padding: const EdgeInsets.all(8),
-      child: Row(children: [
-        buildProfileImageWidget(profileImageURL: profileImageURL, radius: 15),
-        const Gap(16),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            whiteInterBold(formattedName, fontSize: 16),
-            if (displayVerificationStatus)
-              interText('Account Verified: $adminApproved',
-                  fontSize: 12, color: Colors.white)
-          ],
-        )
-      ]),
+    child: Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Container(
+        decoration: BoxDecoration(
+            color: CustomColors.blush,
+            border: Border.all(color: CustomColors.ketchup, width: 1)),
+        height: 60,
+        padding: const EdgeInsets.all(8),
+        child: Row(children: [
+          buildProfileImageWidget(profileImageURL: profileImageURL, radius: 20),
+          const Gap(16),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              blackInterBold(formattedName, fontSize: 16),
+              if (displayVerificationStatus)
+                blackInterRegular('Account Verified: $adminApproved',
+                    fontSize: 12)
+            ],
+          )
+        ]),
+      ),
     ),
   );
 }
 
 Widget userNameContainer(String formattedName) {
   return vertical20Pix(
-    child: Container(
+    child: SizedBox(
       height: 50,
-      color: CustomColors.bermuda,
       child: Center(
         child: all10Pix(
           child: Row(

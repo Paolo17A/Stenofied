@@ -79,7 +79,7 @@ class _AdminStudentUserScreenState
                 children: [
                   _studentProfileDetails(),
                   if (!accountVerified) _verificationWidgets(),
-                  Divider(color: CustomColors.turquoise),
+                  Divider(color: CustomColors.ketchup),
                   _exerciseResults(),
                   _quizResults()
                 ],
@@ -128,7 +128,7 @@ class _AdminStudentUserScreenState
     return vertical10Pix(
       child: Container(
         width: double.infinity,
-        color: CustomColors.turquoise,
+        color: CustomColors.ketchup,
         padding: EdgeInsets.all(10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -143,7 +143,7 @@ class _AdminStudentUserScreenState
   Widget _quizResults() {
     return Container(
       width: double.infinity,
-      color: CustomColors.turquoise,
+      color: CustomColors.ketchup,
       padding: EdgeInsets.all(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

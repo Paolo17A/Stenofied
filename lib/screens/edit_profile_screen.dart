@@ -70,7 +70,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                   Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
-                        color: CustomColors.turquoise,
+                        color: CustomColors.ketchup,
                         borderRadius: BorderRadius.circular(10)),
                     padding: EdgeInsets.all(10),
                     child: Column(

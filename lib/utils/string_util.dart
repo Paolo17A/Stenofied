@@ -2,6 +2,9 @@ import 'dart:math';
 
 class ImagePaths {
   static const String logo = 'assets/images/stenofied.png';
+  static const String studentUser = 'assets/images/student.png';
+  static const String teacherUser = 'assets/images/teacher.png';
+  static const String tracingPath = 'assets/images/tracing';
 }
 
 class StorageFields {

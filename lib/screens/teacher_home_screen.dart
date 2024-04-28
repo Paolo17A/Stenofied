@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stenofied/providers/user_data_provider.dart';
-import 'package:stenofied/utils/color_util.dart';
 import 'package:stenofied/utils/navigator_util.dart';
 import 'package:stenofied/widgets/app_bottom_nav_bar_widget.dart';
 import 'package:stenofied/widgets/custom_miscellaneous_widgets.dart';
@@ -33,8 +32,7 @@ class _TeacherHomeScreenState extends ConsumerState<TeacherHomeScreen> {
             children: [
               welcomeWidgets(
                   userType: UserTypes.teacher,
-                  profileImageURL: ref.read(userDataProvider).profileImageURL,
-                  containerColor: CustomColors.turquoise)
+                  profileImageURL: ref.read(userDataProvider).profileImageURL)
             ],
           )),
     );

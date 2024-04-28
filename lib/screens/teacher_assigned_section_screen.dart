@@ -77,8 +77,8 @@ class _TeacherAssignedSectionScreenState
   Widget _expandableStudents() {
     return vertical20Pix(
       child: ExpansionTile(
-        collapsedBackgroundColor: CustomColors.turquoise,
-        backgroundColor: CustomColors.turquoise,
+        collapsedBackgroundColor: CustomColors.sangria,
+        backgroundColor: CustomColors.ketchup,
         textColor: Colors.white,
         iconColor: Colors.white,
         collapsedShape: RoundedRectangleBorder(

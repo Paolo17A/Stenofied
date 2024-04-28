@@ -9,7 +9,6 @@ import 'package:stenofied/widgets/app_bar_widget.dart';
 import 'package:stenofied/widgets/custom_miscellaneous_widgets.dart';
 import 'package:stenofied/widgets/custom_padding_widgets.dart';
 
-import '../utils/color_util.dart';
 import '../widgets/custom_text_widgets.dart';
 
 class AdminViewSectionsScreen extends ConsumerStatefulWidget {
@@ -56,15 +55,17 @@ class _AdminViewSectionsScreenState
         ]),
         body: switchedLoadingContainer(
             ref.read(loadingProvider).isLoading,
-            SingleChildScrollView(
-              child: all20Pix(
-                  child: Column(
-                children: [
-                  blackInterBold('SECTIONS', fontSize: 40),
-                  Divider(color: CustomColors.turquoise),
-                  sectionEntries()
-                ],
-              )),
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: SingleChildScrollView(
+                child: all20Pix(
+                    child: Column(
+                  children: [
+                    blackInterBold('SECTIONS', fontSize: 40),
+                    sectionEntries()
+                  ],
+                )),
+              ),
             )),
       ),
     );
@@ -72,18 +73,23 @@ class _AdminViewSectionsScreenState
 
   Widget sectionEntries() {
     return sectionDocs.isNotEmpty
-        ? ListView.builder(
-            shrinkWrap: true,
-            itemCount: sectionDocs.length,
-            itemBuilder: (context, index) {
-              final sectionData =
-                  sectionDocs[index].data() as Map<dynamic, dynamic>;
+        ? Wrap(
+            runAlignment: WrapAlignment.spaceAround,
+            spacing: 12,
+            children: sectionDocs.map((section) {
+              final sectionData = section.data() as Map<dynamic, dynamic>;
               String name = sectionData[SectionFields.name];
-              return ElevatedButton(
-                  onPressed: () => NavigatorRoutes.adminSelectedSection(context,
-                      sectionID: sectionDocs[index].id),
-                  child: whiteInterBold(name));
-            })
+              return SizedBox(
+                width: MediaQuery.of(context).size.width * 0.35,
+                height: MediaQuery.of(context).size.width * 0.3,
+                child: ElevatedButton(
+                    onPressed: () => NavigatorRoutes.adminSelectedSection(
+                        context,
+                        sectionID: section.id),
+                    child: whiteInterBold(name)),
+              );
+            }).toList(),
+          )
         : all20Pix(
             child: blackInterBold('NO AVAILABLE SECTIONS', fontSize: 25));
   }

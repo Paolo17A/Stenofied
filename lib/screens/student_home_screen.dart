@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
-import 'package:stenofied/models/lesson_model.dart';
 import 'package:stenofied/utils/navigator_util.dart';
 import 'package:stenofied/widgets/app_bottom_nav_bar_widget.dart';
 import 'package:stenofied/widgets/custom_button_widgets.dart';
@@ -36,23 +35,43 @@ class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
             children: [
               welcomeWidgets(
                   userType: ref.read(userDataProvider).userType,
-                  profileImageURL: ref.read(userDataProvider).profileImageURL,
-                  containerColor: CustomColors.turquoise),
+                  profileImageURL: ref.read(userDataProvider).profileImageURL),
               Gap(40),
-              if (ref.read(userDataProvider).lessonIndex <
-                  allLessonModels.length)
-                studentHomeButton(context,
-                    label: 'STUDY YOUR\nNEXT LESSON',
-                    onPress: () => NavigatorRoutes.studentSelectedLesson(
-                        context,
-                        lessonModel: allLessonModels[
-                            ref.read(userDataProvider).lessonIndex - 1])),
-              studentHomeButton(context,
-                  label: 'PRACTICE TRACING', onPress: () {}),
-              studentHomeButton(context,
-                  label: 'TAKE THE NEXT QUIZ', onPress: () {})
+              _homeButtons()
             ],
           )),
+    );
+  }
+
+  Widget _homeButtons() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        homeButton(context,
+            label: 'STUDY YOUR NEXT LESSON',
+            width: MediaQuery.of(context).size.width * 0.4,
+            height: MediaQuery.of(context).size.width * 0.8,
+            color: CustomColors.ketchup,
+            onPress: () => Navigator.of(context)
+                .pushNamed(NavigatorRoutes.studentLessons)),
+        Column(
+          children: [
+            homeButton(context,
+                label: 'PRACTICE TRACING',
+                width: MediaQuery.of(context).size.width * 0.4,
+                height: MediaQuery.of(context).size.width * 0.4 - 10,
+                color: CustomColors.sangria,
+                onPress: () {}),
+            Gap(20),
+            homeButton(context,
+                label: 'TAKE YOUR NEXT QUIZ',
+                width: MediaQuery.of(context).size.width * 0.4,
+                height: MediaQuery.of(context).size.width * 0.4 - 10,
+                color: CustomColors.blush,
+                onPress: () {})
+          ],
+        ),
+      ],
     );
   }
 }

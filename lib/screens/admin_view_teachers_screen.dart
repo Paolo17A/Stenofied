@@ -52,7 +52,6 @@ class _AdminViewTeachersScreenState
                 child: Column(
               children: [
                 blackInterBold('REGISTERED TEACHERS', fontSize: 40),
-                Divider(color: CustomColors.turquoise),
                 studentEntries()
               ],
             )),
@@ -61,19 +60,24 @@ class _AdminViewTeachersScreenState
   }
 
   Widget studentEntries() {
-    return teacherDocs.isNotEmpty
-        ? ListView.builder(
-            shrinkWrap: true,
-            itemCount: teacherDocs.length,
-            itemBuilder: (context, index) {
-              return userRecordEntry(
-                  userDoc: teacherDocs[index],
-                  onTap: () => NavigatorRoutes.adminSelectedTeacher(context,
-                      userID: teacherDocs[index].id),
-                  displayVerificationStatus: true);
-            })
-        : all20Pix(
-            child: blackInterBold('NO REGISTERED TEACHERS AVAILABLE',
-                fontSize: 25));
+    return Container(
+      decoration: BoxDecoration(
+          color: CustomColors.ketchup, borderRadius: BorderRadius.circular(10)),
+      padding: EdgeInsets.all(10),
+      child: teacherDocs.isNotEmpty
+          ? ListView.builder(
+              shrinkWrap: true,
+              itemCount: teacherDocs.length,
+              itemBuilder: (context, index) {
+                return userRecordEntry(
+                    userDoc: teacherDocs[index],
+                    onTap: () => NavigatorRoutes.adminSelectedTeacher(context,
+                        userID: teacherDocs[index].id),
+                    displayVerificationStatus: true);
+              })
+          : all20Pix(
+              child: blackInterBold('NO REGISTERED TEACHERS AVAILABLE',
+                  fontSize: 25)),
+    );
   }
 }

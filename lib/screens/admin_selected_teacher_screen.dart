@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
 import '../providers/loading_provider.dart';
-import '../utils/color_util.dart';
 import '../utils/delete_entry_dialog_util.dart';
 import '../utils/future_util.dart';
 import '../utils/string_util.dart';
@@ -107,7 +106,7 @@ class _AdminSelectedTeacherScreenState
                             child: whiteInterBold('DENY\nTEACHER')),
                       ],
                     ),
-                  Divider(color: CustomColors.turquoise),
+                  //Divider(color: CustomColors.turquoise),
                   Gap(40),
                   /*Container(
                     width: double.infinity,

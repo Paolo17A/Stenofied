@@ -60,38 +60,27 @@ class _TeacherProfileScreenState extends ConsumerState<TeacherProfileScreen> {
       drawer: appDrawer(context, ref, userType: UserTypes.teacher),
       body: switchedLoadingContainer(
           ref.read(loadingProvider).isLoading,
-          SingleChildScrollView(
-            child: all20Pix(
-                child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    buildProfileImageWidget(
-                        profileImageURL:
-                            ref.read(userDataProvider).profileImageURL,
-                        radius: MediaQuery.of(context).size.width * 0.2),
-                    Column(
-                      children: [
-                        if (ref
-                            .read(userDataProvider)
-                            .profileImageURL
-                            .isNotEmpty)
-                          ElevatedButton(
-                              onPressed: () =>
-                                  removeProfilePicture(context, ref),
-                              child: whiteInterBold('REMOVE\nPROFILE PICTURE')),
-                        ElevatedButton(
-                            onPressed: () => uploadProfilePicture(context, ref),
-                            child: whiteInterBold('UPLOAD\nPROFILE PICTURE'))
-                      ],
-                    )
-                  ],
-                ),
-                all10Pix(child: blackInterBold(formattedName, fontSize: 20)),
-              ],
-            )),
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: SingleChildScrollView(
+              child: all20Pix(
+                  child: Column(
+                children: [
+                  buildProfileImageWidget(
+                      profileImageURL:
+                          ref.read(userDataProvider).profileImageURL,
+                      radius: MediaQuery.of(context).size.width * 0.2),
+                  all10Pix(child: blackInterBold(formattedName, fontSize: 20)),
+                  if (ref.read(userDataProvider).profileImageURL.isNotEmpty)
+                    ElevatedButton(
+                        onPressed: () => removeProfilePicture(context, ref),
+                        child: whiteInterBold('REMOVE\nPROFILE PICTURE')),
+                  ElevatedButton(
+                      onPressed: () => uploadProfilePicture(context, ref),
+                      child: whiteInterBold('UPLOAD\nPROFILE PICTURE'))
+                ],
+              )),
+            ),
           )),
     );
   }

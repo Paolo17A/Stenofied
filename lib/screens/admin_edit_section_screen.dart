@@ -73,8 +73,7 @@ class _AdminEditSectionScreenState
     return vertical10Pix(
         child: Container(
       decoration: BoxDecoration(
-          color: CustomColors.turquoise,
-          borderRadius: BorderRadius.circular(10)),
+          color: CustomColors.ketchup, borderRadius: BorderRadius.circular(10)),
       child: regularTextField(
           label: 'Section Name', textController: nameController),
     ));

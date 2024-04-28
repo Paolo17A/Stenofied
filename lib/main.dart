@@ -24,6 +24,6 @@ class Stenofied extends StatelessWidget {
         title: 'Stenofied',
         theme: themeData,
         routes: routes,
-        initialRoute: NavigatorRoutes.welcome);
+        initialRoute: NavigatorRoutes.login);
   }
 }

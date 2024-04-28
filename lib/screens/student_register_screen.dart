@@ -7,7 +7,6 @@ import 'package:stenofied/utils/string_util.dart';
 import '../providers/loading_provider.dart';
 import '../widgets/app_bar_widget.dart';
 import '../widgets/custom_miscellaneous_widgets.dart';
-import '../widgets/custom_padding_widgets.dart';
 import '../widgets/custom_text_widgets.dart';
 
 class StudentRegisterScreen extends ConsumerStatefulWidget {
@@ -45,30 +44,32 @@ class _StudentRegisterScreenState extends ConsumerState<StudentRegisterScreen> {
       child: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Scaffold(
-          appBar: appBarWidget(mayGoBack: true),
-          body: stackedLoadingContainer(
+            appBar: appBarWidget(mayGoBack: true),
+            body: stackedLoadingContainer(
               context,
               ref.read(loadingProvider).isLoading,
               SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: SingleChildScrollView(
-                    child: all20Pix(
-                        child: Column(
-                  children: [
-                    blackInterBold('USER REGISTER', fontSize: 35),
-                    authenticationIcon(context, iconData: Icons.person),
-                    const Gap(20),
-                    registerFieldsContainer(context, ref,
-                        userType: UserTypes.student,
-                        emailController: emailController,
-                        passwordController: passwordController,
-                        confirmPasswordController: confirmPasswordController,
-                        firstNameController: firstNameController,
-                        lastNameController: lastNameController),
-                  ],
-                ))),
-              )),
-        ),
+                  width: MediaQuery.of(context).size.width,
+                  child: SingleChildScrollView(
+                      child: Column(
+                    children: [
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Image.asset(ImagePaths.studentUser, scale: 0.9),
+                            blackInterBold('STUDENT', fontSize: 35)
+                          ]),
+                      const Gap(20),
+                      registerFieldsContainer(context, ref,
+                          userType: UserTypes.student,
+                          emailController: emailController,
+                          passwordController: passwordController,
+                          confirmPasswordController: confirmPasswordController,
+                          firstNameController: firstNameController,
+                          lastNameController: lastNameController),
+                    ],
+                  ))),
+            )),
       ),
     );
   }

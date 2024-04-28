@@ -8,31 +8,31 @@ import 'package:stenofied/screens/admin_selected_teacher_screen.dart';
 import 'package:stenofied/screens/admin_view_sections_screen.dart';
 import 'package:stenofied/screens/admin_view_students_screen.dart';
 import 'package:stenofied/screens/admin_view_teachers_screen.dart';
+import 'package:stenofied/screens/login_screen.dart';
 import 'package:stenofied/screens/student_selected_lesson_screen.dart';
 import 'package:stenofied/screens/student_view_lessons_screen.dart';
 import 'package:stenofied/screens/teacher_assigned_section_screen.dart';
 
 import '../screens/admin_home_screen.dart';
-import '../screens/admin_login_screen.dart';
 import '../screens/edit_profile_screen.dart';
 import '../screens/forgot_password_screen.dart';
+import '../screens/select_user_type_screen.dart';
 import '../screens/student_home_screen.dart';
-import '../screens/student_login_screen.dart';
 import '../screens/student_profile_screen.dart';
 import '../screens/student_register_screen.dart';
+import '../screens/student_view_exercises_screen.dart';
 import '../screens/teacher_home_screen.dart';
-import '../screens/teacher_login_screen.dart';
 import '../screens/teacher_profile_screen.dart';
 import '../screens/teacher_register_screen.dart';
-import '../screens/welcome_screen.dart';
 
 class NavigatorRoutes {
-  static const welcome = 'welcome';
+  //static const welcome = 'welcome';
+  static const login = 'login';
+  static const selectUserType = 'selectUserType';
   static const forgotPassword = 'forgotPassword';
   static const editProfile = 'editProfile';
 
   //  STUDENTS
-  static const studentLogin = 'studentLogin';
   static const studentRegister = 'studentRegister';
   static const studentHome = 'studentHome';
   static const studentProfile = 'studentProfile';
@@ -44,15 +44,15 @@ class NavigatorRoutes {
             StudentSelectedLessonScreen(lessonModel: lessonModel)));
   }
 
+  static const studentExercises = 'studentExercises';
+
   //  TEACHERS
-  static const teacherLogin = 'teacherLogin';
   static const teacherRegister = 'teacherRegister';
   static const teacherHome = 'teacherHome';
   static const teacherProfile = 'teacherProfile';
   static const teacherAssignedSection = 'teacherAssignedSection';
 
   //  ADMINS
-  static const adminLogin = 'adminLogin';
   static const adminHome = 'adminHome';
   static const adminViewStudents = 'adminViewStudents';
   static void adminSelectedStudent(BuildContext context,
@@ -91,19 +91,19 @@ class NavigatorRoutes {
 }
 
 final Map<String, WidgetBuilder> routes = {
-  NavigatorRoutes.welcome: (context) => const WelcomeScreen(),
+  NavigatorRoutes.login: (context) => const LoginScreen(),
+  NavigatorRoutes.selectUserType: (context) => const SelectUserTypeScreen(),
   NavigatorRoutes.forgotPassword: (context) => const ForgotPasswordScreen(),
   NavigatorRoutes.editProfile: (context) => const EditProfileScreen(),
 
   //  STUDENTS
-  NavigatorRoutes.studentLogin: (context) => const StudentLoginScreen(),
   NavigatorRoutes.studentRegister: (context) => const StudentRegisterScreen(),
   NavigatorRoutes.studentHome: (context) => const StudentHomeScreen(),
   NavigatorRoutes.studentProfile: (context) => const StudentProfileScreen(),
   NavigatorRoutes.studentLessons: (context) => const StudentLessonsScreen(),
+  NavigatorRoutes.studentExercises: (context) => const StudentExercisesScreen(),
 
   //  TEACHERS
-  NavigatorRoutes.teacherLogin: (context) => const TeacherLoginScreen(),
   NavigatorRoutes.teacherRegister: (context) => const TeacherRegisterScreen(),
   NavigatorRoutes.teacherHome: (context) => const TeacherHomeScreen(),
   NavigatorRoutes.teacherProfile: (context) => const TeacherProfileScreen(),
@@ -111,7 +111,6 @@ final Map<String, WidgetBuilder> routes = {
       const TeacherAssignedSectionScreen(),
 
   //  ADMIN
-  NavigatorRoutes.adminLogin: (context) => const AdminLoginScreen(),
   NavigatorRoutes.adminHome: (context) => const AdminHomeScreen(),
   NavigatorRoutes.adminViewStudents: (context) =>
       const AdminViewStudentsScreen(),

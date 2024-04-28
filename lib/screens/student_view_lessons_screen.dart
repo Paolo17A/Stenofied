@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
 import 'package:stenofied/models/lesson_model.dart';
 import 'package:stenofied/providers/loading_provider.dart';
 import 'package:stenofied/providers/user_data_provider.dart';
@@ -60,28 +61,30 @@ class _StudentLessonsScreenState extends ConsumerState<StudentLessonsScreen> {
               child: all20Pix(
                   child: Column(
                 children: [
-                  blackInterBold('STENOGRAPHY LESSONS', fontSize: 26),
-                  ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: allLessonModels.length,
-                      itemBuilder: (context, index) {
-                        return vertical10Pix(
-                            child: ElevatedButton(
-                                onPressed: allLessonModels[index].lessonIndex <=
-                                        ref.read(userDataProvider).lessonIndex
-                                    ? () =>
-                                        NavigatorRoutes.studentSelectedLesson(
-                                            context,
-                                            lessonModel: allLessonModels[index])
-                                    : null,
-                                style: ElevatedButton.styleFrom(
-                                    disabledBackgroundColor:
-                                        CustomColors.ketchup.withOpacity(0.5)),
-                                child: whiteInterBold(
-                                    'Lesson ${allLessonModels[index].lessonIndex}',
-                                    fontSize: 16)));
-                      })
+                  blackInterBold('STENOGRAPHY LESSONS', fontSize: 32),
+                  Gap(40),
+                  Wrap(
+                      spacing: 10,
+                      runSpacing: 10,
+                      children: allLessonModels.map((lesson) {
+                        return SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.35,
+                          height: MediaQuery.of(context).size.width * 0.3,
+                          child: ElevatedButton(
+                              onPressed: lesson.lessonIndex <=
+                                      ref.read(userDataProvider).lessonIndex
+                                  ? () => NavigatorRoutes.studentSelectedLesson(
+                                      context,
+                                      lessonModel: lesson)
+                                  : null,
+                              style: ElevatedButton.styleFrom(
+                                  disabledBackgroundColor:
+                                      CustomColors.ketchup.withOpacity(0.5)),
+                              child: whiteInterBold(
+                                  'Lesson ${lesson.lessonIndex}',
+                                  fontSize: 16)),
+                        );
+                      }).toList())
                 ],
               )),
             ),

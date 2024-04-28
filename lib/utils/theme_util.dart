@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:stenofied/utils/color_util.dart';
 
 final ThemeData themeData = ThemeData(
-    colorSchemeSeed: CustomColors.turquoise,
+    colorSchemeSeed: CustomColors.sangria,
     scaffoldBackgroundColor: CustomColors.parchment,
-    appBarTheme: const AppBarTheme(backgroundColor: CustomColors.turquoise),
+    appBarTheme: const AppBarTheme(backgroundColor: CustomColors.parchment),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: CustomColors.turquoise,
-        selectedItemColor: CustomColors.mintGreen),
+        backgroundColor: CustomColors.latte, selectedItemColor: Colors.white),
     listTileTheme: const ListTileThemeData(
-        iconColor: CustomColors.mintGreen,
+        iconColor: Colors.white,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)))),
     elevatedButtonTheme: ElevatedButtonThemeData(
