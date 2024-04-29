@@ -24,6 +24,7 @@ class Collections {
   static const String users = 'users';
   static const String sections = 'sections';
   static const String faqs = 'faqs';
+  static const String exerciseResults = 'exerciseResults';
 }
 
 class UserFields {
@@ -48,15 +49,19 @@ class SectionFields {
 class ExerciseResultFields {
   static const String studentID = 'studentID';
   static const String exerciseIndex = 'exerciseIndex';
-  static const String imageURLs = 'imageURLs';
-  static const String exerciseResults = 'exerciserResults';
+  static const String exerciseResults = 'exerciseResults';
+  static const String isGraded = 'isGraded';
 }
 
 class QuizResultFields {
   static const String studentID = 'studentID';
   static const String quizIndex = 'quizIndex';
-  static const String imageURLs = 'imageURLs';
   static const String quizResults = 'quizResults';
+}
+
+class EntryFields {
+  static const String isCorrect = 'isCorrect';
+  static const String imageURL = 'imageURL';
 }
 
 class FAQFields {

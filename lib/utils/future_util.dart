@@ -8,6 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:stenofied/providers/current_exercise_provider.dart';
 import 'package:stenofied/providers/proof_of_enrollment_provider.dart';
 
 import '../providers/loading_provider.dart';
@@ -127,6 +128,7 @@ Future logInUser(BuildContext context, WidgetRef ref,
           const SnackBar(content: Text('Please fill up all given fields.')));
       return;
     }
+    FocusScope.of(context).unfocus();
     ref.read(loadingProvider.notifier).toggleLoading(true);
     await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: emailController.text, password: passwordController.text);
@@ -161,6 +163,7 @@ Future logInUser(BuildContext context, WidgetRef ref,
         .read(userDataProvider)
         .setProfileImage(userData[UserFields.profileImageURL]);
     ref.read(userDataProvider).setUserType(userData[UserFields.userType]);
+    ref.read(userDataProvider).setSectionID(userData[UserFields.sectionID]);
     emailController.clear();
     passwordController.clear();
     if (userData[UserFields.userType] == UserTypes.student) {
@@ -567,4 +570,108 @@ Future assignUserToSection(BuildContext context, WidgetRef ref,
         SnackBar(content: Text('Error assigning user to section: $error')));
     ref.read(loadingProvider).toggleLoading(false);
   }
+}
+
+//==============================================================================
+//EXERCISES=====================================================================
+//==============================================================================
+
+Future submitNewExerciseResult(BuildContext context, WidgetRef ref) async {
+  final scaffoldMessenger = ScaffoldMessenger.of(context);
+  final navigator = Navigator.of(context);
+  try {
+    ref.read(loadingProvider).toggleLoading(true);
+    final resultReference = await FirebaseFirestore.instance
+        .collection(Collections.exerciseResults)
+        .add({
+      ExerciseResultFields.studentID: FirebaseAuth.instance.currentUser!.uid,
+      ExerciseResultFields.exerciseIndex:
+          ref.read(currentExerciseProvider).currentExerciseModel!.exerciseIndex,
+      ExerciseResultFields.isGraded: false
+    });
+
+    List<Map<dynamic, dynamic>> exerciseResults = [];
+    for (var traceImage in ref.read(currentExerciseProvider).traceOutputList) {
+      final storageRef = FirebaseStorage.instance
+          .ref()
+          .child(StorageFields.exerciseImages)
+          .child(resultReference.id)
+          .child('${generateRandomHexString(6)}.png');
+      final uploadTask = storageRef.putData(traceImage!);
+      final taskSnapshot = await uploadTask;
+      final String downloadURL = await taskSnapshot.ref.getDownloadURL();
+      exerciseResults.add(
+          {EntryFields.isCorrect: false, EntryFields.imageURL: downloadURL});
+    }
+
+    await FirebaseFirestore.instance
+        .collection(Collections.exerciseResults)
+        .doc(resultReference.id)
+        .update({ExerciseResultFields.exerciseResults: exerciseResults});
+    scaffoldMessenger.showSnackBar(SnackBar(
+        content: Text('Successfully submitted this tracing exercise')));
+
+    navigator.pop();
+    navigator.pushReplacementNamed(NavigatorRoutes.studentExercises);
+  } catch (error) {
+    scaffoldMessenger.showSnackBar(
+        SnackBar(content: Text('Error submitting this exercise: $error')));
+    ref.read(loadingProvider).toggleLoading(false);
+  }
+}
+
+Future<DocumentSnapshot> getExerciseResultDoc(String exerciseResultID) async {
+  return await FirebaseFirestore.instance
+      .collection(Collections.exerciseResults)
+      .doc(exerciseResultID)
+      .get();
+}
+
+Future<List<DocumentSnapshot>> getStudentExerciseResultDocs(
+    String userID) async {
+  final results = await FirebaseFirestore.instance
+      .collection(Collections.exerciseResults)
+      .where(ExerciseResultFields.studentID, isEqualTo: userID)
+      .get();
+  return results.docs.map((e) => e as DocumentSnapshot).toList();
+}
+
+Future<List<DocumentSnapshot>> getUserExerciseResultDocs() async {
+  return getStudentExerciseResultDocs(FirebaseAuth.instance.currentUser!.uid);
+}
+
+Future gradeExerciseOutput(BuildContext context, WidgetRef ref,
+    {required String exerciseResultID,
+    required List<dynamic> exerciseResults}) async {
+  final scaffoldMessenger = ScaffoldMessenger.of(context);
+  final navigator = Navigator.of(context);
+  try {
+    ref.read(loadingProvider).toggleLoading(true);
+    await FirebaseFirestore.instance
+        .collection(Collections.exerciseResults)
+        .doc(exerciseResultID)
+        .update({
+      ExerciseResultFields.exerciseResults: exerciseResults,
+      ExerciseResultFields.isGraded: true
+    });
+    scaffoldMessenger.showSnackBar(SnackBar(
+        content: Text('Successfully graded this exercise submission.')));
+    navigator.pop();
+    navigator.pushReplacementNamed(NavigatorRoutes.teacherHome);
+    ref.read(loadingProvider).toggleLoading(false);
+  } catch (error) {
+    scaffoldMessenger.showSnackBar(
+        SnackBar(content: Text('Error grading this exercise output: $error')));
+    ref.read(loadingProvider).toggleLoading(false);
+  }
+}
+
+Future<List<DocumentSnapshot>> getUngradedExerciseSubmissionsInSection(
+    List<String> studentIDs) async {
+  final exerciseResults = await FirebaseFirestore.instance
+      .collection(Collections.exerciseResults)
+      .where(ExerciseResultFields.studentID, whereIn: studentIDs)
+      .where(ExerciseResultFields.isGraded, isEqualTo: false)
+      .get();
+  return exerciseResults.docs.map((e) => e as DocumentSnapshot).toList();
 }

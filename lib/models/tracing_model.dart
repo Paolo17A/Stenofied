@@ -590,6 +590,317 @@ final allExerciseModels = [
             imagePath: '${ImagePaths.tracingPath}/L8T9.png'),
         TracingModel(
             word: 'at, it', imagePath: '${ImagePaths.tracingPath}/L8T10.png'),
+        TracingModel(
+            word: 'I', imagePath: '${ImagePaths.tracingPath}/L8T11.png'),
+        TracingModel(
+            word: 'would', imagePath: '${ImagePaths.tracingPath}/L8T12.png'),
+        TracingModel(
+            word: 'be, by', imagePath: '${ImagePaths.tracingPath}/L8T13.png'),
+        TracingModel(
+            word: 'is, his', imagePath: '${ImagePaths.tracingPath}/L8T14.png'),
+        TracingModel(
+            word: 'you, your',
+            imagePath: '${ImagePaths.tracingPath}/L8T15.png'),
+        TracingModel(
+            word: 'can', imagePath: '${ImagePaths.tracingPath}/L8T16.png'),
+        TracingModel(
+            word: 'in, not', imagePath: '${ImagePaths.tracingPath}/L8T17.png'),
+        TracingModel(
+            word: 'afford', imagePath: '${ImagePaths.tracingPath}/L8T18.png'),
+        TracingModel(
+            word: 'believe', imagePath: '${ImagePaths.tracingPath}/L8T19.png'),
+        TracingModel(
+            word: 'forgive', imagePath: '${ImagePaths.tracingPath}/L8T20.png'),
+        TracingModel(
+            word: 'became', imagePath: '${ImagePaths.tracingPath}/L8T21.png'),
+        TracingModel(
+            word: 'beside', imagePath: '${ImagePaths.tracingPath}/L8T22.png'),
+        TracingModel(
+            word: 'form', imagePath: '${ImagePaths.tracingPath}/L8T23.png'),
+        TracingModel(
+            word: 'because', imagePath: '${ImagePaths.tracingPath}/L8T24.png'),
+        TracingModel(
+            word: 'cannot', imagePath: '${ImagePaths.tracingPath}/L8T25.png'),
+        TracingModel(
+            word: 'forms', imagePath: '${ImagePaths.tracingPath}/L8T26.png'),
+        TracingModel(
+            word: 'before', imagePath: '${ImagePaths.tracingPath}/L8T27.png'),
+        TracingModel(
+            word: 'force', imagePath: '${ImagePaths.tracingPath}/L8T28.png'),
+        TracingModel(
+            word: 'goods', imagePath: '${ImagePaths.tracingPath}/L8T29.png'),
+        TracingModel(
+            word: 'began', imagePath: '${ImagePaths.tracingPath}/L8T30.png'),
+        TracingModel(
+            word: 'forced', imagePath: '${ImagePaths.tracingPath}/L8T31.png'),
+        TracingModel(
+            word: 'having', imagePath: '${ImagePaths.tracingPath}/L8T32.png'),
+        TracingModel(
+            word: 'being', imagePath: '${ImagePaths.tracingPath}/L8T33.png'),
+        TracingModel(
+            word: 'forget', imagePath: '${ImagePaths.tracingPath}/L8T34.png'),
+        TracingModel(
+            word: 'inform', imagePath: '${ImagePaths.tracingPath}/L8T35.png'),
+        TracingModel(
+            word: 'I will have',
+            imagePath: '${ImagePaths.tracingPath}/L8T36.png'),
+        TracingModel(
+            word: 'we will be',
+            imagePath: '${ImagePaths.tracingPath}/L8T37.png'),
+        TracingModel(
+            word: 'you will not be',
+            imagePath: '${ImagePaths.tracingPath}/L8T38.png'),
+        TracingModel(
+            word: 'I will not',
+            imagePath: '${ImagePaths.tracingPath}/L8T39.png'),
+        TracingModel(
+            word: 'will not', imagePath: '${ImagePaths.tracingPath}/L8T40.png'),
+        TracingModel(
+            word: 'you will not',
+            imagePath: '${ImagePaths.tracingPath}/L8T41.png'),
+        TracingModel(
+            word: 'I will not be',
+            imagePath: '${ImagePaths.tracingPath}/L8T42.png'),
+        TracingModel(
+            word: 'you will', imagePath: '${ImagePaths.tracingPath}/L8T43.png'),
+        TracingModel(
+            word: 'have', imagePath: '${ImagePaths.tracingPath}/L8T44.png'),
+        TracingModel(
+            word: 'I would', imagePath: '${ImagePaths.tracingPath}/L8T45.png'),
+        TracingModel(
+            word: 'you would',
+            imagePath: '${ImagePaths.tracingPath}/L8T46.png'),
+        TracingModel(
+            word: 'you would not be',
+            imagePath: '${ImagePaths.tracingPath}/L8T47.png'),
+        TracingModel(
+            word: 'I would be',
+            imagePath: '${ImagePaths.tracingPath}/L8T48.png'),
+        TracingModel(
+            word: 'you would be',
+            imagePath: '${ImagePaths.tracingPath}/L8T49.png'),
+        TracingModel(
+            word: 'you would not have',
+            imagePath: '${ImagePaths.tracingPath}/L8T50.png'),
+        TracingModel(
+            word: 'I would not',
+            imagePath: '${ImagePaths.tracingPath}/L8T51.png'),
+        TracingModel(
+            word: 'you would have',
+            imagePath: '${ImagePaths.tracingPath}/L8T52.png'),
+        TracingModel(
+            word: 'can have', imagePath: '${ImagePaths.tracingPath}/L8T53.png'),
+        TracingModel(
+            word: 'I cannot', imagePath: '${ImagePaths.tracingPath}/L8T54.png'),
+        TracingModel(
+            word: 'you can', imagePath: '${ImagePaths.tracingPath}/L8T55.png'),
+        TracingModel(
+            word: 'cannot be',
+            imagePath: '${ImagePaths.tracingPath}/L8T56.png'),
+        TracingModel(
+            word: 'I cannot be',
+            imagePath: '${ImagePaths.tracingPath}/L8T57.png'),
+        TracingModel(
+            word: 'you can be',
+            imagePath: '${ImagePaths.tracingPath}/L8T58.png'),
+        TracingModel(
+            word: 'I can', imagePath: '${ImagePaths.tracingPath}/L8T59.png'),
+        TracingModel(
+            word: 'we can', imagePath: '${ImagePaths.tracingPath}/L8T60.png'),
+        TracingModel(
+            word: 'you can have',
+            imagePath: '${ImagePaths.tracingPath}/L8T61.png'),
+        TracingModel(
+            word: 'I can be', imagePath: '${ImagePaths.tracingPath}/L8T62.png'),
+        TracingModel(
+            word: 'we cannot',
+            imagePath: '${ImagePaths.tracingPath}/L8T63.png'),
+        TracingModel(
+            word: 'you cannot',
+            imagePath: '${ImagePaths.tracingPath}/L8T64.png'),
+        TracingModel(
+            word: 'are in, are not',
+            imagePath: '${ImagePaths.tracingPath}/L8T65.png'),
+        TracingModel(
+            word: 'I have', imagePath: '${ImagePaths.tracingPath}/L8T66.png'),
+        TracingModel(
+            word: 'by the', imagePath: '${ImagePaths.tracingPath}/L8T67.png'),
+        TracingModel(
+            word: 'I have not',
+            imagePath: '${ImagePaths.tracingPath}/L8T68.png'),
+        TracingModel(
+            word: 'by you, by your',
+            imagePath: '${ImagePaths.tracingPath}/L8T69.png'),
+        TracingModel(
+            word: 'in it', imagePath: '${ImagePaths.tracingPath}/L8T70.png'),
+        TracingModel(
+            word: 'have not', imagePath: '${ImagePaths.tracingPath}/L8T71.png'),
+        TracingModel(
+            word: 'in our', imagePath: '${ImagePaths.tracingPath}/L8T72.png'),
+        TracingModel(
+            word: 'I am', imagePath: '${ImagePaths.tracingPath}/L8T73.png'),
+        TracingModel(
+            word: 'it is', imagePath: '${ImagePaths.tracingPath}/L8T74.png'),
+      ]),
+  ExerciseModel(
+      exerciseIndex: 9,
+      exerciseDescription: 'Sound of Th, Sh, Ch, and J Words',
+      tracingModels: [
+        TracingModel(
+            word: 'these', imagePath: '${ImagePaths.tracingPath}/L9T1.png'),
+        TracingModel(
+            word: 'Keith', imagePath: '${ImagePaths.tracingPath}/L9T2.png'),
+        TracingModel(
+            word: 'then, thin',
+            imagePath: '${ImagePaths.tracingPath}/L9T3.png'),
+        TracingModel(
+            word: 'Ruth', imagePath: '${ImagePaths.tracingPath}/L9T4.png'),
+        TracingModel(
+            word: 'thick', imagePath: '${ImagePaths.tracingPath}/L9T5.png'),
+        TracingModel(
+            word: 'smooth', imagePath: '${ImagePaths.tracingPath}/L9T6.png'),
+        TracingModel(
+            word: 'math', imagePath: '${ImagePaths.tracingPath}/L9T7.png'),
+        TracingModel(
+            word: 'truth', imagePath: '${ImagePaths.tracingPath}/L9T8.png'),
+        TracingModel(
+            word: 'Smith', imagePath: '${ImagePaths.tracingPath}/L9T9.png'),
+        TracingModel(
+            word: 'faith', imagePath: '${ImagePaths.tracingPath}/L9T10.png'),
+        TracingModel(
+            word: 'she', imagePath: '${ImagePaths.tracingPath}/L9T11.png'),
+        TracingModel(
+            word: 'shape', imagePath: '${ImagePaths.tracingPath}/L9T12.png'),
+        TracingModel(
+            word: 'show', imagePath: '${ImagePaths.tracingPath}/L9T13.png'),
+        TracingModel(
+            word: 'sure', imagePath: '${ImagePaths.tracingPath}/L9T14.png'),
+        TracingModel(
+            word: 'showed', imagePath: '${ImagePaths.tracingPath}/L9T15.png'),
+        TracingModel(
+            word: 'issue', imagePath: '${ImagePaths.tracingPath}/L9T16.png'),
+        TracingModel(
+            word: 'share', imagePath: '${ImagePaths.tracingPath}/L9T17.png'),
+        TracingModel(
+            word: 'issued', imagePath: '${ImagePaths.tracingPath}/L9T18.png'),
+        TracingModel(
+            word: 'shade', imagePath: '${ImagePaths.tracingPath}/L9T19.png'),
+        TracingModel(
+            word: 'sheep', imagePath: '${ImagePaths.tracingPath}/L9T20.png'),
+      ]),
+  ExerciseModel(
+      exerciseIndex: 10,
+      exerciseDescription: 'Brief Forms and -ly words',
+      tracingModels: [
+        TracingModel(
+            word: 'the', imagePath: '${ImagePaths.tracingPath}/L10T1.png'),
+        TracingModel(
+            word: 'that', imagePath: '${ImagePaths.tracingPath}/L10T2.png'),
+        TracingModel(
+            word: 'this', imagePath: '${ImagePaths.tracingPath}/L10T3.png'),
+        TracingModel(
+            word: 'them', imagePath: '${ImagePaths.tracingPath}/L10T4.png'),
+        TracingModel(
+            word: 'should', imagePath: '${ImagePaths.tracingPath}/L10T5.png'),
+        TracingModel(
+            word: 'could', imagePath: '${ImagePaths.tracingPath}/L10T6.png'),
+        TracingModel(
+            word: 'but', imagePath: '${ImagePaths.tracingPath}/L10T7.png'),
+        TracingModel(
+            word: 'which', imagePath: '${ImagePaths.tracingPath}/L10T8.png'),
+        TracingModel(
+            word: 'of the', imagePath: '${ImagePaths.tracingPath}/L10T9.png'),
+        TracingModel(
+            word: 'in the', imagePath: '${ImagePaths.tracingPath}/L10T10.png'),
+        TracingModel(
+            word: 'in which',
+            imagePath: '${ImagePaths.tracingPath}/L10T11.png'),
+        TracingModel(
+            word: 'of these',
+            imagePath: '${ImagePaths.tracingPath}/L10T12.png'),
+        TracingModel(
+            word: 'on the', imagePath: '${ImagePaths.tracingPath}/L10T13.png'),
+        TracingModel(
+            word: 'which is',
+            imagePath: '${ImagePaths.tracingPath}/L10T14.png'),
+        TracingModel(
+            word: 'of them', imagePath: '${ImagePaths.tracingPath}/L10T15.png'),
+        TracingModel(
+            word: 'is this, is in',
+            imagePath: '${ImagePaths.tracingPath}/L10T16.png'),
+        TracingModel(
+            word: 'is not', imagePath: '${ImagePaths.tracingPath}/L10T17.png'),
+        TracingModel(
+            word: 'on the', imagePath: '${ImagePaths.tracingPath}/L10T18.png'),
+        TracingModel(
+            word: 'this is', imagePath: '${ImagePaths.tracingPath}/L10T19.png'),
+        TracingModel(
+            word: 'should be',
+            imagePath: '${ImagePaths.tracingPath}/L10T20.png'),
+        TracingModel(
+            word: 'as the', imagePath: '${ImagePaths.tracingPath}/L10T21.png'),
+        TracingModel(
+            word: 'this is the',
+            imagePath: '${ImagePaths.tracingPath}/L10T22.png'),
+        TracingModel(
+            word: 'should have',
+            imagePath: '${ImagePaths.tracingPath}/L10T23.png'),
+        TracingModel(
+            word: 'by the', imagePath: '${ImagePaths.tracingPath}/L10T24.png'),
+        TracingModel(
+            word: 'in this', imagePath: '${ImagePaths.tracingPath}/L10T25.png'),
+        TracingModel(
+            word: 'I could', imagePath: '${ImagePaths.tracingPath}/L10T26.png'),
+        TracingModel(
+            word: 'to the', imagePath: '${ImagePaths.tracingPath}/L10T27.png'),
+        TracingModel(
+            word: 'on this', imagePath: '${ImagePaths.tracingPath}/L10T28.png'),
+        TracingModel(
+            word: 'I could not',
+            imagePath: '${ImagePaths.tracingPath}/L10T29.png'),
+        TracingModel(
+            word: 'for the', imagePath: '${ImagePaths.tracingPath}/L10T30.png'),
+        TracingModel(
+            word: 'this will',
+            imagePath: '${ImagePaths.tracingPath}/L10T31.png'),
+        TracingModel(
+            word: 'did not', imagePath: '${ImagePaths.tracingPath}/L10T32.png'),
+        TracingModel(
+            word: 'for this',
+            imagePath: '${ImagePaths.tracingPath}/L10T33.png'),
+        TracingModel(
+            word: 'this will be',
+            imagePath: '${ImagePaths.tracingPath}/L10T34.png'),
+        TracingModel(
+            word: 'for you, for your',
+            imagePath: '${ImagePaths.tracingPath}/L10T35.png'),
+        TracingModel(
+            word: 'that will',
+            imagePath: '${ImagePaths.tracingPath}/L10T36.png'),
+        TracingModel(
+            word: 'only', imagePath: '${ImagePaths.tracingPath}/L10T37.png'),
+        TracingModel(
+            word: 'likely', imagePath: '${ImagePaths.tracingPath}/L10T38.png'),
+        TracingModel(
+            word: 'greatly', imagePath: '${ImagePaths.tracingPath}/L10T39.png'),
+        TracingModel(
+            word: 'clearly', imagePath: '${ImagePaths.tracingPath}/L10T40.png'),
+        TracingModel(
+            word: 'properly',
+            imagePath: '${ImagePaths.tracingPath}/L10T41.png'),
+        TracingModel(
+            word: 'highly', imagePath: '${ImagePaths.tracingPath}/L10T42.png'),
+        TracingModel(
+            word: 'weekly', imagePath: '${ImagePaths.tracingPath}/L10T43.png'),
+        TracingModel(
+            word: 'daily', imagePath: '${ImagePaths.tracingPath}/L10T44.png'),
+        TracingModel(
+            word: 'mostly', imagePath: '${ImagePaths.tracingPath}/L10T45.png'),
+        TracingModel(
+            word: 'early', imagePath: '${ImagePaths.tracingPath}/L10T46.png'),
+        TracingModel(
+            word: 'sincerely',
+            imagePath: '${ImagePaths.tracingPath}/L10T47.png'),
       ])
 ];
 

@@ -1,10 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:stenofied/models/tracing_model.dart';
+import 'package:stenofied/providers/current_exercise_provider.dart';
 import 'package:stenofied/utils/navigator_util.dart';
 import 'package:stenofied/widgets/app_bar_widget.dart';
 import 'package:stenofied/widgets/app_bottom_nav_bar_widget.dart';
+import 'package:stenofied/widgets/app_drawer_widget.dart';
 import 'package:stenofied/widgets/custom_miscellaneous_widgets.dart';
 import 'package:stenofied/widgets/custom_padding_widgets.dart';
 
@@ -25,6 +28,26 @@ class StudentExercisesScreen extends ConsumerStatefulWidget {
 
 class _StudentExercisesScreenState
     extends ConsumerState<StudentExercisesScreen> {
+  List<DocumentSnapshot> submittedExerciseResults = [];
+
+  bool hasSubmission(int index) {
+    return submittedExerciseResults.any((element) {
+      final exerciseResultData = element.data() as Map<dynamic, dynamic>;
+      return exerciseResultData[ExerciseResultFields.exerciseIndex] == index;
+    });
+  }
+
+  String getCorrespondingExerciseResult(int index) {
+    return submittedExerciseResults
+        .where((element) {
+          final exerciseResultData = element.data() as Map<dynamic, dynamic>;
+          return exerciseResultData[ExerciseResultFields.exerciseIndex] ==
+              index;
+        })
+        .first
+        .id;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -36,6 +59,7 @@ class _StudentExercisesScreenState
         ref
             .read(userDataProvider)
             .setLessonIndex(userData[UserFields.currentLessonIndex]);
+        submittedExerciseResults = await getUserExerciseResultDocs();
         ref.read(loadingProvider).toggleLoading(false);
       } catch (error) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -49,8 +73,10 @@ class _StudentExercisesScreenState
   Widget build(BuildContext context) {
     ref.watch(loadingProvider);
     ref.watch(userDataProvider);
+    ref.watch(currentExerciseProvider);
     return Scaffold(
-      appBar: appBarWidget(),
+      appBar: appBarWidget(mayGoBack: true),
+      drawer: appDrawer(context, ref, userType: UserTypes.student),
       bottomNavigationBar:
           studentBottomNavBar(context, path: NavigatorRoutes.studentExercises),
       body: switchedLoadingContainer(
@@ -63,6 +89,7 @@ class _StudentExercisesScreenState
                 children: [
                   blackInterBold('TRACING EXERCISES', fontSize: 32),
                   Gap(40),
+                  exerciseWidgets()
                 ],
               )),
             ),
@@ -79,11 +106,15 @@ class _StudentExercisesScreenState
             width: MediaQuery.of(context).size.width * 0.35,
             height: MediaQuery.of(context).size.width * 0.3,
             child: ElevatedButton(
-                onPressed: () => showDescriptionDialog(exercise),
+                onPressed: () => hasSubmission(exercise.exerciseIndex)
+                    ? NavigatorRoutes.selectedExerciseResult(context,
+                        exerciseResultID: getCorrespondingExerciseResult(
+                            exercise.exerciseIndex))
+                    : showDescriptionDialog(exercise),
                 style: ElevatedButton.styleFrom(
                     disabledBackgroundColor:
                         CustomColors.ketchup.withOpacity(0.5)),
-                child: whiteInterBold('Lesson ${exercise.exerciseIndex}',
+                child: whiteInterBold('Exercise ${exercise.exerciseIndex}',
                     fontSize: 16)),
           );
         }).toList());
@@ -97,14 +128,23 @@ class _StudentExercisesScreenState
               content: SingleChildScrollView(
                 child: Column(
                   children: [
-                    whiteInterBold('Exercise Contents'),
+                    whiteInterBold('Exercise Contents', fontSize: 28),
                     vertical20Pix(
                         child: whiteInterRegular(
-                            exerciseModel.exerciseDescription)),
+                            exerciseModel.exerciseDescription,
+                            fontSize: 20)),
                     Gap(40),
                     ElevatedButton(
                         onPressed: () {
                           Navigator.of(context).pop();
+                          ref
+                              .read(currentExerciseProvider)
+                              .resetExerciseProvider();
+                          ref
+                              .read(currentExerciseProvider)
+                              .setExerciseModel(exerciseModel);
+                          Navigator.of(context)
+                              .pushNamed(NavigatorRoutes.studentTakeExercise);
                         },
                         child: whiteInterBold('START EXERCISE'))
                   ],

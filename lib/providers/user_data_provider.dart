@@ -7,6 +7,7 @@ class UserDataNotifier extends ChangeNotifier {
   String userType = UserTypes.student;
   String profileImageURL = '';
   int lessonIndex = 1;
+  String sectionID = '';
 
   void setUserType(String type) {
     userType = type;
@@ -20,6 +21,11 @@ class UserDataNotifier extends ChangeNotifier {
 
   void setLessonIndex(int index) {
     lessonIndex = index;
+    notifyListeners();
+  }
+
+  void setSectionID(String section) {
+    sectionID = section;
     notifyListeners();
   }
 }
