@@ -56,6 +56,10 @@ class CurrentExerciseNotifier extends ChangeNotifier {
     return tracingIndex == traceOutputList.length;
   }
 
+  bool isLookingAtLastWord() {
+    return tracingIndex == currentExerciseModel!.tracingModels.length - 1;
+  }
+
   Uint8List? getCurrentTrace() {
     if (tracingIndex >= traceOutputList.length) return null;
     return traceOutputList[tracingIndex];

@@ -10,11 +10,15 @@ import 'package:stenofied/screens/admin_view_students_screen.dart';
 import 'package:stenofied/screens/admin_view_teachers_screen.dart';
 import 'package:stenofied/screens/exercise_result_screen.dart';
 import 'package:stenofied/screens/login_screen.dart';
+import 'package:stenofied/screens/quiz_result_screen.dart';
 import 'package:stenofied/screens/student_selected_lesson_screen.dart';
 import 'package:stenofied/screens/student_take_exercise_screen.dart';
+import 'package:stenofied/screens/student_take_quiz_screen.dart';
 import 'package:stenofied/screens/student_view_lessons_screen.dart';
+import 'package:stenofied/screens/student_view_quizzes_screen.dart';
 import 'package:stenofied/screens/teacher_assigned_section_screen.dart';
 import 'package:stenofied/screens/teacher_grade_exercise_screen.dart';
+import 'package:stenofied/screens/teacher_grade_quiz_screen.dart';
 
 import '../screens/admin_home_screen.dart';
 import '../screens/edit_profile_screen.dart';
@@ -41,6 +45,12 @@ class NavigatorRoutes {
             ExerciseResultScreen(exerciseResultID: exerciseResultID)));
   }
 
+  static void selectedQuizResult(BuildContext context,
+      {required String quizResultID}) {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => QuizResultScreen(quizResultID: quizResultID)));
+  }
+
   //  STUDENTS
   static const studentRegister = 'studentRegister';
   static const studentHome = 'studentHome';
@@ -55,6 +65,8 @@ class NavigatorRoutes {
 
   static const studentExercises = 'studentExercises';
   static const studentTakeExercise = 'studentTakeExercise';
+  static const studentQuizzes = 'studentQuizzes';
+  static const studentTakeQuiz = 'studentTakeQuiz';
 
   //  TEACHERS
   static const teacherRegister = 'teacherRegister';
@@ -66,6 +78,13 @@ class NavigatorRoutes {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) =>
             TeacherGradeExerciseScreen(exerciseResultID: exerciseResultID)));
+  }
+
+  static void teacherGradeSelectedQuiz(BuildContext context,
+      {required String quizResultID}) {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>
+            TeacherGradeQuizScreen(quizResultID: quizResultID)));
   }
 
   //  ADMINS
@@ -120,6 +139,8 @@ final Map<String, WidgetBuilder> routes = {
   NavigatorRoutes.studentExercises: (context) => const StudentExercisesScreen(),
   NavigatorRoutes.studentTakeExercise: (context) =>
       const StudentTakeExerciseScreen(),
+  NavigatorRoutes.studentQuizzes: (context) => const StudentQuizzesScreen(),
+  NavigatorRoutes.studentTakeQuiz: (context) => const StudentTakeQuizScreen(),
 
   //  TEACHERS
   NavigatorRoutes.teacherRegister: (context) => const TeacherRegisterScreen(),

@@ -8,7 +8,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:stenofied/models/tracing_model.dart';
 import 'package:stenofied/providers/current_exercise_provider.dart';
+import 'package:stenofied/providers/current_quiz_provider.dart';
 import 'package:stenofied/providers/proof_of_enrollment_provider.dart';
 
 import '../providers/loading_provider.dart';
@@ -674,4 +676,147 @@ Future<List<DocumentSnapshot>> getUngradedExerciseSubmissionsInSection(
       .where(ExerciseResultFields.isGraded, isEqualTo: false)
       .get();
   return exerciseResults.docs.map((e) => e as DocumentSnapshot).toList();
+}
+
+Future retakeThisExercise(BuildContext context, WidgetRef ref,
+    {required String exerciseResultID, required int exerciseIndex}) async {
+  final scaffoldMessenger = ScaffoldMessenger.of(context);
+  final navigator = Navigator.of(context);
+  try {
+    ref.read(loadingProvider).toggleLoading(true);
+    final images = await FirebaseStorage.instance
+        .ref()
+        .child(StorageFields.exerciseImages)
+        .child(exerciseResultID)
+        .listAll();
+    for (var image in images.items) {
+      await image.delete();
+    }
+    await FirebaseFirestore.instance
+        .collection(Collections.exerciseResults)
+        .doc(exerciseResultID)
+        .delete();
+    scaffoldMessenger.showSnackBar(SnackBar(
+        content: Text('Successfully deleted existing exercise submission')));
+    ref.read(currentExerciseProvider).resetExerciseProvider();
+    ref.read(currentExerciseProvider).setExerciseModel(allExerciseModels
+        .where((element) => element.exerciseIndex == exerciseIndex)
+        .first);
+    navigator.pop();
+    navigator.pushReplacementNamed(NavigatorRoutes.studentExercises);
+    navigator.pushNamed(NavigatorRoutes.studentTakeExercise);
+    ref.read(loadingProvider).toggleLoading(false);
+  } catch (error) {
+    scaffoldMessenger.showSnackBar(SnackBar(
+        content: Text('error deleting existing exercise submission: $error')));
+    ref.read(loadingProvider).toggleLoading(false);
+  }
+}
+
+//==============================================================================
+//QUIZZES=======================================================================
+//==============================================================================
+
+Future<List<DocumentSnapshot>> getStudentQuizResultDocs(String userID) async {
+  final results = await FirebaseFirestore.instance
+      .collection(Collections.quizResults)
+      .where(QuizResultFields.studentID, isEqualTo: userID)
+      .get();
+  return results.docs.map((e) => e as DocumentSnapshot).toList();
+}
+
+Future<List<DocumentSnapshot>> getUserQuizResultDocs() async {
+  return getStudentQuizResultDocs(FirebaseAuth.instance.currentUser!.uid);
+}
+
+Future submitNewQuizResult(BuildContext context, WidgetRef ref) async {
+  final scaffoldMessenger = ScaffoldMessenger.of(context);
+  final navigator = Navigator.of(context);
+  try {
+    ref.read(loadingProvider).toggleLoading(true);
+    final resultReference = await FirebaseFirestore.instance
+        .collection(Collections.quizResults)
+        .add({
+      QuizResultFields.studentID: FirebaseAuth.instance.currentUser!.uid,
+      QuizResultFields.quizIndex:
+          ref.read(currentQuizProvider).currentQuizModel!.quizIndex,
+      ExerciseResultFields.isGraded: false
+    });
+
+    List<Map<dynamic, dynamic>> quizResults = [];
+    for (var doodleImage in ref.read(currentQuizProvider).doodleOutputList) {
+      final storageRef = FirebaseStorage.instance
+          .ref()
+          .child(StorageFields.quizImages)
+          .child(resultReference.id)
+          .child('${generateRandomHexString(6)}.png');
+      final uploadTask = storageRef.putData(doodleImage!);
+      final taskSnapshot = await uploadTask;
+      final String downloadURL = await taskSnapshot.ref.getDownloadURL();
+      quizResults.add(
+          {EntryFields.isCorrect: false, EntryFields.imageURL: downloadURL});
+    }
+
+    await FirebaseFirestore.instance
+        .collection(Collections.quizResults)
+        .doc(resultReference.id)
+        .update({QuizResultFields.quizResults: quizResults});
+    scaffoldMessenger.showSnackBar(
+        SnackBar(content: Text('Successfully submitted this quiz.')));
+
+    navigator.pop();
+    navigator.pushReplacementNamed(NavigatorRoutes.studentQuizzes);
+  } catch (error) {
+    scaffoldMessenger.showSnackBar(
+        SnackBar(content: Text('Error submitting this quiz: $error')));
+    ref.read(loadingProvider).toggleLoading(false);
+  }
+}
+
+Future<DocumentSnapshot> getQuizResultDoc(String quizResultID) async {
+  return await FirebaseFirestore.instance
+      .collection(Collections.quizResults)
+      .doc(quizResultID)
+      .get();
+}
+
+Future<List<DocumentSnapshot>> getUngradedQuizSubmissionsInSection(
+    List<String> studentIDs) async {
+  final quizResults = await FirebaseFirestore.instance
+      .collection(Collections.quizResults)
+      .where(QuizResultFields.studentID, whereIn: studentIDs)
+      .where(QuizResultFields.isGraded, isEqualTo: false)
+      .get();
+  return quizResults.docs.map((e) => e as DocumentSnapshot).toList();
+}
+
+Future gradeQuizOutput(BuildContext context, WidgetRef ref,
+    {required String studentID,
+    required String quizResultID,
+    required List<dynamic> quizResults}) async {
+  final scaffoldMessenger = ScaffoldMessenger.of(context);
+  final navigator = Navigator.of(context);
+  try {
+    ref.read(loadingProvider).toggleLoading(true);
+    await FirebaseFirestore.instance
+        .collection(Collections.quizResults)
+        .doc(quizResultID)
+        .update({
+      QuizResultFields.quizResults: quizResults,
+      QuizResultFields.isGraded: true
+    });
+    await FirebaseFirestore.instance
+        .collection(Collections.users)
+        .doc(studentID)
+        .update({UserFields.currentLessonIndex: FieldValue.increment(1)});
+    scaffoldMessenger.showSnackBar(
+        SnackBar(content: Text('Successfully graded this quiz submission.')));
+    navigator.pop();
+    navigator.pushReplacementNamed(NavigatorRoutes.teacherHome);
+    ref.read(loadingProvider).toggleLoading(false);
+  } catch (error) {
+    scaffoldMessenger.showSnackBar(
+        SnackBar(content: Text('Error grading this quiz output: $error')));
+    ref.read(loadingProvider).toggleLoading(false);
+  }
 }

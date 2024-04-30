@@ -19,4 +19,13 @@ final allQuizModels = [
     'wine',
     'swearing'
   ]),
+  QuizModel(quizIndex: 2, quizDescription: 'Th words', wordsToWrite: [
+    'sooths',
+    'broth',
+    'teeth',
+    'theme',
+    'clothes',
+    'bath',
+    'growth'
+  ]),
 ];

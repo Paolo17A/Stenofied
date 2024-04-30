@@ -6,13 +6,14 @@ PreferredSizeWidget appBarWidget(
     {bool mayGoBack = false, List<Widget>? actions}) {
   return AppBar(
       automaticallyImplyLeading: mayGoBack,
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Image.asset(ImagePaths.logo, scale: 9),
-          //whiteInterBold('STENOFIED')
-        ],
-      ),
+      title: actions != null
+          ? null
+          : Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Image.asset(ImagePaths.logo, scale: 9),
+              ],
+            ),
       iconTheme: const IconThemeData(color: CustomColors.sangria),
       actions: actions);
 }

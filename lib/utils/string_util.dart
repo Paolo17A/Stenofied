@@ -25,6 +25,7 @@ class Collections {
   static const String sections = 'sections';
   static const String faqs = 'faqs';
   static const String exerciseResults = 'exerciseResults';
+  static const String quizResults = 'quizResults';
 }
 
 class UserFields {
@@ -57,6 +58,7 @@ class QuizResultFields {
   static const String studentID = 'studentID';
   static const String quizIndex = 'quizIndex';
   static const String quizResults = 'quizResults';
+  static const String isGraded = 'isGraded';
 }
 
 class EntryFields {

@@ -37,7 +37,7 @@ Widget studentBottomNavBar(BuildContext context, {required String path}) {
             child: bottomButton(context,
                 iconData: Icons.edit_document,
                 label: 'QUIZZES',
-                thisPath: '',
+                thisPath: NavigatorRoutes.studentQuizzes,
                 currentPath: path))
       ],
     ),
