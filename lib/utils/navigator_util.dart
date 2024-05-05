@@ -11,6 +11,7 @@ import 'package:stenofied/screens/admin_view_teachers_screen.dart';
 import 'package:stenofied/screens/exercise_result_screen.dart';
 import 'package:stenofied/screens/login_screen.dart';
 import 'package:stenofied/screens/quiz_result_screen.dart';
+import 'package:stenofied/screens/selected_student_summary_screen.dart';
 import 'package:stenofied/screens/student_selected_lesson_screen.dart';
 import 'package:stenofied/screens/student_take_exercise_screen.dart';
 import 'package:stenofied/screens/student_take_quiz_screen.dart';
@@ -49,6 +50,13 @@ class NavigatorRoutes {
       {required String quizResultID}) {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => QuizResultScreen(quizResultID: quizResultID)));
+  }
+
+  static void selectedStudentSummary(BuildContext context,
+      {required String studentID}) {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>
+            SelectedStudentSummaryScreen(studentID: studentID)));
   }
 
   //  STUDENTS

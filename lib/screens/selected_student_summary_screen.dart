@@ -1,60 +1,53 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gap/gap.dart';
+import 'package:stenofied/models/quiz_model.dart';
+import 'package:stenofied/models/tracing_model.dart';
+import 'package:stenofied/providers/loading_provider.dart';
+import 'package:stenofied/utils/future_util.dart';
+import 'package:stenofied/utils/navigator_util.dart';
+import 'package:stenofied/utils/string_util.dart';
+import 'package:stenofied/widgets/app_bar_widget.dart';
+import 'package:stenofied/widgets/custom_miscellaneous_widgets.dart';
+import 'package:stenofied/widgets/custom_padding_widgets.dart';
+import 'package:stenofied/widgets/custom_text_widgets.dart';
 
-import '../models/quiz_model.dart';
-import '../models/tracing_model.dart';
-import '../providers/loading_provider.dart';
 import '../utils/color_util.dart';
-import '../utils/delete_entry_dialog_util.dart';
-import '../utils/future_util.dart';
-import '../utils/navigator_util.dart';
-import '../utils/string_util.dart';
-import '../widgets/app_bar_widget.dart';
-import '../widgets/custom_miscellaneous_widgets.dart';
-import '../widgets/custom_padding_widgets.dart';
-import '../widgets/custom_text_widgets.dart';
 
-class AdminSelectedStudentScreen extends ConsumerStatefulWidget {
-  final String userID;
-  const AdminSelectedStudentScreen({super.key, required this.userID});
+class SelectedStudentSummaryScreen extends ConsumerStatefulWidget {
+  final String studentID;
+  const SelectedStudentSummaryScreen({super.key, required this.studentID});
 
   @override
-  ConsumerState<AdminSelectedStudentScreen> createState() =>
-      _AdminStudentUserScreenState();
+  ConsumerState<SelectedStudentSummaryScreen> createState() =>
+      _SelectedStudentSummaryScreenState();
 }
 
-class _AdminStudentUserScreenState
-    extends ConsumerState<AdminSelectedStudentScreen> {
+class _SelectedStudentSummaryScreenState
+    extends ConsumerState<SelectedStudentSummaryScreen> {
   String formattedName = '';
-  String profileImageURL = '';
-  String proofOfEnrollment = '';
-  String assignedSectionName = '';
-  bool accountVerified = false;
+  int currentQuizIndex = 1;
   List<DocumentSnapshot> exerciseResultDocs = [];
   List<DocumentSnapshot> quizResultDocs = [];
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final scaffoldMessenger = ScaffoldMessenger.of(context);
       try {
         ref.read(loadingProvider).toggleLoading(true);
-        final user = await getThisUserDoc(widget.userID);
-        final userData = user.data() as Map<dynamic, dynamic>;
+
+        //  Get student data
+        final userDoc = await getThisUserDoc(widget.studentID);
+        final userData = userDoc.data() as Map<dynamic, dynamic>;
         formattedName =
             '${userData[UserFields.firstName]} ${userData[UserFields.lastName]}';
-        profileImageURL = userData[UserFields.profileImageURL];
-        accountVerified = userData[UserFields.accountVerified];
-        proofOfEnrollment = userData[UserFields.proofOfEnrollment];
-        String sectionID = userData[UserFields.sectionID];
-        if (sectionID.isNotEmpty) {
-          final section = await getThisSectionDoc(sectionID);
-          final sectionData = section.data() as Map<dynamic, dynamic>;
-          assignedSectionName = sectionData[SectionFields.name];
-        }
+        currentQuizIndex = userData[UserFields.currentLessonIndex];
+
         //  Get student results
-        exerciseResultDocs = await getStudentExerciseResultDocs(widget.userID);
+        exerciseResultDocs =
+            await getStudentExerciseResultDocs(widget.studentID);
         exerciseResultDocs = exerciseResultDocs.where((element) {
           final exerciseResultData = element.data() as Map<dynamic, dynamic>;
           return exerciseResultData[ExerciseResultFields.isGraded];
@@ -67,7 +60,7 @@ class _AdminStudentUserScreenState
 
           return aIndex.compareTo(bIndex);
         });
-        quizResultDocs = await getStudentQuizResultDocs(widget.userID);
+        quizResultDocs = await getStudentQuizResultDocs(widget.studentID);
         quizResultDocs = quizResultDocs.where((element) {
           final quizResultData = element.data() as Map<dynamic, dynamic>;
           return quizResultData[QuizResultFields.isGraded];
@@ -82,8 +75,8 @@ class _AdminStudentUserScreenState
         });
         ref.read(loadingProvider).toggleLoading(false);
       } catch (error) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text('Error getting selected user data: $error')));
+        scaffoldMessenger.showSnackBar(SnackBar(
+            content: Text('Error getting selected student summary: $error')));
         ref.read(loadingProvider).toggleLoading(false);
       }
     });
@@ -93,66 +86,33 @@ class _AdminStudentUserScreenState
   Widget build(BuildContext context) {
     ref.watch(loadingProvider);
     return Scaffold(
-      appBar: appBarWidget(mayGoBack: true, actions: [
-        TextButton(
-            onPressed: () => showDialog(
-                context: context,
-                builder: (context) =>
-                    AlertDialog(content: Image.network(proofOfEnrollment))),
-            child: sangriaInterBold('VIEW PROOF OF ENROLLMENT'))
-      ]),
+      appBar: appBarWidget(mayGoBack: true),
       body: switchedLoadingContainer(
           ref.read(loadingProvider).isLoading,
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: SingleChildScrollView(
-              child: all20Pix(
-                  child: Column(
+          SingleChildScrollView(
+            child: all20Pix(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _studentProfileDetails(),
-                  if (!accountVerified) _verificationWidgets(),
-                  Divider(color: CustomColors.ketchup),
+                  _headerWidgets(),
                   _exerciseResults(),
                   _quizResults()
                 ],
-              )),
+              ),
             ),
           )),
     );
   }
 
-  Widget _studentProfileDetails() {
-    return Column(children: [
-      blackInterBold('Student Profile', fontSize: 40),
-      all10Pix(
-          child: buildProfileImageWidget(
-              profileImageURL: profileImageURL,
-              radius: MediaQuery.of(context).size.width * 0.2)),
-      interText(formattedName, fontSize: 20),
-      interText(
-          'Section: ${assignedSectionName.isNotEmpty ? assignedSectionName : 'N/A'}'),
-      interText('Account Verified: $accountVerified'),
-      Gap(5)
-    ]);
-  }
-
-  Widget _verificationWidgets() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        ElevatedButton(
-            onPressed: () => approveThisUser(context, ref,
-                userType: UserTypes.student, userID: widget.userID),
-            child: whiteInterBold('VERIFY\n STUDENT')),
-        ElevatedButton(
-            onPressed: () => displayDeleteEntryDialog(context,
-                message:
-                    'Are you sure you wish to deny this student\'s verification?',
-                deleteWord: 'Deny',
-                deleteEntry: () => denyThisUser(context, ref,
-                    userType: UserTypes.teacher, userID: widget.userID)),
-            child: whiteInterBold('DENY\nSTUDENT')),
-      ],
+  Widget _headerWidgets() {
+    return all10Pix(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          blackInterBold(formattedName, fontSize: 26),
+          blackInterRegular('Current Level: $currentQuizIndex')
+        ],
+      ),
     );
   }
 

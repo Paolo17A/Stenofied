@@ -78,6 +78,7 @@ Widget homeButton(BuildContext context,
     required double height,
     required Color color,
     int? count,
+    double? fontSize = 21,
     required Function onPress,
     bool willDisplayCount = false}) {
   return SizedBox(
@@ -89,7 +90,8 @@ Widget homeButton(BuildContext context,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              whiteInterBold(label, fontSize: 21),
+              whiteInterBold(label,
+                  fontSize: fontSize, textOverflow: TextOverflow.ellipsis),
               Gap(5),
               if (willDisplayCount) whiteInterBold('$count AVAILABLE')
             ],

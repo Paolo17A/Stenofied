@@ -106,11 +106,14 @@ class _StudentExercisesScreenState
             width: MediaQuery.of(context).size.width * 0.35,
             height: MediaQuery.of(context).size.width * 0.3,
             child: ElevatedButton(
-                onPressed: () => hasSubmission(exercise.exerciseIndex)
-                    ? NavigatorRoutes.selectedExerciseResult(context,
-                        exerciseResultID: getCorrespondingExerciseResult(
-                            exercise.exerciseIndex))
-                    : showDescriptionDialog(exercise),
+                onPressed: exercise.exerciseIndex <=
+                        ref.read(userDataProvider).lessonIndex
+                    ? () => hasSubmission(exercise.exerciseIndex)
+                        ? NavigatorRoutes.selectedExerciseResult(context,
+                            exerciseResultID: getCorrespondingExerciseResult(
+                                exercise.exerciseIndex))
+                        : showDescriptionDialog(exercise)
+                    : null,
                 style: ElevatedButton.styleFrom(
                     disabledBackgroundColor:
                         CustomColors.ketchup.withOpacity(0.5)),

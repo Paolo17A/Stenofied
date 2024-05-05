@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gap/gap.dart';
 import 'package:stenofied/providers/loading_provider.dart';
 import 'package:stenofied/utils/future_util.dart';
 import 'package:stenofied/utils/navigator_util.dart';
@@ -81,6 +80,7 @@ class _TeacherAssignedSectionScreenState
         backgroundColor: CustomColors.ketchup,
         textColor: Colors.white,
         iconColor: Colors.white,
+        collapsedIconColor: Colors.white,
         collapsedShape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10), side: BorderSide()),
         shape: RoundedRectangleBorder(
@@ -98,19 +98,9 @@ class _TeacherAssignedSectionScreenState
                       itemBuilder: (context, index) => all10Pix(
                         child: userRecordEntry(
                             userDoc: studentDocs[index],
-                            onTap: () => showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                      content: SingleChildScrollView(
-                                        child: Column(
-                                          children: [
-                                            blackInterBold(
-                                                'TODO: SHOW STUDENT GRADES'),
-                                            Gap(50)
-                                          ],
-                                        ),
-                                      ),
-                                    ))),
+                            onTap: () => NavigatorRoutes.selectedStudentSummary(
+                                context,
+                                studentID: studentDocs[index].id)),
                       ),
                     ))
                 : whiteInterBold('NO AVAILABLE STUDENTS', fontSize: 16),

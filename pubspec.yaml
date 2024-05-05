@@ -46,6 +46,7 @@ dependencies:
   firebase_storage: ^11.6.9
   easy_pdf_viewer: ^1.0.8
   screenshot: ^2.3.0
+  flutter_tts: ^4.0.2
 
 dev_dependencies:
   flutter_test:

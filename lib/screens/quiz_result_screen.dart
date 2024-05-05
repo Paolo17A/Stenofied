@@ -139,7 +139,8 @@ class _QuizResultScreenState extends ConsumerState<QuizResultScreen> {
                   'Word/s: ${allQuizModels[quizIndex - 1].wordsToWrite[index]}',
                   fontSize: 16),
               if (isGraded)
-                whiteInterBold('Result: ${answerData[EntryFields.isCorrect]}')
+                whiteInterBold(
+                    'Result: ${answerData[EntryFields.isCorrect] ? 'CORRECT' : 'WRONG'}')
             ],
           )
         ],

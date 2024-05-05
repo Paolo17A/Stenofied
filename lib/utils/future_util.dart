@@ -165,15 +165,17 @@ Future logInUser(BuildContext context, WidgetRef ref,
         .read(userDataProvider)
         .setProfileImage(userData[UserFields.profileImageURL]);
     ref.read(userDataProvider).setUserType(userData[UserFields.userType]);
-    ref.read(userDataProvider).setSectionID(userData[UserFields.sectionID]);
     emailController.clear();
     passwordController.clear();
     if (userData[UserFields.userType] == UserTypes.student) {
+      ref.read(userDataProvider).setSectionID(userData[UserFields.sectionID]);
+
       ref
           .read(userDataProvider)
           .setLessonIndex(userData[UserFields.currentLessonIndex]);
       navigator.pushNamed(NavigatorRoutes.studentHome);
     } else if (userData[UserFields.userType] == UserTypes.teacher) {
+      ref.read(userDataProvider).setSectionID(userData[UserFields.sectionID]);
       navigator.pushNamed(NavigatorRoutes.teacherHome);
     }
     if (userData[UserFields.userType] == UserTypes.admin) {

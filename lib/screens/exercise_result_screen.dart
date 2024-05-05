@@ -166,7 +166,8 @@ class _ExerciseResultScreenState extends ConsumerState<ExerciseResultScreen> {
                   'Word/s: ${allExerciseModels[exerciseIndex - 1].tracingModels[index].word}',
                   fontSize: 16),
               if (isGraded)
-                whiteInterBold('Result: ${answerData[EntryFields.isCorrect]}')
+                whiteInterBold(
+                    'Result: ${answerData[EntryFields.isCorrect] ? 'CORRECT' : 'WRONG'}')
             ],
           )
         ],

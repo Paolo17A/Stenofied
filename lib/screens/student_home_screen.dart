@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:stenofied/models/lesson_model.dart';
+import 'package:stenofied/models/quiz_model.dart';
+import 'package:stenofied/models/tracing_model.dart';
 import 'package:stenofied/utils/navigator_util.dart';
 import 'package:stenofied/widgets/app_bottom_nav_bar_widget.dart';
 import 'package:stenofied/widgets/custom_button_widgets.dart';
 
+import '../providers/current_exercise_provider.dart';
+import '../providers/current_quiz_provider.dart';
 import '../providers/user_data_provider.dart';
 import '../utils/color_util.dart';
 import '../utils/string_util.dart';
@@ -48,27 +53,61 @@ class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         homeButton(context,
-            label: 'STUDY YOUR NEXT LESSON',
+            label: ref.read(userDataProvider).lessonIndex >=
+                    allLessonModels.length
+                ? 'DONE WITH ALL LESSONS'
+                : 'YOUR NEXT LESSON:\n\nLesson ${ref.read(userDataProvider).lessonIndex}',
             width: MediaQuery.of(context).size.width * 0.4,
-            height: MediaQuery.of(context).size.width * 0.8,
+            height: MediaQuery.of(context).size.width * 0.9,
             color: CustomColors.ketchup,
-            onPress: () => Navigator.of(context)
-                .pushNamed(NavigatorRoutes.studentLessons)),
+            onPress: () =>
+                ref.read(userDataProvider).lessonIndex >= allLessonModels.length
+                    ? null
+                    : NavigatorRoutes.studentSelectedLesson(context,
+                        lessonModel: allLessonModels[
+                            ref.read(userDataProvider).lessonIndex - 1])),
         Column(
           children: [
             homeButton(context,
-                label: 'PRACTICE TRACING',
-                width: MediaQuery.of(context).size.width * 0.4,
-                height: MediaQuery.of(context).size.width * 0.4 - 10,
-                color: CustomColors.sangria,
-                onPress: () {}),
+                label: ref.read(userDataProvider).lessonIndex >=
+                        allExerciseModels.length
+                    ? 'NO EXERCISES LEFT TO TAKE'
+                    : 'YOUR NEXT\nEXERCISE:\n\n${allExerciseModels[ref.read(userDataProvider).lessonIndex].exerciseDescription}',
+                width: MediaQuery.of(context).size.width * 0.45,
+                height: MediaQuery.of(context).size.width * 0.45 - 10,
+                color: CustomColors.sangria, onPress: () {
+              if (ref.read(userDataProvider).lessonIndex >=
+                  allExerciseModels.length) return;
+              Navigator.of(context).pushNamed(NavigatorRoutes.studentExercises);
+              ref.read(currentExerciseProvider).resetExerciseProvider();
+              ref.read(currentExerciseProvider).setExerciseModel(
+                  allExerciseModels[
+                      ref.read(userDataProvider).lessonIndex - 1]);
+              Navigator.of(context)
+                  .pushNamed(NavigatorRoutes.studentTakeExercise);
+            }),
             Gap(20),
             homeButton(context,
-                label: 'TAKE YOUR NEXT QUIZ',
-                width: MediaQuery.of(context).size.width * 0.4,
-                height: MediaQuery.of(context).size.width * 0.4 - 10,
+                label: ref.read(userDataProvider).lessonIndex >=
+                        allQuizModels.length
+                    ? 'NO QUIZZES LEFT TO TAKE'
+                    : 'YOUR NEXT QUIZ:\n\n${allQuizModels[ref.read(userDataProvider).lessonIndex].quizDescription}',
+                width: MediaQuery.of(context).size.width * 0.45,
+                height: MediaQuery.of(context).size.width * 0.45 - 10,
                 color: CustomColors.blush,
-                onPress: () {})
+                onPress: () => ref.read(userDataProvider).lessonIndex >=
+                        allQuizModels.length
+                    ? null
+                    : () {
+                        Navigator.of(context)
+                            .pushNamed(NavigatorRoutes.studentQuizzes);
+                        ref.read(currentQuizProvider).resetQuizProvider();
+                        ref.read(currentQuizProvider).setQuizModel(
+                            allQuizModels[
+                                ref.read(userDataProvider).lessonIndex - 1]);
+                        Navigator.of(context)
+                            .pushNamed(NavigatorRoutes.studentTakeQuiz);
+                      })
           ],
         ),
       ],

@@ -33,9 +33,12 @@ Text sangriaInterBold(String label,
 Text whiteInterBold(String label,
     {double? fontSize,
     TextAlign textAlign = TextAlign.center,
+    TextOverflow? textOverflow,
     TextDecoration? textDecoration}) {
   return Text(label,
       textAlign: textAlign,
+      overflow: textOverflow,
+      maxLines: 5,
       style: GoogleFonts.inter(
           fontSize: fontSize,
           color: Colors.white,

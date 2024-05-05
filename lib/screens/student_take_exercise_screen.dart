@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:gap/gap.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:stenofied/providers/current_exercise_provider.dart';
@@ -28,7 +29,30 @@ class _StudentTakeExerciseScreenState
   var drawingPoints = <DrawingPoint>[];
   DrawingPoint? currentDrawingPoint;
   bool hasDoodle = false;
+  double doodleWidth = 5;
   ScreenshotController screenshotController = ScreenshotController();
+  FlutterTts flutterTts = FlutterTts();
+
+  @override
+  void dispose() {
+    super.dispose();
+    flutterTts.pause();
+    flutterTts.stop();
+  }
+
+  Future playback() async {
+    //await flutterTts.stop();
+    await flutterTts
+        .setLanguage('en-US'); // Set the language (adjust as needed)
+    await flutterTts.setPitch(1.0); // Set pitch (adjust as needed)
+    await flutterTts.setSpeechRate(0.5); // Set speech rate (adjust as needed)
+    String currentWord = ref
+        .read(currentExerciseProvider)
+        .currentExerciseModel!
+        .tracingModels[ref.read(currentExerciseProvider).tracingIndex]
+        .word;
+    await flutterTts.speak(currentWord);
+  }
 
   void onNextButtonPress() async {
     if (hasDoodle) {
@@ -67,7 +91,7 @@ class _StudentTakeExerciseScreenState
           SizedBox(
             width: MediaQuery.of(context).size.width,
             child: SingleChildScrollView(
-              child: all20Pix(
+              child: all10Pix(
                   child: Column(
                 children: [
                   _exerciseIndexHeader(),
@@ -81,7 +105,7 @@ class _StudentTakeExerciseScreenState
                         ref.read(currentExerciseProvider).deleteTraceOutput();
                       },
                       child: whiteInterBold('RESET TRACE')),
-                  Gap(100),
+                  Gap(80),
                   _navigatorButtons()
                 ],
               )),
@@ -141,7 +165,8 @@ class _StudentTakeExerciseScreenState
                   setState(() {
                     currentDrawingPoint = DrawingPoint(
                         id: DateTime.now().millisecondsSinceEpoch,
-                        offsets: [details.localPosition]);
+                        offsets: [details.localPosition],
+                        width: doodleWidth);
                     if (currentDrawingPoint == null) return;
                     drawingPoints.add(currentDrawingPoint!);
                   });
@@ -174,6 +199,18 @@ class _StudentTakeExerciseScreenState
               ),
             ),
           ),
+          Slider(
+              value: doodleWidth,
+              min: 1,
+              max: 10,
+              thumbColor: Colors.white,
+              activeColor: Colors.white,
+              inactiveColor: Colors.white70,
+              onChanged: (newVal) {
+                setState(() {
+                  doodleWidth = newVal;
+                });
+              }),
           Gap(10),
           whiteInterRegular('Trace the shorthanded word above.'),
         ],
@@ -194,8 +231,21 @@ class _StudentTakeExerciseScreenState
         .tracingModels
         .length;
     return vertical20Pix(
-        child: whiteInterBold('Word $currentIndex/$totalWords: $currentWord',
-            fontSize: 24));
+        child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        whiteInterBold('Word $currentIndex/$totalWords: $currentWord',
+            fontSize: 24),
+        ElevatedButton(
+            onPressed: playback,
+            style: ElevatedButton.styleFrom(
+                shape: CircleBorder(), backgroundColor: Colors.white),
+            child: Icon(
+              Icons.volume_up,
+              color: CustomColors.ketchup,
+            ))
+      ],
+    ));
   }
 
   Widget _navigatorButtons() {
