@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gap/gap.dart';
 import 'package:stenofied/models/quiz_model.dart';
 import 'package:stenofied/models/tracing_model.dart';
 import 'package:stenofied/providers/current_exercise_provider.dart';
@@ -13,6 +12,7 @@ import 'package:stenofied/utils/future_util.dart';
 import 'package:stenofied/utils/navigator_util.dart';
 import 'package:stenofied/widgets/app_bottom_nav_bar_widget.dart';
 import 'package:stenofied/widgets/custom_miscellaneous_widgets.dart';
+import 'package:stenofied/widgets/custom_padding_widgets.dart';
 import 'package:stenofied/widgets/custom_text_widgets.dart';
 
 import '../utils/string_util.dart';
@@ -65,37 +65,45 @@ class _TeacherHomeScreenState extends ConsumerState<TeacherHomeScreen> {
               userType: UserTypes.teacher, isHome: true),
           bottomNavigationBar:
               teacherBottomNavBar(context, path: NavigatorRoutes.teacherHome),
-          body: Column(
-            children: [
-              welcomeWidgets(
-                  userType: UserTypes.teacher,
-                  profileImageURL: ref.read(userDataProvider).profileImageURL),
-              exercisesToGrade(),
-              Gap(20),
-              quizzesToGrade()
-            ],
+          body: switchedLoadingContainer(
+            ref.read(loadingProvider).isLoading,
+            vertical20Pix(
+              child: Column(
+                children: [
+                  welcomeWidgets(
+                      userType: UserTypes.teacher,
+                      profileImageURL:
+                          ref.read(userDataProvider).profileImageURL),
+                  exercisesToGrade(),
+                  quizzesToGrade()
+                ],
+              ),
+            ),
           )),
     );
   }
 
   Widget exercisesToGrade() {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-          color: CustomColors.ketchup, borderRadius: BorderRadius.circular(10)),
-      padding: EdgeInsets.all(10),
-      child: Column(
-        children: [
-          whiteInterBold('Ungraded Exercises', fontSize: 24),
-          if (ungradedExerciseDocs.isNotEmpty)
-            ListView.builder(
-                shrinkWrap: true,
-                itemCount: ungradedExerciseDocs.length,
-                itemBuilder: (context, index) =>
-                    ungradedExerciseEntry(ungradedExerciseDocs[index]))
-          else
-            whiteInterRegular('No Exercises to Grade')
-        ],
+    return all20Pix(
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+            color: CustomColors.ketchup,
+            borderRadius: BorderRadius.circular(10)),
+        padding: EdgeInsets.all(10),
+        child: Column(
+          children: [
+            whiteInterBold('Ungraded Exercises', fontSize: 24),
+            if (ungradedExerciseDocs.isNotEmpty)
+              ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: ungradedExerciseDocs.length,
+                  itemBuilder: (context, index) =>
+                      ungradedExerciseEntry(ungradedExerciseDocs[index]))
+            else
+              whiteInterRegular('No Exercises to Grade')
+          ],
+        ),
       ),
     );
   }
@@ -141,23 +149,26 @@ class _TeacherHomeScreenState extends ConsumerState<TeacherHomeScreen> {
   }
 
   Widget quizzesToGrade() {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-          color: CustomColors.ketchup, borderRadius: BorderRadius.circular(10)),
-      padding: EdgeInsets.all(10),
-      child: Column(
-        children: [
-          whiteInterBold('Ungraded Quizzes', fontSize: 24),
-          if (ungradedQuizDocs.isNotEmpty)
-            ListView.builder(
-                shrinkWrap: true,
-                itemCount: ungradedQuizDocs.length,
-                itemBuilder: (context, index) =>
-                    ungradedQuizEntry(ungradedQuizDocs[index]))
-          else
-            whiteInterRegular('No Quizzes to Grade')
-        ],
+    return all20Pix(
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+            color: CustomColors.ketchup,
+            borderRadius: BorderRadius.circular(10)),
+        padding: EdgeInsets.all(10),
+        child: Column(
+          children: [
+            whiteInterBold('Ungraded Quizzes', fontSize: 24),
+            if (ungradedQuizDocs.isNotEmpty)
+              ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: ungradedQuizDocs.length,
+                  itemBuilder: (context, index) =>
+                      ungradedQuizEntry(ungradedQuizDocs[index]))
+            else
+              whiteInterRegular('No Quizzes to Grade')
+          ],
+        ),
       ),
     );
   }

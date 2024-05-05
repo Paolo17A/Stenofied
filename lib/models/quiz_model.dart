@@ -28,4 +28,20 @@ final allQuizModels = [
     'bath',
     'growth'
   ]),
+  QuizModel(quizIndex: 3, quizDescription: 'Wh words', wordsToWrite: [
+    'Why',
+    'When',
+    'Whale',
+    'Where',
+    'White',
+    'Whine',
+    'Whisper'
+  ]),
+  QuizModel(quizIndex: 4, quizDescription: 'oo words', wordsToWrite: [
+    'loop',
+    'room',
+    'oompa',
+    'zoom',
+    'cool',
+  ]),
 ];

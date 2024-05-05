@@ -249,7 +249,8 @@ Widget userRecordEntry(
             children: [
               blackInterBold(formattedName, fontSize: 16),
               if (displayVerificationStatus)
-                blackInterRegular('Account Verified: $adminApproved',
+                blackInterRegular(
+                    'Account Verified: ${adminApproved == true ? 'YES' : 'NO'}',
                     fontSize: 12)
             ],
           )

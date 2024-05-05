@@ -67,7 +67,7 @@ class _AdminSelectedTeacherScreenState
                 builder: (context) => AlertDialog(
                       content: Image.network(proofOfEmployment),
                     )),
-            child: whiteInterBold('VIEW PROOF OF EMPLOYMENT'))
+            child: sangriaInterBold('VIEW PROOF OF EMPLOYMENT'))
       ]),
       body: switchedLoadingContainer(
           ref.read(loadingProvider).isLoading,
