@@ -131,7 +131,7 @@ class _AdminStudentUserScreenState
       interText(formattedName, fontSize: 20),
       interText(
           'Section: ${assignedSectionName.isNotEmpty ? assignedSectionName : 'N/A'}'),
-      interText('Account Verified: $accountVerified'),
+      interText('Account Verified: ${accountVerified ? 'YES' : 'NO'}'),
       Gap(5)
     ]);
   }

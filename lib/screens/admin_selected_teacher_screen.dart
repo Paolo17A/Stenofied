@@ -85,7 +85,8 @@ class _AdminSelectedTeacherScreenState
                   interText(formattedName, fontSize: 20),
                   interText(
                       'Section: ${assignedSectionName.isNotEmpty ? assignedSectionName : 'N/A'}'),
-                  interText('Account Verified: $accountVerified'),
+                  interText(
+                      'Account Verified: ${accountVerified ? 'YES' : 'NO'}'),
                   if (!accountVerified)
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
