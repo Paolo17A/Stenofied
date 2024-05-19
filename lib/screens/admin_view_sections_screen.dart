@@ -76,6 +76,7 @@ class _AdminViewSectionsScreenState
         ? Wrap(
             runAlignment: WrapAlignment.spaceAround,
             spacing: 12,
+            runSpacing: 12,
             children: sectionDocs.map((section) {
               final sectionData = section.data() as Map<dynamic, dynamic>;
               String name = sectionData[SectionFields.name];

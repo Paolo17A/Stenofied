@@ -77,7 +77,7 @@ class _AdminSelectedTeacherScreenState
               child: all20Pix(
                   child: Column(
                 children: [
-                  blackInterBold('Collector Profile', fontSize: 40),
+                  blackInterBold('Professor Profile', fontSize: 40),
                   all10Pix(
                       child: buildProfileImageWidget(
                           profileImageURL: profileImageURL,
