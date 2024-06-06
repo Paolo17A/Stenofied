@@ -31,7 +31,7 @@ Widget adminRail(BuildContext context, GlobalKey<ScaffoldState> scaffoldKey,
                 icon: Image.asset(ImagePaths.home, scale: 20),
                 label: Container()),
             NavigationRailDestination(
-                icon: Image.asset(ImagePaths.faqs, scale: 20),
+                icon: Image.asset(ImagePaths.profile, scale: 20),
                 label: Container()),
           ],
           onDestinationSelected: (value) {
@@ -43,6 +43,8 @@ Widget adminRail(BuildContext context, GlobalKey<ScaffoldState> scaffoldKey,
                 Navigator.of(context).pushNamed(NavigatorRoutes.adminHome);
                 break;
               case 1:
+                Navigator.of(context).pushNamed(NavigatorRoutes.editProfile);
+
                 break;
             }
           },
@@ -79,9 +81,6 @@ Widget teacherRail(BuildContext context, GlobalKey<ScaffoldState> scaffoldKey,
                 icon: Image.asset(ImagePaths.section, scale: 20),
                 label: Container()),
             NavigationRailDestination(
-                icon: Image.asset(ImagePaths.faqs, scale: 20),
-                label: Container()),
-            NavigationRailDestination(
                 icon: Image.asset(ImagePaths.profile, scale: 20),
                 label: Container()),
           ],
@@ -97,9 +96,8 @@ Widget teacherRail(BuildContext context, GlobalKey<ScaffoldState> scaffoldKey,
                 Navigator.of(context)
                     .pushNamed(NavigatorRoutes.teacherAssignedSection);
                 break;
+
               case 2:
-                break;
-              case 3:
                 Navigator.of(context).pushNamed(NavigatorRoutes.editProfile);
                 break;
             }
@@ -149,10 +147,6 @@ Widget studentRail(BuildContext context, GlobalKey<ScaffoldState> scaffoldKey,
                 label: Container()),
             NavigationRailDestination(
                 icon: vertical10Pix(
-                    child: Image.asset(ImagePaths.faqs, scale: 20)),
-                label: Container()),
-            NavigationRailDestination(
-                icon: vertical10Pix(
                     child: Image.asset(ImagePaths.profile, scale: 20)),
                 label: Container()),
           ],
@@ -175,8 +169,6 @@ Widget studentRail(BuildContext context, GlobalKey<ScaffoldState> scaffoldKey,
                 Navigator.of(context).pushNamed(NavigatorRoutes.studentQuizzes);
                 break;
               case 4:
-                break;
-              case 5:
                 Navigator.of(context).pushNamed(NavigatorRoutes.editProfile);
                 break;
             }

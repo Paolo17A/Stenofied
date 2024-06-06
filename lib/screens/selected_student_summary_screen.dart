@@ -95,8 +95,9 @@ class _SelectedStudentSummaryScreenState
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _headerWidgets(),
-                  _exerciseResults(),
-                  _quizResults()
+                  Divider(color: CustomColors.ketchup)
+                  //_exerciseResults(),
+                  //_quizResults()
                 ],
               ),
             ),

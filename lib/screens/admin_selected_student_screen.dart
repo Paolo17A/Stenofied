@@ -99,8 +99,7 @@ class _AdminStudentUserScreenState
                 context: context,
                 builder: (context) =>
                     AlertDialog(content: Image.network(proofOfEnrollment))),
-            child: blackAndadaProRegular(
-                'VIEW PROOF OF ENROLLMENT/\nEMPLOYMENT',
+            child: blackAndadaProRegular('VIEW CERTIFICATE OF\nREGISTRATION',
                 textAlign: TextAlign.right))
       ]),
       body: switchedLoadingContainer(
@@ -114,8 +113,8 @@ class _AdminStudentUserScreenState
                   _studentProfileDetails(),
                   if (!accountVerified) _verificationWidgets(),
                   Divider(color: CustomColors.ketchup),
-                  _exerciseResults(),
-                  _quizResults()
+                  //_exerciseResults(),
+                  // _quizResults()
                 ],
               )),
             ),

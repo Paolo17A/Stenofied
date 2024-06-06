@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stenofied/providers/proof_of_enrollment_provider.dart';
 import 'package:stenofied/utils/color_util.dart';
 import 'package:stenofied/utils/string_util.dart';
+import 'package:stenofied/widgets/custom_padding_widgets.dart';
 
 import '../providers/loading_provider.dart';
 import '../utils/future_util.dart';
@@ -75,8 +76,10 @@ class _StudentRegisterScreenState extends ConsumerState<StudentRegisterScreen> {
                                   confirmPasswordController,
                               firstNameController: firstNameController,
                               lastNameController: lastNameController),
-                          proofOfEnrollmentUploadWidget(context, ref,
-                              userType: UserTypes.student),
+                          all20Pix(
+                            child: proofOfEnrollmentUploadWidget(context, ref,
+                                userType: UserTypes.student),
+                          ),
                           registerButton(
                               onPress: () => registerNewUser(context, ref,
                                   userType: UserTypes.student,

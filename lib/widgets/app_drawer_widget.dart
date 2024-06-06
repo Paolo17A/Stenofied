@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:stenofied/widgets/custom_padding_widgets.dart';
 
 import '../utils/color_util.dart';
 import '../utils/navigator_util.dart';
@@ -12,24 +13,28 @@ Drawer adminAppDrawer(BuildContext context, WidgetRef ref,
     {required String currentPath}) {
   return Drawer(
     backgroundColor: CustomColors.ketchup,
+    shape: RoundedRectangleBorder(),
     child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        all10Pix(
+            child: Row(
+          children: [
+            Image.asset(ImagePaths.logo, scale: 10),
+            Gap(40),
+            whiteCinzelBold('Stenofied', fontSize: 24)
+          ],
+        )),
         Flexible(
           flex: 1,
           child: ListView(
             padding: EdgeInsets.zero,
             children: [
-              Gap(20),
               _drawerTile(context,
                   label: 'HOME',
                   imagePath: ImagePaths.home,
                   currentPath: currentPath,
                   thisPath: NavigatorRoutes.adminHome),
-              _drawerTile(context,
-                  label: 'FAQs',
-                  imagePath: ImagePaths.faqs,
-                  currentPath: currentPath,
-                  thisPath: ''),
               _drawerTile(context,
                   label: 'PROFILE',
                   imagePath: ImagePaths.profile,
@@ -49,7 +54,16 @@ Drawer studentAppDrawer(BuildContext context, WidgetRef ref,
   return Drawer(
     backgroundColor: CustomColors.ketchup,
     child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        all10Pix(
+            child: Row(
+          children: [
+            Image.asset(ImagePaths.logo, scale: 10),
+            Gap(40),
+            whiteCinzelBold('Stenofied', fontSize: 24)
+          ],
+        )),
         Flexible(
           flex: 1,
           child: ListView(
@@ -77,11 +91,6 @@ Drawer studentAppDrawer(BuildContext context, WidgetRef ref,
                   currentPath: currentPath,
                   thisPath: NavigatorRoutes.studentQuizzes),
               _drawerTile(context,
-                  label: 'FAQs',
-                  imagePath: ImagePaths.faqs,
-                  currentPath: currentPath,
-                  thisPath: ''),
-              _drawerTile(context,
                   label: 'PROFILE',
                   imagePath: ImagePaths.profile,
                   currentPath: currentPath,
@@ -100,7 +109,16 @@ Drawer teacherAppDrawer(BuildContext context, WidgetRef ref,
   return Drawer(
     backgroundColor: CustomColors.ketchup,
     child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        all10Pix(
+            child: Row(
+          children: [
+            Image.asset(ImagePaths.logo, scale: 10),
+            Gap(40),
+            whiteCinzelBold('Stenofied', fontSize: 24)
+          ],
+        )),
         Flexible(
           flex: 1,
           child: ListView(
@@ -117,11 +135,6 @@ Drawer teacherAppDrawer(BuildContext context, WidgetRef ref,
                   imagePath: ImagePaths.section,
                   currentPath: currentPath,
                   thisPath: NavigatorRoutes.teacherAssignedSection),
-              _drawerTile(context,
-                  label: 'FAQs',
-                  imagePath: ImagePaths.faqs,
-                  currentPath: currentPath,
-                  thisPath: ''),
               _drawerTile(context,
                   label: 'PROFILE',
                   imagePath: ImagePaths.profile,

@@ -184,21 +184,17 @@ Widget proofOfEnrollmentUploadWidget(BuildContext context, WidgetRef ref,
     width: double.infinity,
     child: Column(
       children: [
-        Row(children: [
-          blackJosefinSansBold(
-              'Proof of ${userType == UserTypes.student ? 'Enrollment' : 'Employment'}',
-              fontSize: 18)
-        ]),
+        blackJosefinSansBold('Certificate of Registration', fontSize: 18),
         if (ref.read(proofOfEnrollmentProvider).proofOfEnrollmentFile != null)
           Image.file(ref.read(proofOfEnrollmentProvider).proofOfEnrollmentFile!,
               width: MediaQuery.of(context).size.width * 0.3),
-        TextButton(
+        ElevatedButton(
             onPressed: () =>
                 ref.read(proofOfEnrollmentProvider).setProofOfEmployment(),
-            child: blackJosefinSansBold(
-                'UPLOAD PROOF\ OF ${userType == UserTypes.student ? 'ENROLLMENT' : 'EMPLOYMENT'}',
-                textDecoration: TextDecoration.underline,
-                fontSize: 12))
+            style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30))),
+            child: whiteJosefinSansBold('UPLOAD HERE', fontSize: 12))
       ],
     ),
   );

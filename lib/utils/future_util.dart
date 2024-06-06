@@ -12,6 +12,7 @@ import 'package:stenofied/models/tracing_model.dart';
 import 'package:stenofied/providers/current_exercise_provider.dart';
 import 'package:stenofied/providers/current_quiz_provider.dart';
 import 'package:stenofied/providers/proof_of_enrollment_provider.dart';
+import 'package:stenofied/providers/sections_provider.dart';
 
 import '../providers/loading_provider.dart';
 import '../providers/user_data_provider.dart';
@@ -536,6 +537,7 @@ Future editThisSection(BuildContext context, WidgetRef ref,
         .update({SectionFields.name: nameController.text.trim()});
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Successfully edited this section.')));
+    ref.read(sectionsProvider).setSectionDocs(await getAllSectionDocs());
     ref.read(loadingProvider).toggleLoading(false);
     Navigator.of(context).pop();
     NavigatorRoutes.adminSelectedSection(context, sectionID: sectionID);

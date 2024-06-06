@@ -42,7 +42,7 @@ Widget loginButton({required Function onPress}) {
               backgroundColor: CustomColors.ketchup,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30))),
-          child: whiteJosefinSansBold('LOG-IN', fontSize: 18)));
+          child: whiteJosefinSansBold('Login', fontSize: 18)));
 }
 
 Widget registerButton({required Function onPress}) {

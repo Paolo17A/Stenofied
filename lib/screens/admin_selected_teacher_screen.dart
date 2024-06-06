@@ -60,17 +60,7 @@ class _AdminSelectedTeacherScreenState
   Widget build(BuildContext context) {
     ref.watch(loadingProvider);
     return Scaffold(
-      appBar: appBarWidget(mayGoBack: true, actions: [
-        TextButton(
-            onPressed: () => showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                      content: Image.network(proofOfEmployment),
-                    )),
-            child: blackAndadaProRegular(
-                'VIEW PROOF OF ENROLLMENT/\nEMPLOYMENT',
-                textAlign: TextAlign.right))
-      ]),
+      appBar: appBarWidget(mayGoBack: true),
       body: switchedLoadingContainer(
           ref.read(loadingProvider).isLoading,
           SizedBox(

@@ -1,8 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:stenofied/providers/loading_provider.dart';
+import 'package:stenofied/providers/sections_provider.dart';
 import 'package:stenofied/utils/color_util.dart';
 import 'package:stenofied/utils/future_util.dart';
 import 'package:stenofied/utils/navigator_util.dart';
@@ -23,15 +23,15 @@ class AdminViewSectionsScreen extends ConsumerStatefulWidget {
 
 class _AdminViewSectionsScreenState
     extends ConsumerState<AdminViewSectionsScreen> {
-  List<DocumentSnapshot> sectionDocs = [];
-
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       try {
         ref.read(loadingProvider).toggleLoading(true);
-        sectionDocs = await getAllSectionDocs();
+        ref.read(sectionsProvider).setSectionDocs(await getAllSectionDocs());
+
+        //sectionDocs = await getAllSectionDocs();
         ref.read(loadingProvider).toggleLoading(false);
       } catch (error) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -75,12 +75,17 @@ class _AdminViewSectionsScreenState
   }
 
   Widget sectionEntries() {
-    return sectionDocs.isNotEmpty
+    return ref.read(sectionsProvider).sectionDocs.isNotEmpty
         ? Wrap(
             runAlignment: WrapAlignment.spaceAround,
             spacing: 12,
             runSpacing: 12,
-            children: sectionDocs.asMap().entries.map((section) {
+            children: ref
+                .read(sectionsProvider)
+                .sectionDocs
+                .asMap()
+                .entries
+                .map((section) {
               int index = section.key;
               final sectionData = section.value.data() as Map<dynamic, dynamic>;
               String name = sectionData[SectionFields.name];

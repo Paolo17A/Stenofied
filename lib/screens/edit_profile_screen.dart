@@ -124,7 +124,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                       ),
                                     )
                                   ])),
-                                  if (ref
+                                  /*if (ref
                                       .read(userDataProvider)
                                       .profileImageURL
                                       .isNotEmpty)
@@ -133,7 +133,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                             removeProfilePicture(context, ref),
                                         child: whiteAndadaProBold(
                                             'REMOVE PROFILE PICTURE')),
-                                  /* ElevatedButton(
+                                   ElevatedButton(
                                       onPressed: () =>
                                           uploadProfilePicture(context, ref),
                                       child: whiteInterBold(
