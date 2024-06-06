@@ -5,11 +5,10 @@ import 'package:gap/gap.dart';
 import 'package:stenofied/models/tracing_model.dart';
 import 'package:stenofied/providers/current_exercise_provider.dart';
 import 'package:stenofied/utils/navigator_util.dart';
-import 'package:stenofied/widgets/app_bar_widget.dart';
-import 'package:stenofied/widgets/app_bottom_nav_bar_widget.dart';
 import 'package:stenofied/widgets/app_drawer_widget.dart';
 import 'package:stenofied/widgets/custom_miscellaneous_widgets.dart';
 import 'package:stenofied/widgets/custom_padding_widgets.dart';
+import 'package:stenofied/widgets/navigator_rail_widget.dart';
 
 import '../providers/loading_provider.dart';
 import '../providers/user_data_provider.dart';
@@ -28,6 +27,7 @@ class StudentExercisesScreen extends ConsumerStatefulWidget {
 
 class _StudentExercisesScreenState
     extends ConsumerState<StudentExercisesScreen> {
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   List<DocumentSnapshot> submittedExerciseResults = [];
 
   bool hasSubmission(int index) {
@@ -75,24 +75,31 @@ class _StudentExercisesScreenState
     ref.watch(userDataProvider);
     ref.watch(currentExerciseProvider);
     return Scaffold(
-      appBar: appBarWidget(mayGoBack: true),
-      drawer: appDrawer(context, ref, userType: UserTypes.student),
-      bottomNavigationBar:
-          studentBottomNavBar(context, path: NavigatorRoutes.studentExercises),
+      key: scaffoldKey,
+      drawer: studentAppDrawer(context, ref,
+          currentPath: NavigatorRoutes.studentExercises),
       body: switchedLoadingContainer(
           ref.read(loadingProvider).isLoading,
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: SingleChildScrollView(
-              child: all20Pix(
-                  child: Column(
-                children: [
-                  blackInterBold('TRACING EXERCISES', fontSize: 32),
-                  Gap(40),
-                  exerciseWidgets()
-                ],
-              )),
-            ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              studentRail(context, scaffoldKey,
+                  selectedIndex: 2,
+                  currentPath: NavigatorRoutes.studentExercises),
+              SizedBox(
+                width: MediaQuery.of(context).size.width - 50,
+                child: SingleChildScrollView(
+                  child: all20Pix(
+                      child: Column(
+                    children: [
+                      blackCinzelBold('TRACING EXERCISES', fontSize: 32),
+                      Gap(40),
+                      exerciseWidgets()
+                    ],
+                  )),
+                ),
+              ),
+            ],
           )),
     );
   }
@@ -104,7 +111,7 @@ class _StudentExercisesScreenState
         children: allExerciseModels.map((exercise) {
           return SizedBox(
             width: MediaQuery.of(context).size.width * 0.35,
-            height: MediaQuery.of(context).size.width * 0.3,
+            height: MediaQuery.of(context).size.width * 0.2,
             child: ElevatedButton(
                 onPressed: exercise.exerciseIndex <=
                         ref.read(userDataProvider).lessonIndex
@@ -117,7 +124,7 @@ class _StudentExercisesScreenState
                 style: ElevatedButton.styleFrom(
                     disabledBackgroundColor:
                         CustomColors.ketchup.withOpacity(0.5)),
-                child: whiteInterBold('Exercise ${exercise.exerciseIndex}',
+                child: whiteAndadaProBold('Exercise ${exercise.exerciseIndex}',
                     fontSize: 16)),
           );
         }).toList());
@@ -131,9 +138,9 @@ class _StudentExercisesScreenState
               content: SingleChildScrollView(
                 child: Column(
                   children: [
-                    whiteInterBold('Exercise Contents', fontSize: 28),
+                    whiteAndadaProBold('Exercise Contents', fontSize: 28),
                     vertical20Pix(
-                        child: whiteInterRegular(
+                        child: whiteAndadaProRegular(
                             exerciseModel.exerciseDescription,
                             fontSize: 20)),
                     Gap(40),
@@ -149,7 +156,7 @@ class _StudentExercisesScreenState
                           Navigator.of(context)
                               .pushNamed(NavigatorRoutes.studentTakeExercise);
                         },
-                        child: whiteInterBold('START EXERCISE'))
+                        child: whiteAndadaProBold('START EXERCISE'))
                   ],
                 ),
               ),

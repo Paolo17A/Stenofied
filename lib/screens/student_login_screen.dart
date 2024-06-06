@@ -45,7 +45,7 @@ class _UserLoginScreenState extends ConsumerState<StudentLoginScreen> {
                   child: all20Pix(
                       child: Column(
                 children: [
-                  blackInterBold('STUDENT LOG-IN', fontSize: 35),
+                  blackJosefinSansBold('STUDENT LOG-IN', fontSize: 35),
                   authenticationIcon(context, iconData: Icons.person),
                   const Gap(20),
                   loginFieldsContainer(context, ref,

@@ -382,7 +382,7 @@ Future updateProfile(BuildContext context, WidgetRef ref,
   }
   try {
     ref.read(loadingProvider).toggleLoading(true);
-    FirebaseFirestore.instance
+    await FirebaseFirestore.instance
         .collection(Collections.users)
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .update({
@@ -392,11 +392,11 @@ Future updateProfile(BuildContext context, WidgetRef ref,
     ref.read(loadingProvider).toggleLoading(false);
     Navigator.of(context).pop();
     if (userType == UserTypes.student) {
-      Navigator.of(context)
-          .pushReplacementNamed(NavigatorRoutes.studentProfile);
+      Navigator.of(context).pushReplacementNamed(NavigatorRoutes.studentHome);
     } else if (userType == UserTypes.teacher) {
-      Navigator.of(context)
-          .pushReplacementNamed(NavigatorRoutes.teacherProfile);
+      Navigator.of(context).pushReplacementNamed(NavigatorRoutes.teacherHome);
+    } else if (userType == UserTypes.admin) {
+      Navigator.of(context).pushReplacementNamed(NavigatorRoutes.adminHome);
     }
   } catch (error) {
     ScaffoldMessenger.of(context).showSnackBar(

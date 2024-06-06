@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
 import 'package:stenofied/utils/future_util.dart';
 
 import '../providers/loading_provider.dart';
-import '../utils/color_util.dart';
 import '../utils/navigator_util.dart';
 import '../widgets/app_bar_widget.dart';
 import '../widgets/custom_miscellaneous_widgets.dart';
@@ -51,7 +51,8 @@ class _AdminViewTeachersScreenState
             child: all20Pix(
                 child: Column(
               children: [
-                blackInterBold('REGISTERED TEACHERS', fontSize: 40),
+                blackCinzelBold('REGISTERED TEACHERS', fontSize: 32),
+                Gap(20),
                 studentEntries()
               ],
             )),
@@ -60,24 +61,19 @@ class _AdminViewTeachersScreenState
   }
 
   Widget studentEntries() {
-    return Container(
-      decoration: BoxDecoration(
-          color: CustomColors.ketchup, borderRadius: BorderRadius.circular(10)),
-      padding: EdgeInsets.all(10),
-      child: teacherDocs.isNotEmpty
-          ? ListView.builder(
-              shrinkWrap: true,
-              itemCount: teacherDocs.length,
-              itemBuilder: (context, index) {
-                return userRecordEntry(
-                    userDoc: teacherDocs[index],
-                    onTap: () => NavigatorRoutes.adminSelectedTeacher(context,
-                        userID: teacherDocs[index].id),
-                    displayVerificationStatus: true);
-              })
-          : all20Pix(
-              child: blackInterBold('NO REGISTERED TEACHERS AVAILABLE',
-                  fontSize: 25)),
-    );
+    return teacherDocs.isNotEmpty
+        ? ListView.builder(
+            shrinkWrap: true,
+            itemCount: teacherDocs.length,
+            itemBuilder: (context, index) {
+              return userRecordEntry(
+                  userDoc: teacherDocs[index],
+                  onTap: () => NavigatorRoutes.adminSelectedTeacher(context,
+                      userID: teacherDocs[index].id),
+                  displayVerificationStatus: true);
+            })
+        : all20Pix(
+            child: blackAndadaProBold('NO REGISTERED TEACHERS AVAILABLE',
+                fontSize: 25));
   }
 }

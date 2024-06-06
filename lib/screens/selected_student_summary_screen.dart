@@ -109,8 +109,8 @@ class _SelectedStudentSummaryScreenState
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          blackInterBold(formattedName, fontSize: 26),
-          blackInterRegular('Current Level: $currentQuizIndex')
+          blackCinzelBold(formattedName, fontSize: 26),
+          blackCinzelRegular('Current Level: $currentQuizIndex')
         ],
       ),
     );
@@ -128,7 +128,7 @@ class _SelectedStudentSummaryScreenState
           borderRadius: BorderRadius.circular(10), side: BorderSide()),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10), side: BorderSide()),
-      title: whiteInterBold('EXERCISE RESULTS', fontSize: 16),
+      title: whiteAndadaProBold('EXERCISE RESULTS', fontSize: 16),
       children: [
         exerciseResultDocs.isNotEmpty
             ? ListView.builder(
@@ -138,7 +138,7 @@ class _SelectedStudentSummaryScreenState
                 },
                 itemCount: exerciseResultDocs.length)
             : vertical20Pix(
-                child: whiteInterBold('NO EXERCISE RESULTS AVAILABLE',
+                child: whiteAndadaProBold('NO EXERCISE RESULTS AVAILABLE',
                     fontSize: 20))
       ],
     ));
@@ -156,7 +156,7 @@ class _SelectedStudentSummaryScreenState
           borderRadius: BorderRadius.circular(10), side: BorderSide()),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10), side: BorderSide()),
-      title: whiteInterBold('QUIZ RESULTS', fontSize: 16),
+      title: whiteAndadaProBold('QUIZ RESULTS', fontSize: 16),
       children: [
         quizResultDocs.isNotEmpty
             ? ListView.builder(
@@ -166,7 +166,7 @@ class _SelectedStudentSummaryScreenState
                 },
                 itemCount: quizResultDocs.length)
             : vertical20Pix(
-                child: whiteInterBold('NO EXERCISE RESULTS AVAILABLE',
+                child: whiteAndadaProBold('NO EXERCISE RESULTS AVAILABLE',
                     fontSize: 20))
       ],
     ));
@@ -192,8 +192,8 @@ class _SelectedStudentSummaryScreenState
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              whiteInterBold('Exercise: $exerciseIndex'),
-              whiteInterRegular(
+              whiteAndadaProBold('Exercise: $exerciseIndex'),
+              whiteAndadaProRegular(
                   'Score: $score / ${allExerciseModels[exerciseIndex - 1].tracingModels.length}')
             ],
           ),
@@ -220,8 +220,8 @@ class _SelectedStudentSummaryScreenState
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              whiteInterBold('Quiz: $quizIndex'),
-              whiteInterRegular(
+              whiteAndadaProBold('Quiz: $quizIndex'),
+              whiteAndadaProRegular(
                   'Score: $score / ${allQuizModels[quizIndex - 1].wordsToWrite.length}')
             ],
           ),

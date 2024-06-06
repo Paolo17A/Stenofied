@@ -68,8 +68,8 @@ class _TeacherGradeExerciseScreenState
                     child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                blackInterBold(formattedName, fontSize: 28),
-                blackInterRegular(
+                blackCinzelBold(formattedName, fontSize: 28),
+                blackCinzelRegular(
                     '\t\tExercise ${ref.read(currentExerciseProvider).currentExerciseModel!.exerciseIndex.toString()}',
                     fontSize: 20),
                 if (exerciseResults.isNotEmpty) _exerciseEntriesContainer(),
@@ -94,7 +94,8 @@ class _TeacherGradeExerciseScreenState
         .tracingModels
         .length;
     return vertical20Pix(
-        child: whiteInterBold('Word $currentIndex/$totalWords: $currentWord',
+        child: whiteAndadaProBold(
+            'Word $currentIndex/$totalWords: $currentWord',
             fontSize: 24));
   }
 
@@ -171,7 +172,7 @@ class _TeacherGradeExerciseScreenState
                     ref.read(currentExerciseProvider).decrementTracingIndex(),
             style: ElevatedButton.styleFrom(
                 disabledBackgroundColor: CustomColors.blush),
-            child: whiteInterBold('PREV')),
+            child: whiteAndadaProBold('PREV')),
         SizedBox(
           child: ElevatedButton(
               onPressed: () => isLastQuestion
@@ -179,7 +180,7 @@ class _TeacherGradeExerciseScreenState
                       exerciseResultID: widget.exerciseResultID,
                       exerciseResults: exerciseResults)
                   : ref.read(currentExerciseProvider).incrementTracingIndex(),
-              child: whiteInterBold(isLastQuestion ? 'SUBMIT' : 'NEXT')),
+              child: whiteAndadaProBold(isLastQuestion ? 'SUBMIT' : 'NEXT')),
         )
       ],
     );

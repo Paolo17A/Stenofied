@@ -17,6 +17,201 @@ Text interText(String label,
   );
 }
 
+Text cinzelText(String label,
+    {double? fontSize,
+    FontWeight? fontWeight,
+    Color? color,
+    TextAlign? textAlign,
+    TextOverflow? overflow}) {
+  return Text(
+    label,
+    textAlign: textAlign,
+    overflow: overflow,
+    style: GoogleFonts.cinzel(
+        fontSize: fontSize, fontWeight: fontWeight, color: color),
+  );
+}
+
+Text jostText(String label,
+    {double? fontSize,
+    FontWeight? fontWeight,
+    Color? color,
+    TextAlign? textAlign,
+    TextOverflow? overflow}) {
+  return Text(
+    label,
+    textAlign: textAlign,
+    overflow: overflow,
+    style: GoogleFonts.jost(
+        fontSize: fontSize, fontWeight: fontWeight, color: color),
+  );
+}
+
+Text josepfinSansText(String label,
+    {double? fontSize,
+    FontWeight? fontWeight,
+    Color? color,
+    TextAlign? textAlign,
+    TextOverflow? overflow}) {
+  return Text(
+    label,
+    textAlign: textAlign,
+    overflow: overflow,
+    style: GoogleFonts.josefinSans(
+        fontSize: fontSize, fontWeight: fontWeight, color: color),
+  );
+}
+
+Text andandaProText(String label,
+    {double? fontSize,
+    FontWeight? fontWeight,
+    Color? color,
+    TextAlign? textAlign,
+    TextOverflow? overflow}) {
+  return Text(
+    label,
+    textAlign: textAlign,
+    overflow: overflow,
+    style: GoogleFonts.andadaPro(
+        fontSize: fontSize, fontWeight: fontWeight, color: color),
+  );
+}
+
+Text whiteCinzelBold(String label,
+    {double? fontSize,
+    TextAlign textAlign = TextAlign.center,
+    TextOverflow? textOverflow,
+    TextDecoration? textDecoration}) {
+  return Text(label,
+      textAlign: textAlign,
+      overflow: textOverflow,
+      maxLines: 5,
+      style: GoogleFonts.cinzel(
+          fontSize: fontSize,
+          color: Colors.white,
+          decoration: textDecoration,
+          fontWeight: FontWeight.bold));
+}
+
+Text whiteAndadaProBold(String label,
+    {double? fontSize,
+    TextAlign textAlign = TextAlign.center,
+    TextOverflow? textOverflow,
+    TextDecoration? textDecoration}) {
+  return Text(label,
+      textAlign: textAlign,
+      overflow: textOverflow,
+      maxLines: 5,
+      style: GoogleFonts.andadaPro(
+          fontSize: fontSize,
+          color: Colors.white,
+          decoration: textDecoration,
+          fontWeight: FontWeight.bold));
+}
+
+Text whiteAndadaProRegular(String label,
+    {double? fontSize,
+    TextAlign textAlign = TextAlign.center,
+    TextOverflow? textOverflow,
+    TextDecoration? textDecoration}) {
+  return Text(label,
+      textAlign: textAlign,
+      overflow: textOverflow,
+      maxLines: 5,
+      style: GoogleFonts.andadaPro(
+          fontSize: fontSize, color: Colors.white, decoration: textDecoration));
+}
+
+Text whiteJosefinSansBold(String label,
+    {double? fontSize,
+    TextAlign textAlign = TextAlign.center,
+    TextOverflow? textOverflow,
+    TextDecoration? textDecoration}) {
+  return Text(label,
+      textAlign: textAlign,
+      overflow: textOverflow,
+      maxLines: 5,
+      style: GoogleFonts.josefinSans(
+          fontSize: fontSize,
+          color: Colors.white,
+          decoration: textDecoration,
+          fontWeight: FontWeight.bold));
+}
+
+Text blackJosefinSansBold(String label,
+    {double? fontSize,
+    TextAlign textAlign = TextAlign.center,
+    TextOverflow? textOverflow,
+    TextDecoration? textDecoration}) {
+  return Text(label,
+      textAlign: textAlign,
+      overflow: textOverflow,
+      maxLines: 5,
+      style: GoogleFonts.josefinSans(
+          fontSize: fontSize,
+          color: Colors.black,
+          decoration: textDecoration,
+          fontWeight: FontWeight.bold));
+}
+
+Text blackCinzelBold(String label,
+    {double? fontSize,
+    TextAlign textAlign = TextAlign.center,
+    TextOverflow? textOverflow,
+    TextDecoration? textDecoration}) {
+  return Text(label,
+      textAlign: textAlign,
+      overflow: textOverflow,
+      maxLines: 5,
+      style: GoogleFonts.cinzel(
+          fontSize: fontSize,
+          color: Colors.black,
+          decoration: textDecoration,
+          fontWeight: FontWeight.bold));
+}
+
+Text blackCinzelRegular(String label,
+    {double? fontSize,
+    TextAlign textAlign = TextAlign.center,
+    TextOverflow? textOverflow,
+    TextDecoration? textDecoration}) {
+  return Text(label,
+      textAlign: textAlign,
+      overflow: textOverflow,
+      maxLines: 5,
+      style: GoogleFonts.cinzel(
+          fontSize: fontSize, color: Colors.black, decoration: textDecoration));
+}
+
+Text blackAndadaProBold(String label,
+    {double? fontSize,
+    TextAlign textAlign = TextAlign.center,
+    TextOverflow? textOverflow,
+    TextDecoration? textDecoration}) {
+  return Text(label,
+      textAlign: textAlign,
+      overflow: textOverflow,
+      maxLines: 5,
+      style: GoogleFonts.andadaPro(
+          fontSize: fontSize,
+          color: Colors.black,
+          decoration: textDecoration,
+          fontWeight: FontWeight.bold));
+}
+
+Text blackAndadaProRegular(String label,
+    {double? fontSize,
+    TextAlign textAlign = TextAlign.center,
+    TextOverflow? textOverflow,
+    TextDecoration? textDecoration}) {
+  return Text(label,
+      textAlign: textAlign,
+      overflow: textOverflow,
+      maxLines: 5,
+      style: GoogleFonts.andadaPro(
+          fontSize: fontSize, color: Colors.black, decoration: textDecoration));
+}
+
 Text sangriaInterBold(String label,
     {double? fontSize,
     TextAlign textAlign = TextAlign.center,
@@ -30,7 +225,7 @@ Text sangriaInterBold(String label,
           fontWeight: FontWeight.bold));
 }
 
-Text whiteInterBold(String label,
+/*Text whiteInterBold(String label,
     {double? fontSize,
     TextAlign textAlign = TextAlign.center,
     TextOverflow? textOverflow,
@@ -77,4 +272,4 @@ Text blackInterRegular(String label,
       textAlign: textAlign,
       style: GoogleFonts.inter(
           fontSize: fontSize, color: Colors.black, decoration: textDecoration));
-}
+}*/

@@ -60,7 +60,7 @@ class _AdminEditSectionScreenState
                 child: all20Pix(
                     child: Column(
               children: [
-                blackInterBold('EDIT SECTION', fontSize: 25),
+                blackCinzelBold('EDIT SECTION', fontSize: 25),
                 sectionDetails(),
                 createSectionButton()
               ],
@@ -84,6 +84,6 @@ class _AdminEditSectionScreenState
         child: ElevatedButton(
             onPressed: () => editThisSection(context, ref,
                 sectionID: widget.sectionID, nameController: nameController),
-            child: whiteInterBold('EDIT SECTION')));
+            child: whiteAndadaProBold('EDIT SECTION')));
   }
 }

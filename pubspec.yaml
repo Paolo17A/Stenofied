@@ -81,6 +81,7 @@ flutter:
     - assets/images/student.png
     - assets/images/teacher.png
     - assets/images/tracing/
+    - assets/images/icons/
     - assets/documents/
   #   - images/a_dot_ham.jpeg
 

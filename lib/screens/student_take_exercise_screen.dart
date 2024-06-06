@@ -104,7 +104,7 @@ class _StudentTakeExerciseScreenState
                         });
                         ref.read(currentExerciseProvider).deleteTraceOutput();
                       },
-                      child: whiteInterBold('RESET TRACE')),
+                      child: whiteAndadaProBold('RESET TRACE')),
                   Gap(80),
                   _navigatorButtons()
                 ],
@@ -115,7 +115,7 @@ class _StudentTakeExerciseScreenState
   }
 
   Widget _exerciseIndexHeader() {
-    return blackInterBold(
+    return blackCinzelBold(
         'Exercise ${ref.read(currentExerciseProvider).currentExerciseModel!.exerciseIndex.toString()}',
         fontSize: 40);
   }
@@ -212,7 +212,7 @@ class _StudentTakeExerciseScreenState
                 });
               }),
           Gap(10),
-          whiteInterRegular('Trace the shorthanded word above.'),
+          whiteAndadaProBold('Trace the shorthanded word above.'),
         ],
       ),
     );
@@ -234,7 +234,7 @@ class _StudentTakeExerciseScreenState
         child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        whiteInterBold('Word $currentIndex/$totalWords: $currentWord',
+        whiteAndadaProBold('Word $currentIndex/$totalWords: $currentWord',
             fontSize: 24),
         ElevatedButton(
             onPressed: playback,
@@ -278,11 +278,11 @@ class _StudentTakeExerciseScreenState
                   },
             style: ElevatedButton.styleFrom(
                 disabledBackgroundColor: CustomColors.blush),
-            child: whiteInterBold('PREV')),
+            child: whiteAndadaProBold('PREV')),
         SizedBox(
           child: ElevatedButton(
               onPressed: () => onNextButtonPress(),
-              child: whiteInterBold(
+              child: whiteAndadaProBold(
                   ref.read(currentExerciseProvider).isLookingAtLastWord()
                       ? 'SUBMIT'
                       : 'NEXT')),

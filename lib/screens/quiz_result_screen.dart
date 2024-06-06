@@ -59,7 +59,7 @@ class _QuizResultScreenState extends ConsumerState<QuizResultScreen> {
           SingleChildScrollView(
               child: Column(
             children: [
-              all10Pix(child: blackInterBold('Quiz $quizIndex', fontSize: 32)),
+              all10Pix(child: blackCinzelBold('Quiz $quizIndex', fontSize: 32)),
               if (!ref.read(loadingProvider).isLoading) answersContainer()
             ],
           ))),
@@ -74,9 +74,9 @@ class _QuizResultScreenState extends ConsumerState<QuizResultScreen> {
       child: Column(
         children: [
           if (!isGraded)
-            whiteInterBold('NOT YET GRADED', fontSize: 22)
+            whiteAndadaProBold('NOT YET GRADED', fontSize: 22)
           else if (quizIndex > 0)
-            whiteInterBold(
+            whiteAndadaProRegular(
                 'Score: ${score}/${allQuizModels[quizIndex - 1].wordsToWrite.length}',
                 fontSize: 22),
           Divider(color: Colors.white),
@@ -101,7 +101,7 @@ class _QuizResultScreenState extends ConsumerState<QuizResultScreen> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          whiteInterBold('${index + 1}.', fontSize: 20),
+          whiteAndadaProBold('${index + 1}.', fontSize: 20),
           GestureDetector(
             onTap: () => showDialog(
                 context: context,
@@ -117,7 +117,7 @@ class _QuizResultScreenState extends ConsumerState<QuizResultScreen> {
                                 )),
                             ElevatedButton(
                                 onPressed: () => Navigator.of(context).pop(),
-                                child: whiteInterBold('CLOSE'))
+                                child: whiteAndadaProBold('CLOSE'))
                           ],
                         ),
                       ),
@@ -135,11 +135,11 @@ class _QuizResultScreenState extends ConsumerState<QuizResultScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              whiteInterBold(
+              whiteAndadaProBold(
                   'Word/s: ${allQuizModels[quizIndex - 1].wordsToWrite[index]}',
                   fontSize: 16),
               if (isGraded)
-                whiteInterBold(
+                whiteAndadaProBold(
                     'Result: ${answerData[EntryFields.isCorrect] ? 'CORRECT' : 'WRONG'}')
             ],
           )

@@ -28,6 +28,7 @@ class _StudentTakeQuizScreenState extends ConsumerState<StudentTakeQuizScreen> {
   DrawingPoint? currentDrawingPoint;
   bool hasDoodle = false;
   ScreenshotController screenshotController = ScreenshotController();
+  double doodleWidth = 5;
 
   void onNextButtonPress() async {
     if (hasDoodle) {
@@ -80,7 +81,7 @@ class _StudentTakeQuizScreenState extends ConsumerState<StudentTakeQuizScreen> {
                         });
                         ref.read(currentQuizProvider).deleteDoodleOutput();
                       },
-                      child: whiteInterBold('RESET SHORTHAND')),
+                      child: whiteAndadaProBold('RESET SHORTHAND')),
                   Gap(100),
                   _navigatorButtons()
                 ],
@@ -91,7 +92,7 @@ class _StudentTakeQuizScreenState extends ConsumerState<StudentTakeQuizScreen> {
   }
 
   Widget _quizIndexHeader() {
-    return blackInterBold(
+    return blackCinzelBold(
         'Quiz ${ref.read(currentQuizProvider).currentQuizModel!.quizIndex.toString()}',
         fontSize: 40);
   }
@@ -172,8 +173,20 @@ class _StudentTakeQuizScreenState extends ConsumerState<StudentTakeQuizScreen> {
               ),
             ),
           ),
+          Slider(
+              value: doodleWidth,
+              min: 1,
+              max: 10,
+              thumbColor: Colors.white,
+              activeColor: Colors.white,
+              inactiveColor: Colors.white70,
+              onChanged: (newVal) {
+                setState(() {
+                  doodleWidth = newVal;
+                });
+              }),
           Gap(10),
-          whiteInterRegular('Write the word above in shorthand.'),
+          whiteAndadaProBold('Write the word above in shorthand.'),
         ],
       ),
     );
@@ -188,7 +201,8 @@ class _StudentTakeQuizScreenState extends ConsumerState<StudentTakeQuizScreen> {
     int totalWords =
         ref.read(currentQuizProvider).currentQuizModel!.wordsToWrite.length;
     return vertical20Pix(
-        child: whiteInterBold('Word $currentIndex/$totalWords: $currentWord',
+        child: whiteAndadaProBold(
+            'Word $currentIndex/$totalWords: $currentWord',
             fontSize: 24));
   }
 
@@ -222,11 +236,11 @@ class _StudentTakeQuizScreenState extends ConsumerState<StudentTakeQuizScreen> {
                   },
             style: ElevatedButton.styleFrom(
                 disabledBackgroundColor: CustomColors.blush),
-            child: whiteInterBold('PREV')),
+            child: whiteAndadaProBold('PREV')),
         SizedBox(
           child: ElevatedButton(
               onPressed: () => onNextButtonPress(),
-              child: whiteInterBold(
+              child: whiteAndadaProBold(
                   ref.read(currentQuizProvider).isLookingAtLastWord()
                       ? 'SUBMIT'
                       : 'NEXT')),

@@ -10,13 +10,12 @@ import 'package:stenofied/providers/user_data_provider.dart';
 import 'package:stenofied/utils/color_util.dart';
 import 'package:stenofied/utils/future_util.dart';
 import 'package:stenofied/utils/navigator_util.dart';
-import 'package:stenofied/widgets/app_bottom_nav_bar_widget.dart';
 import 'package:stenofied/widgets/custom_miscellaneous_widgets.dart';
 import 'package:stenofied/widgets/custom_padding_widgets.dart';
 import 'package:stenofied/widgets/custom_text_widgets.dart';
+import 'package:stenofied/widgets/navigator_rail_widget.dart';
 
 import '../utils/string_util.dart';
-import '../widgets/app_bar_widget.dart';
 import '../widgets/app_drawer_widget.dart';
 
 class TeacherHomeScreen extends ConsumerStatefulWidget {
@@ -27,6 +26,7 @@ class TeacherHomeScreen extends ConsumerStatefulWidget {
 }
 
 class _TeacherHomeScreenState extends ConsumerState<TeacherHomeScreen> {
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   List<DocumentSnapshot> ungradedExerciseDocs = [];
   List<DocumentSnapshot> ungradedQuizDocs = [];
   @override
@@ -60,24 +60,32 @@ class _TeacherHomeScreenState extends ConsumerState<TeacherHomeScreen> {
     return PopScope(
       canPop: false,
       child: Scaffold(
-          appBar: appBarWidget(mayGoBack: true),
-          drawer: appDrawer(context, ref,
-              userType: UserTypes.teacher, isHome: true),
-          bottomNavigationBar:
-              teacherBottomNavBar(context, path: NavigatorRoutes.teacherHome),
+          key: scaffoldKey,
+          //appBar: appBarWidget(mayGoBack: true),
+          drawer: teacherAppDrawer(context, ref,
+              currentPath: NavigatorRoutes.teacherHome),
           body: switchedLoadingContainer(
             ref.read(loadingProvider).isLoading,
-            vertical20Pix(
-              child: Column(
-                children: [
-                  welcomeWidgets(
-                      userType: UserTypes.teacher,
-                      profileImageURL:
-                          ref.read(userDataProvider).profileImageURL),
-                  exercisesToGrade(),
-                  quizzesToGrade()
-                ],
-              ),
+            Row(
+              children: [
+                teacherRail(context, scaffoldKey,
+                    selectedIndex: 0, currentPath: NavigatorRoutes.teacherHome),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width - 50,
+                  child: vertical20Pix(
+                    child: Column(
+                      children: [
+                        welcomeWidgets(context,
+                            userType: UserTypes.teacher,
+                            profileImageURL:
+                                ref.read(userDataProvider).profileImageURL),
+                        exercisesToGrade(),
+                        quizzesToGrade()
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           )),
     );
@@ -93,15 +101,16 @@ class _TeacherHomeScreenState extends ConsumerState<TeacherHomeScreen> {
         padding: EdgeInsets.all(10),
         child: Column(
           children: [
-            whiteInterBold('Ungraded Exercises', fontSize: 24),
+            whiteAndadaProBold('Ungraded Exercises', fontSize: 24),
             if (ungradedExerciseDocs.isNotEmpty)
               ListView.builder(
                   shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
                   itemCount: ungradedExerciseDocs.length,
                   itemBuilder: (context, index) =>
                       ungradedExerciseEntry(ungradedExerciseDocs[index]))
             else
-              whiteInterRegular('No Exercises to Grade')
+              whiteAndadaProRegular('No Exercises to Grade')
           ],
         ),
       ),
@@ -140,8 +149,8 @@ class _TeacherHomeScreenState extends ConsumerState<TeacherHomeScreen> {
               return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    whiteInterBold('Student: $formattedName'),
-                    whiteInterRegular('Exercise ${exerciseIndex}')
+                    whiteAndadaProBold('Student: $formattedName'),
+                    whiteAndadaProRegular('Exercise ${exerciseIndex}')
                   ]);
             }),
       ),
@@ -158,15 +167,16 @@ class _TeacherHomeScreenState extends ConsumerState<TeacherHomeScreen> {
         padding: EdgeInsets.all(10),
         child: Column(
           children: [
-            whiteInterBold('Ungraded Quizzes', fontSize: 24),
+            whiteAndadaProBold('Ungraded Quizzes', fontSize: 24),
             if (ungradedQuizDocs.isNotEmpty)
               ListView.builder(
                   shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
                   itemCount: ungradedQuizDocs.length,
                   itemBuilder: (context, index) =>
                       ungradedQuizEntry(ungradedQuizDocs[index]))
             else
-              whiteInterRegular('No Quizzes to Grade')
+              whiteAndadaProRegular('No Quizzes to Grade')
           ],
         ),
       ),
@@ -204,8 +214,8 @@ class _TeacherHomeScreenState extends ConsumerState<TeacherHomeScreen> {
               return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    whiteInterBold('Student: $formattedName'),
-                    whiteInterRegular('Quiz ${quizIndex}')
+                    whiteAndadaProBold('Student: $formattedName'),
+                    whiteAndadaProRegular('Quiz ${quizIndex}')
                   ]);
             }),
       ),

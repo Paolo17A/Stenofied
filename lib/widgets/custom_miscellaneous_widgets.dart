@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:stenofied/providers/proof_of_enrollment_provider.dart';
-import 'package:stenofied/utils/future_util.dart';
 import 'package:stenofied/utils/string_util.dart';
 
 import '../utils/color_util.dart';
@@ -45,13 +44,45 @@ Widget loginFieldsContainer(BuildContext context, WidgetRef ref,
     required TextEditingController emailController,
     required TextEditingController passwordController}) {
   return Container(
-      width: MediaQuery.of(context).size.width,
+      width: MediaQuery.of(context).size.width * 0.8,
       decoration: BoxDecoration(
-          color: CustomColors.ketchup, borderRadius: BorderRadius.circular(20)),
+          color: Colors.white,
+          border: Border.all(width: 2),
+          borderRadius: BorderRadius.circular(30)),
       padding: const EdgeInsets.all(20),
       child: Column(
         children: [
-          Row(children: [whiteInterBold('Log-In', fontSize: 32)]),
+          all10Pix(
+            child: Stack(
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  height: 30,
+                  decoration: BoxDecoration(
+                      color: CustomColors.blush.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(30)),
+                  child: Row(
+                    children: [
+                      SizedBox(width: MediaQuery.of(context).size.width * 0.4),
+                      InkWell(
+                          onTap: () => Navigator.of(context)
+                              .pushNamed(NavigatorRoutes.studentRegister),
+                          child: blackJosefinSansBold('Sign Up')),
+                    ],
+                  ),
+                ),
+                Container(
+                    width: MediaQuery.of(context).size.width * 0.35,
+                    decoration: BoxDecoration(
+                        color: CustomColors.ketchup,
+                        borderRadius: BorderRadius.circular(30)),
+                    child: Center(
+                      child: whiteJosefinSansBold('\t\t\tLogin\t\t\t',
+                          textAlign: TextAlign.justify, fontSize: 20),
+                    )),
+              ],
+            ),
+          ),
           emailAddressTextField(emailController: emailController),
           passwordTextField(
               label: 'Password', passwordController: passwordController),
@@ -60,13 +91,6 @@ Widget loginFieldsContainer(BuildContext context, WidgetRef ref,
                 onPress: () => Navigator.of(context)
                     .pushNamed(NavigatorRoutes.forgotPassword))
           ]),
-          loginButton(
-              onPress: () => logInUser(context, ref,
-                  emailController: emailController,
-                  passwordController: passwordController)),
-          dontHaveAccountButton(
-              onPress: () => Navigator.of(context)
-                  .pushNamed(NavigatorRoutes.selectUserType))
         ],
       ));
 }
@@ -79,9 +103,11 @@ Widget registerFieldsContainer(BuildContext context, WidgetRef ref,
     required TextEditingController firstNameController,
     required TextEditingController lastNameController}) {
   return Container(
-      width: MediaQuery.of(context).size.width,
+      width: MediaQuery.of(context).size.width * 0.9,
       decoration: BoxDecoration(
-          color: CustomColors.ketchup, borderRadius: BorderRadius.circular(20)),
+          color: Colors.white,
+          border: Border.all(width: 2),
+          borderRadius: BorderRadius.circular(20)),
       padding: const EdgeInsets.all(20),
       child: Column(
         children: [
@@ -96,15 +122,6 @@ Widget registerFieldsContainer(BuildContext context, WidgetRef ref,
               label: 'First Name', textController: firstNameController),
           regularTextField(
               label: 'Last Name', textController: lastNameController),
-          proofOfEnrollmentUploadWidget(context, ref, userType: userType),
-          registerButton(
-              onPress: () => registerNewUser(context, ref,
-                  userType: userType,
-                  emailController: emailController,
-                  passwordController: passwordController,
-                  confirmPasswordController: confirmPasswordController,
-                  firstNameController: firstNameController,
-                  lastNameController: lastNameController)),
         ],
       ));
 }
@@ -114,9 +131,10 @@ Widget emailAddressTextField({required TextEditingController emailController}) {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        whiteInterBold('Email Address', fontSize: 18),
+        blackJosefinSansBold('Email Address', fontSize: 18),
         CustomTextField(
             text: 'Email Address',
+            fillColor: CustomColors.blush.withOpacity(0.5),
             controller: emailController,
             textInputType: TextInputType.emailAddress,
             displayPrefixIcon: const Icon(Icons.email)),
@@ -132,10 +150,11 @@ Widget passwordTextField(
       child: Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      whiteInterBold(label, fontSize: 18),
+      blackJosefinSansBold(label, fontSize: 18),
       CustomTextField(
           text: label,
           controller: passwordController,
+          fillColor: CustomColors.blush.withOpacity(0.5),
           textInputType: TextInputType.visiblePassword,
           displayPrefixIcon: const Icon(Icons.lock)),
     ],
@@ -148,9 +167,10 @@ Widget regularTextField(
       child: Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      whiteInterBold(label, fontSize: 18),
+      blackJosefinSansBold(label, fontSize: 18),
       CustomTextField(
           text: label,
+          fillColor: CustomColors.blush.withOpacity(0.5),
           controller: textController,
           textInputType: TextInputType.name,
           displayPrefixIcon: null),
@@ -165,38 +185,37 @@ Widget proofOfEnrollmentUploadWidget(BuildContext context, WidgetRef ref,
     child: Column(
       children: [
         Row(children: [
-          whiteInterBold(
+          blackJosefinSansBold(
               'Proof of ${userType == UserTypes.student ? 'Enrollment' : 'Employment'}',
               fontSize: 18)
         ]),
         if (ref.read(proofOfEnrollmentProvider).proofOfEnrollmentFile != null)
           Image.file(ref.read(proofOfEnrollmentProvider).proofOfEnrollmentFile!,
               width: MediaQuery.of(context).size.width * 0.3),
-        ElevatedButton(
+        TextButton(
             onPressed: () =>
                 ref.read(proofOfEnrollmentProvider).setProofOfEmployment(),
-            style: ElevatedButton.styleFrom(
-                backgroundColor: CustomColors.parchment),
-            child: blackInterBold(
+            child: blackJosefinSansBold(
                 'UPLOAD PROOF\ OF ${userType == UserTypes.student ? 'ENROLLMENT' : 'EMPLOYMENT'}',
+                textDecoration: TextDecoration.underline,
                 fontSize: 12))
       ],
     ),
   );
 }
 
-Widget welcomeWidgets(
+Widget welcomeWidgets(BuildContext context,
     {required String userType, required String profileImageURL}) {
   return SizedBox(
-    width: double.infinity,
+    width: MediaQuery.of(context).size.width * 0.8,
     child: Column(
       children: [
         all10Pix(
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+            blackJosefinSansBold('WELCOME,\n$userType', fontSize: 28),
             buildProfileImageWidget(
                 profileImageURL: profileImageURL, radius: 40),
-            blackInterBold('WELCOME,\n$userType', fontSize: 28)
           ]),
         ),
       ],
@@ -236,23 +255,24 @@ Widget userRecordEntry(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Container(
         decoration: BoxDecoration(
-            color: CustomColors.blush,
-            border: Border.all(color: CustomColors.ketchup, width: 1)),
+            color: CustomColors.blush, borderRadius: BorderRadius.circular(20)),
         height: 60,
         padding: const EdgeInsets.all(8),
         child: Row(children: [
           buildProfileImageWidget(profileImageURL: profileImageURL, radius: 20),
           const Gap(16),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              blackInterBold(formattedName, fontSize: 16),
-              if (displayVerificationStatus)
-                blackInterRegular(
-                    'Account Verified: ${adminApproved == true ? 'YES' : 'NO'}',
-                    fontSize: 12)
-            ],
+          Expanded(
+            child: Column(
+              //crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                blackAndadaProBold(formattedName, fontSize: 16),
+                if (displayVerificationStatus)
+                  blackAndadaProRegular(
+                      'Account Verified: ${adminApproved == true ? 'YES' : 'NO'}',
+                      fontSize: 12)
+              ],
+            ),
           )
         ]),
       ),

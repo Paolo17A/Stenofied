@@ -39,7 +39,7 @@ class _AdminAddSectionScreenState extends ConsumerState<AdminAddSectionScreen> {
                 child: all20Pix(
                     child: Column(
               children: [
-                blackInterBold('CREATE NEW SECTION', fontSize: 25),
+                blackCinzelBold('CREATE NEW SECTION', fontSize: 25),
                 sectionDetails(),
                 createSectionButton()
               ],
@@ -63,6 +63,6 @@ class _AdminAddSectionScreenState extends ConsumerState<AdminAddSectionScreen> {
         child: ElevatedButton(
             onPressed: () =>
                 addNewSection(context, ref, nameController: nameController),
-            child: whiteInterBold('CREATE SECTION')));
+            child: whiteAndadaProBold('CREATE SECTION')));
   }
 }

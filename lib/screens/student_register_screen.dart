@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gap/gap.dart';
 import 'package:stenofied/providers/proof_of_enrollment_provider.dart';
+import 'package:stenofied/utils/color_util.dart';
 import 'package:stenofied/utils/string_util.dart';
 
 import '../providers/loading_provider.dart';
-import '../widgets/app_bar_widget.dart';
+import '../utils/future_util.dart';
+import '../widgets/custom_button_widgets.dart';
 import '../widgets/custom_miscellaneous_widgets.dart';
-import '../widgets/custom_text_widgets.dart';
 
 class StudentRegisterScreen extends ConsumerStatefulWidget {
   const StudentRegisterScreen({super.key});
@@ -44,31 +44,54 @@ class _StudentRegisterScreenState extends ConsumerState<StudentRegisterScreen> {
       child: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Scaffold(
-            appBar: appBarWidget(mayGoBack: true),
+            appBar: AppBar(backgroundColor: Colors.transparent),
+            backgroundColor: CustomColors.ketchup,
             body: stackedLoadingContainer(
               context,
               ref.read(loadingProvider).isLoading,
-              SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: SingleChildScrollView(
+              Stack(
+                children: [
+                  Positioned(
+                      bottom: 0,
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 0.6,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.elliptical(300, 100),
+                                topRight: Radius.elliptical(300, 100))),
+                      )),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height,
+                    child: SingleChildScrollView(
                       child: Column(
-                    children: [
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Image.asset(ImagePaths.studentUser, scale: 0.9),
-                            blackInterBold('STUDENT', fontSize: 35)
-                          ]),
-                      const Gap(20),
-                      registerFieldsContainer(context, ref,
-                          userType: UserTypes.student,
-                          emailController: emailController,
-                          passwordController: passwordController,
-                          confirmPasswordController: confirmPasswordController,
-                          firstNameController: firstNameController,
-                          lastNameController: lastNameController),
-                    ],
-                  ))),
+                        children: [
+                          registerFieldsContainer(context, ref,
+                              userType: UserTypes.student,
+                              emailController: emailController,
+                              passwordController: passwordController,
+                              confirmPasswordController:
+                                  confirmPasswordController,
+                              firstNameController: firstNameController,
+                              lastNameController: lastNameController),
+                          proofOfEnrollmentUploadWidget(context, ref,
+                              userType: UserTypes.student),
+                          registerButton(
+                              onPress: () => registerNewUser(context, ref,
+                                  userType: UserTypes.student,
+                                  emailController: emailController,
+                                  passwordController: passwordController,
+                                  confirmPasswordController:
+                                      confirmPasswordController,
+                                  firstNameController: firstNameController,
+                                  lastNameController: lastNameController)),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             )),
       ),
     );

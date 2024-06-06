@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../utils/color_util.dart';
 
@@ -10,6 +11,7 @@ class CustomTextField extends StatefulWidget {
   final bool enabled;
   final bool hasSearchButton;
   final Function? onSearchPress;
+  final Color? fillColor;
   const CustomTextField(
       {super.key,
       required this.text,
@@ -18,6 +20,7 @@ class CustomTextField extends StatefulWidget {
       required this.displayPrefixIcon,
       this.enabled = true,
       this.hasSearchButton = false,
+      this.fillColor,
       this.onSearchPress});
 
   @override
@@ -50,12 +53,13 @@ class _LiliwECommerceTextFieldState extends State<CustomTextField> {
         decoration: InputDecoration(
             alignLabelWithHint: true,
             labelText: widget.text,
-            labelStyle: TextStyle(
-                color: Colors.black.withOpacity(0.5),
-                fontStyle: FontStyle.italic),
+            labelStyle: GoogleFonts.josefinSans(
+                textStyle: TextStyle(
+                    color: Colors.black.withOpacity(0.5),
+                    fontStyle: FontStyle.italic)),
             filled: true,
             floatingLabelBehavior: FloatingLabelBehavior.never,
-            fillColor: Colors.white.withOpacity(0.9),
+            fillColor: widget.fillColor ?? Colors.white.withOpacity(0.9),
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
                 borderSide: const BorderSide(color: Colors.black, width: 3.0)),

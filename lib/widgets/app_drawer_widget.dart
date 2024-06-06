@@ -3,45 +3,38 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
-import '../providers/user_data_provider.dart';
 import '../utils/color_util.dart';
 import '../utils/navigator_util.dart';
 import '../utils/string_util.dart';
-import 'custom_miscellaneous_widgets.dart';
 import 'custom_text_widgets.dart';
 
-Drawer appDrawer(BuildContext context, WidgetRef ref,
-    {required String userType,
-    bool isHome = false,
-    Color backgroundColor = CustomColors.ketchup}) {
+Drawer adminAppDrawer(BuildContext context, WidgetRef ref,
+    {required String currentPath}) {
   return Drawer(
-    backgroundColor: backgroundColor,
+    backgroundColor: CustomColors.ketchup,
     child: Column(
       children: [
-        DrawerHeader(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(children: [
-                buildProfileImageWidget(
-                    profileImageURL: ref.read(userDataProvider).profileImageURL,
-                    radius: 52)
-              ]),
-              Gap(8),
-            ],
-          ),
-          decoration: BoxDecoration(color: backgroundColor),
-        ),
         Flexible(
           flex: 1,
           child: ListView(
             padding: EdgeInsets.zero,
             children: [
               Gap(20),
-              _home(context, userType: userType, isHome: isHome),
-              if (userType == UserTypes.student ||
-                  userType == UserTypes.teacher)
-                _profile(context, userType: userType),
+              _drawerTile(context,
+                  label: 'HOME',
+                  imagePath: ImagePaths.home,
+                  currentPath: currentPath,
+                  thisPath: NavigatorRoutes.adminHome),
+              _drawerTile(context,
+                  label: 'FAQs',
+                  imagePath: ImagePaths.faqs,
+                  currentPath: currentPath,
+                  thisPath: ''),
+              _drawerTile(context,
+                  label: 'PROFILE',
+                  imagePath: ImagePaths.profile,
+                  currentPath: currentPath,
+                  thisPath: NavigatorRoutes.editProfile),
             ],
           ),
         ),
@@ -51,12 +44,104 @@ Drawer appDrawer(BuildContext context, WidgetRef ref,
   );
 }
 
-Widget _home(BuildContext context,
+Drawer studentAppDrawer(BuildContext context, WidgetRef ref,
+    {required String currentPath}) {
+  return Drawer(
+    backgroundColor: CustomColors.ketchup,
+    child: Column(
+      children: [
+        Flexible(
+          flex: 1,
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              Gap(20),
+              _drawerTile(context,
+                  label: 'HOME',
+                  imagePath: ImagePaths.home,
+                  currentPath: currentPath,
+                  thisPath: NavigatorRoutes.studentHome),
+              _drawerTile(context,
+                  label: 'LESSONS',
+                  imagePath: ImagePaths.lessons,
+                  currentPath: currentPath,
+                  thisPath: NavigatorRoutes.studentLessons),
+              _drawerTile(context,
+                  label: 'EXERCISES',
+                  imagePath: ImagePaths.exercises,
+                  currentPath: currentPath,
+                  thisPath: NavigatorRoutes.studentExercises),
+              _drawerTile(context,
+                  label: 'QUIZZES',
+                  imagePath: ImagePaths.quizzes,
+                  currentPath: currentPath,
+                  thisPath: NavigatorRoutes.studentQuizzes),
+              _drawerTile(context,
+                  label: 'FAQs',
+                  imagePath: ImagePaths.faqs,
+                  currentPath: currentPath,
+                  thisPath: ''),
+              _drawerTile(context,
+                  label: 'PROFILE',
+                  imagePath: ImagePaths.profile,
+                  currentPath: currentPath,
+                  thisPath: NavigatorRoutes.editProfile),
+            ],
+          ),
+        ),
+        _logOutButton(context)
+      ],
+    ),
+  );
+}
+
+Drawer teacherAppDrawer(BuildContext context, WidgetRef ref,
+    {required String currentPath}) {
+  return Drawer(
+    backgroundColor: CustomColors.ketchup,
+    child: Column(
+      children: [
+        Flexible(
+          flex: 1,
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              Gap(20),
+              _drawerTile(context,
+                  label: 'TEACHER',
+                  imagePath: ImagePaths.home,
+                  currentPath: currentPath,
+                  thisPath: NavigatorRoutes.teacherHome),
+              _drawerTile(context,
+                  label: 'MY SECTION',
+                  imagePath: ImagePaths.section,
+                  currentPath: currentPath,
+                  thisPath: NavigatorRoutes.teacherAssignedSection),
+              _drawerTile(context,
+                  label: 'FAQs',
+                  imagePath: ImagePaths.faqs,
+                  currentPath: currentPath,
+                  thisPath: ''),
+              _drawerTile(context,
+                  label: 'PROFILE',
+                  imagePath: ImagePaths.profile,
+                  currentPath: currentPath,
+                  thisPath: NavigatorRoutes.editProfile),
+            ],
+          ),
+        ),
+        _logOutButton(context)
+      ],
+    ),
+  );
+}
+
+/*Widget _home(BuildContext context,
     {required String userType, required bool isHome}) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 10),
     child: ListTile(
-      leading: const Icon(Icons.home, color: Colors.white),
+      leading: Image.asset(ImagePaths.home, scale: 20),
       title: whiteInterBold('HOME'),
       onTap: () {
         Navigator.of(context).pop();
@@ -72,6 +157,49 @@ Widget _home(BuildContext context,
           Navigator.of(context)
               .pushReplacementNamed(NavigatorRoutes.studentHome);
         }
+      },
+    ),
+  );
+}
+
+Widget _lessons(BuildContext context) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 10),
+    child: ListTile(
+      leading: Image.asset(ImagePaths.lessons, scale: 20),
+      title: whiteInterBold('LESSONS'),
+      onTap: () {
+        Navigator.of(context).pop();
+
+        Navigator.of(context).pushNamed(NavigatorRoutes.studentLessons);
+      },
+    ),
+  );
+}
+
+Widget _section(BuildContext context) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 10),
+    child: ListTile(
+      leading: Image.asset(ImagePaths.section, scale: 20),
+      title: whiteInterBold('SECTIONS'),
+      onTap: () {
+        Navigator.of(context).pop();
+
+        Navigator.of(context).pushNamed(NavigatorRoutes.adminViewSections);
+      },
+    ),
+  );
+}
+
+Widget _faq(BuildContext context) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 10),
+    child: ListTile(
+      leading: Image.asset(ImagePaths.faqs, scale: 20),
+      title: whiteInterBold('FAQs'),
+      onTap: () {
+        Navigator.of(context).pop();
       },
     ),
   );
@@ -94,25 +222,35 @@ Widget _profile(BuildContext context, {required String userType}) {
       },
     ),
   );
+}*/
+
+Widget _drawerTile(BuildContext context,
+    {required String label,
+    required String imagePath,
+    required String thisPath,
+    required String currentPath}) {
+  return ListTile(
+    leading: Image.asset(imagePath, scale: 20),
+    title: whiteCinzelBold(label, fontSize: 16),
+    onTap: () {
+      Navigator.of(context).pop();
+      if (thisPath == currentPath || thisPath.isEmpty) return;
+      Navigator.of(context).pushNamed(thisPath);
+    },
+  );
 }
 
 Widget _logOutButton(BuildContext context) {
   return Padding(
     padding: const EdgeInsets.all(20),
-    child: Container(
-      decoration: BoxDecoration(
-          color: CustomColors.ketchup,
-          border: Border.all(color: CustomColors.sangria, width: 3),
-          borderRadius: BorderRadius.circular(50)),
-      child: ListTile(
-        leading: const Icon(Icons.logout, color: Colors.white),
-        title: Center(child: interText('LOG-OUT', color: Colors.white)),
-        onTap: () {
-          FirebaseAuth.instance.signOut().then((value) {
-            Navigator.popUntil(context, (route) => route.isFirst);
-          });
-        },
-      ),
+    child: ListTile(
+      leading: Image.asset(ImagePaths.logout, scale: 15),
+      title: Center(child: blackCinzelBold('LOG OUT')),
+      onTap: () {
+        FirebaseAuth.instance.signOut().then((value) {
+          Navigator.popUntil(context, (route) => route.isFirst);
+        });
+      },
     ),
   );
 }

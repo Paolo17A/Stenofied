@@ -38,18 +38,22 @@ Widget loginButton({required Function onPress}) {
   return all10Pix(
       child: ElevatedButton(
           onPressed: () => onPress(),
-          style:
-              ElevatedButton.styleFrom(backgroundColor: CustomColors.parchment),
-          child: blackInterBold('LOG-IN', fontSize: 18)));
+          style: ElevatedButton.styleFrom(
+              backgroundColor: CustomColors.ketchup,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30))),
+          child: whiteJosefinSansBold('LOG-IN', fontSize: 18)));
 }
 
 Widget registerButton({required Function onPress}) {
   return all10Pix(
       child: ElevatedButton(
           onPressed: () => onPress(),
-          style:
-              ElevatedButton.styleFrom(backgroundColor: CustomColors.parchment),
-          child: blackInterBold('REGISTER')));
+          style: ElevatedButton.styleFrom(
+              backgroundColor: CustomColors.ketchup,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30))),
+          child: whiteJosefinSansBold('REGISTER')));
 }
 
 Widget sendPasswordResetEmailButton({required Function onPress}) {
@@ -57,43 +61,52 @@ Widget sendPasswordResetEmailButton({required Function onPress}) {
       child: ElevatedButton(
           onPressed: () => onPress(),
           style:
-              ElevatedButton.styleFrom(backgroundColor: CustomColors.parchment),
-          child: blackInterBold('SEND PASSWORD\nRESET EMAIL')));
+              ElevatedButton.styleFrom(backgroundColor: CustomColors.ketchup),
+          child: whiteJosefinSansBold('SEND PASSWORD\nRESET EMAIL')));
 }
 
 Widget forgotPasswordButton({required Function onPress}) {
   return TextButton(
-      onPressed: () => onPress(), child: whiteInterBold('Forgot Password?'));
+      onPressed: () => onPress(), child: sangriaInterBold('Forgot Password?'));
 }
 
 Widget dontHaveAccountButton({required Function onPress}) {
   return TextButton(
       onPressed: () => onPress(),
-      child: whiteInterBold('Don\'t have an account?'));
+      child: sangriaInterBold('Don\'t have an account?'));
 }
 
 Widget homeButton(BuildContext context,
     {required String label,
-    required double width,
-    required double height,
-    required Color color,
+    required String imagePath,
     int? count,
-    double? fontSize = 21,
     required Function onPress,
     bool willDisplayCount = false}) {
-  return SizedBox(
-      width: width,
-      height: height,
+  return Container(
+      width: 150,
+      height: 250,
+      decoration:
+          BoxDecoration(borderRadius: BorderRadius.circular(40), boxShadow: [
+        BoxShadow(
+            blurRadius: 6,
+            spreadRadius: 1,
+            offset: Offset(1, 1),
+            color: Colors.black.withOpacity(0.5))
+      ]),
       child: ElevatedButton(
           onPressed: () => onPress(),
-          style: ElevatedButton.styleFrom(backgroundColor: color),
+          style: ElevatedButton.styleFrom(
+              backgroundColor: CustomColors.ketchup,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(40))),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              whiteInterBold(label,
-                  fontSize: fontSize, textOverflow: TextOverflow.ellipsis),
+              Image.asset(imagePath),
+              whiteAndadaProBold(label,
+                  fontSize: 16, textOverflow: TextOverflow.ellipsis),
               Gap(5),
-              if (willDisplayCount) whiteInterBold('$count AVAILABLE')
+              if (willDisplayCount) andandaProText('$count AVAILABLE')
             ],
           )));
 }
@@ -112,7 +125,7 @@ Widget selectUserTypeButton(BuildContext context,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             all10Pix(child: Image.asset(imagePath, scale: scale)),
-            whiteInterBold(label, fontSize: 28)
+            whiteAndadaProBold(label, fontSize: 28)
           ],
         )),
   ));
@@ -125,6 +138,7 @@ Widget studentHomeButton(BuildContext context,
     width: MediaQuery.of(context).size.width * 0.8,
     height: 80,
     child: ElevatedButton(
-        onPressed: () => onPress(), child: whiteInterBold(label, fontSize: 24)),
+        onPressed: () => onPress(),
+        child: whiteAndadaProBold(label, fontSize: 24)),
   ));
 }

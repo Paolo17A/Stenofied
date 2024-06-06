@@ -1,18 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
 import 'package:stenofied/providers/loading_provider.dart';
 import 'package:stenofied/utils/future_util.dart';
 import 'package:stenofied/utils/navigator_util.dart';
 import 'package:stenofied/utils/string_util.dart';
-import 'package:stenofied/widgets/app_bar_widget.dart';
-import 'package:stenofied/widgets/app_bottom_nav_bar_widget.dart';
 import 'package:stenofied/widgets/app_drawer_widget.dart';
 import 'package:stenofied/widgets/custom_miscellaneous_widgets.dart';
 import 'package:stenofied/widgets/custom_padding_widgets.dart';
 import 'package:stenofied/widgets/custom_text_widgets.dart';
-
-import '../utils/color_util.dart';
+import 'package:stenofied/widgets/navigator_rail_widget.dart';
 
 class TeacherAssignedSectionScreen extends ConsumerStatefulWidget {
   const TeacherAssignedSectionScreen({super.key});
@@ -24,6 +22,8 @@ class TeacherAssignedSectionScreen extends ConsumerStatefulWidget {
 
 class _TeacherAssignedSectionScreenState
     extends ConsumerState<TeacherAssignedSectionScreen> {
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
   String sectionName = '';
   List<DocumentSnapshot> studentDocs = [];
 
@@ -55,57 +55,48 @@ class _TeacherAssignedSectionScreenState
   Widget build(BuildContext context) {
     ref.watch(loadingProvider);
     return Scaffold(
-      appBar: appBarWidget(mayGoBack: true),
-      drawer: appDrawer(context, ref, userType: UserTypes.teacher),
-      bottomNavigationBar: teacherBottomNavBar(context,
-          path: NavigatorRoutes.teacherAssignedSection),
+      key: scaffoldKey,
+      drawer: teacherAppDrawer(context, ref,
+          currentPath: NavigatorRoutes.teacherAssignedSection),
       body: switchedLoadingContainer(
           ref.read(loadingProvider).isLoading,
-          SingleChildScrollView(
-            child: all20Pix(
-                child: Column(
-              children: [
-                blackInterBold(sectionName, fontSize: 26),
-                _expandableStudents()
-              ],
-            )),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              teacherRail(context, scaffoldKey,
+                  selectedIndex: 1,
+                  currentPath: NavigatorRoutes.teacherAssignedSection),
+              SizedBox(
+                width: MediaQuery.of(context).size.width - 50,
+                child: SingleChildScrollView(
+                  child: all20Pix(
+                      child: Column(
+                    children: [
+                      Gap(20),
+                      blackCinzelBold(sectionName, fontSize: 26),
+                      _expandableStudents()
+                    ],
+                  )),
+                ),
+              ),
+            ],
           )),
     );
   }
 
   Widget _expandableStudents() {
     return vertical20Pix(
-      child: ExpansionTile(
-        collapsedBackgroundColor: CustomColors.sangria,
-        backgroundColor: CustomColors.ketchup,
-        textColor: Colors.white,
-        iconColor: Colors.white,
-        collapsedIconColor: Colors.white,
-        collapsedShape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10), side: BorderSide()),
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10), side: BorderSide()),
-        title: whiteInterBold('SECTION STUDENTS', fontSize: 16),
-        children: [
-          vertical20Pix(
-            child: studentDocs.isNotEmpty
-                ? SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.5,
-                    child: ListView.builder(
-                      shrinkWrap: false,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: studentDocs.length,
-                      itemBuilder: (context, index) => all10Pix(
-                        child: userRecordEntry(
-                            userDoc: studentDocs[index],
-                            onTap: () => NavigatorRoutes.selectedStudentSummary(
-                                context,
-                                studentID: studentDocs[index].id)),
-                      ),
-                    ))
-                : whiteInterBold('NO AVAILABLE STUDENTS', fontSize: 16),
-          )
-        ],
+      child: ListView.builder(
+        shrinkWrap: true,
+        padding: EdgeInsetsDirectional.zero,
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: studentDocs.length,
+        itemBuilder: (context, index) => all10Pix(
+          child: userRecordEntry(
+              userDoc: studentDocs[index],
+              onTap: () => NavigatorRoutes.selectedStudentSummary(context,
+                  studentID: studentDocs[index].id)),
+        ),
       ),
     );
   }

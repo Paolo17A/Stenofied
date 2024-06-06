@@ -86,7 +86,7 @@ class _ExerciseResultScreenState extends ConsumerState<ExerciseResultScreen> {
             children: [
               all10Pix(
                   child:
-                      blackInterBold('Exercise $exerciseIndex', fontSize: 32)),
+                      blackCinzelBold('Exercise $exerciseIndex', fontSize: 32)),
               if (!ref.read(loadingProvider).isLoading) answersContainer()
             ],
           ))),
@@ -101,9 +101,9 @@ class _ExerciseResultScreenState extends ConsumerState<ExerciseResultScreen> {
       child: Column(
         children: [
           if (!isGraded)
-            whiteInterBold('NOT YET GRADED', fontSize: 22)
+            whiteAndadaProBold('NOT YET GRADED', fontSize: 22)
           else if (exerciseIndex > 0)
-            whiteInterBold(
+            whiteAndadaProBold(
                 'Score: ${score}/${allExerciseModels[exerciseIndex - 1].tracingModels.length}',
                 fontSize: 22),
           Divider(color: Colors.white),
@@ -128,7 +128,7 @@ class _ExerciseResultScreenState extends ConsumerState<ExerciseResultScreen> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          whiteInterBold('${index + 1}.', fontSize: 20),
+          whiteAndadaProBold('${index + 1}.', fontSize: 20),
           GestureDetector(
             onTap: () => showDialog(
                 context: context,
@@ -144,7 +144,7 @@ class _ExerciseResultScreenState extends ConsumerState<ExerciseResultScreen> {
                                 )),
                             ElevatedButton(
                                 onPressed: () => Navigator.of(context).pop(),
-                                child: whiteInterBold('CLOSE'))
+                                child: whiteAndadaProBold('CLOSE'))
                           ],
                         ),
                       ),
@@ -162,11 +162,11 @@ class _ExerciseResultScreenState extends ConsumerState<ExerciseResultScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              whiteInterBold(
+              whiteAndadaProBold(
                   'Word/s: ${allExerciseModels[exerciseIndex - 1].tracingModels[index].word}',
                   fontSize: 16),
               if (isGraded)
-                whiteInterBold(
+                whiteAndadaProRegular(
                     'Result: ${answerData[EntryFields.isCorrect] ? 'CORRECT' : 'WRONG'}')
             ],
           )

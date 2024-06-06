@@ -19,7 +19,7 @@ class SelectUserTypeScreen extends ConsumerWidget {
           width: MediaQuery.of(context).size.width,
           child: Column(
             children: [
-              blackInterBold('SELECT USER TYPE', fontSize: 36),
+              blackJosefinSansBold('SELECT USER TYPE', fontSize: 36),
               vertical20Pix(
                 child: Column(
                   children: [

@@ -66,8 +66,8 @@ class _TeacherGradeQuizScreenState
                     child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                blackInterBold(formattedName, fontSize: 28),
-                blackInterRegular(
+                blackCinzelBold(formattedName, fontSize: 28),
+                blackCinzelRegular(
                     '\t\tQuiz ${ref.read(currentQuizProvider).currentQuizModel!.quizIndex.toString()}',
                     fontSize: 20),
                 if (quizResults.isNotEmpty) _quizEntriesContainer(),
@@ -88,7 +88,8 @@ class _TeacherGradeQuizScreenState
     int totalWords =
         ref.read(currentQuizProvider).currentQuizModel!.wordsToWrite.length;
     return vertical20Pix(
-        child: whiteInterBold('Word $currentIndex/$totalWords: $currentWord',
+        child: whiteAndadaProBold(
+            'Word $currentIndex/$totalWords: $currentWord',
             fontSize: 24));
   }
 
@@ -159,7 +160,7 @@ class _TeacherGradeQuizScreenState
                 : () => ref.read(currentQuizProvider).decrementQuizIndex(),
             style: ElevatedButton.styleFrom(
                 disabledBackgroundColor: CustomColors.blush),
-            child: whiteInterBold('PREV')),
+            child: whiteAndadaProBold('PREV')),
         SizedBox(
           child: ElevatedButton(
               onPressed: () => isLastQuestion
@@ -168,7 +169,7 @@ class _TeacherGradeQuizScreenState
                       quizResultID: widget.quizResultID,
                       quizResults: quizResults)
                   : ref.read(currentQuizProvider).incrementQuizIndex(),
-              child: whiteInterBold(isLastQuestion ? 'SUBMIT' : 'NEXT')),
+              child: whiteAndadaProBold(isLastQuestion ? 'SUBMIT' : 'NEXT')),
         )
       ],
     );

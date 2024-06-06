@@ -31,7 +31,7 @@ class _BoolAnswerButtonState extends State<BoolAnswerButton> {
             style: ElevatedButton.styleFrom(
                 backgroundColor:
                     widget.isSelected ? CustomColors.blush : Colors.white),
-            child: blackInterBold(widget.answer, fontSize: 14)),
+            child: andandaProText(widget.answer, fontSize: 14)),
       ),
     );
   }

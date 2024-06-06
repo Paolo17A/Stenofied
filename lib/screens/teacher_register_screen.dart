@@ -3,11 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:stenofied/providers/proof_of_enrollment_provider.dart';
 import 'package:stenofied/utils/string_util.dart';
+import 'package:stenofied/widgets/custom_text_widgets.dart';
 
 import '../providers/loading_provider.dart';
 import '../widgets/app_bar_widget.dart';
 import '../widgets/custom_miscellaneous_widgets.dart';
-import '../widgets/custom_text_widgets.dart';
 
 class TeacherRegisterScreen extends ConsumerStatefulWidget {
   const TeacherRegisterScreen({super.key});
@@ -57,7 +57,7 @@ class _TeacherRegisterScreenState extends ConsumerState<TeacherRegisterScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Image.asset(ImagePaths.teacherUser, scale: 6),
-                            blackInterBold('TEACHER', fontSize: 35)
+                            blackJosefinSansBold('TEACHER', fontSize: 35)
                           ]),
                       const Gap(20),
                       registerFieldsContainer(context, ref,

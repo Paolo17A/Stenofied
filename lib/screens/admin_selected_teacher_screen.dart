@@ -67,7 +67,9 @@ class _AdminSelectedTeacherScreenState
                 builder: (context) => AlertDialog(
                       content: Image.network(proofOfEmployment),
                     )),
-            child: sangriaInterBold('VIEW PROOF OF EMPLOYMENT'))
+            child: blackAndadaProRegular(
+                'VIEW PROOF OF ENROLLMENT/\nEMPLOYMENT',
+                textAlign: TextAlign.right))
       ]),
       body: switchedLoadingContainer(
           ref.read(loadingProvider).isLoading,
@@ -77,7 +79,7 @@ class _AdminSelectedTeacherScreenState
               child: all20Pix(
                   child: Column(
                 children: [
-                  blackInterBold('Professor Profile', fontSize: 40),
+                  blackAndadaProBold('Professor Profile', fontSize: 40),
                   all10Pix(
                       child: buildProfileImageWidget(
                           profileImageURL: profileImageURL,
@@ -95,7 +97,7 @@ class _AdminSelectedTeacherScreenState
                             onPressed: () => approveThisUser(context, ref,
                                 userType: UserTypes.teacher,
                                 userID: widget.userID),
-                            child: whiteInterBold('VERIFY\nTEACHER')),
+                            child: whiteAndadaProBold('VERIFY\nTEACHER')),
                         ElevatedButton(
                             onPressed: () => displayDeleteEntryDialog(context,
                                 message:
@@ -104,7 +106,7 @@ class _AdminSelectedTeacherScreenState
                                 deleteEntry: () => denyThisUser(context, ref,
                                     userType: UserTypes.teacher,
                                     userID: widget.userID)),
-                            child: whiteInterBold('DENY\nTEACHER')),
+                            child: whiteAndadaProBold('DENY\nTEACHER')),
                       ],
                     ),
                   //Divider(color: CustomColors.turquoise),

@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
 import 'package:stenofied/providers/loading_provider.dart';
+import 'package:stenofied/utils/color_util.dart';
 import 'package:stenofied/utils/future_util.dart';
 import 'package:stenofied/utils/navigator_util.dart';
 import 'package:stenofied/utils/string_util.dart';
@@ -61,7 +63,8 @@ class _AdminViewSectionsScreenState
                 child: all20Pix(
                     child: Column(
                   children: [
-                    blackInterBold('SECTIONS', fontSize: 40),
+                    blackCinzelBold('SECTIONS', fontSize: 40),
+                    Gap(60),
                     sectionEntries()
                   ],
                 )),
@@ -77,21 +80,38 @@ class _AdminViewSectionsScreenState
             runAlignment: WrapAlignment.spaceAround,
             spacing: 12,
             runSpacing: 12,
-            children: sectionDocs.map((section) {
-              final sectionData = section.data() as Map<dynamic, dynamic>;
+            children: sectionDocs.asMap().entries.map((section) {
+              int index = section.key;
+              final sectionData = section.value.data() as Map<dynamic, dynamic>;
               String name = sectionData[SectionFields.name];
-              return SizedBox(
+              return Container(
                 width: MediaQuery.of(context).size.width * 0.35,
-                height: MediaQuery.of(context).size.width * 0.3,
-                child: ElevatedButton(
+                height: MediaQuery.of(context).size.width * 0.4,
+                decoration: BoxDecoration(
+                    color: CustomColors.ketchup,
+                    borderRadius: BorderRadius.only(
+                      topLeft: index % 4 == 0 || index % 4 == 3
+                          ? Radius.zero
+                          : Radius.circular(60),
+                      topRight: index % 4 == 1 || index % 4 == 2
+                          ? Radius.zero
+                          : Radius.circular(60),
+                      bottomLeft: index % 4 == 1 || index % 4 == 2
+                          ? Radius.zero
+                          : Radius.circular(60),
+                      bottomRight: index % 4 == 0 || index % 4 == 3
+                          ? Radius.zero
+                          : Radius.circular(60),
+                    )),
+                child: TextButton(
                     onPressed: () => NavigatorRoutes.adminSelectedSection(
                         context,
-                        sectionID: section.id),
-                    child: whiteInterBold(name)),
+                        sectionID: section.value.id),
+                    child: whiteAndadaProBold(name)),
               );
             }).toList(),
           )
         : all20Pix(
-            child: blackInterBold('NO AVAILABLE SECTIONS', fontSize: 25));
+            child: blackAndadaProBold('NO AVAILABLE SECTIONS', fontSize: 25));
   }
 }

@@ -5,6 +5,21 @@ class ImagePaths {
   static const String studentUser = 'assets/images/student.png';
   static const String teacherUser = 'assets/images/teacher.png';
   static const String tracingPath = 'assets/images/tracing';
+  static const String home = 'assets/images/icons/home.png';
+  static const String section = 'assets/images/icons/section.png';
+  static const String faqs = 'assets/images/icons/FAQs.png';
+  static const String profile = 'assets/images/icons/profile.png';
+  static const String logout = 'assets/images/icons/logout.png';
+  static const String studentRecord = 'assets/images/icons/student record.png';
+  static const String sectionRecord = 'assets/images/icons/section record.png';
+  static const String teacherRecord = 'assets/images/icons/teacher record.png';
+  static const String writing = 'assets/images/icons/writing_vector.png';
+  static const String tropic = 'assets/images/icons/4.png';
+  static const String tower = 'assets/images/icons/5.png';
+  static const String lessons = 'assets/images/icons/lessons.png';
+  static const String exercises = 'assets/images/icons/exercise.png';
+  static const String quizzes = 'assets/images/icons/quiz.png';
+  static const String camera = 'assets/images/icons/camera.png';
 }
 
 class StorageFields {

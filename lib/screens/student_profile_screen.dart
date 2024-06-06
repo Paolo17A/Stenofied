@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stenofied/widgets/navigator_rail_widget.dart';
 
 import '../providers/loading_provider.dart';
 import '../providers/user_data_provider.dart';
 import '../utils/future_util.dart';
 import '../utils/navigator_util.dart';
 import '../utils/string_util.dart';
-import '../widgets/app_bar_widget.dart';
 import '../widgets/app_drawer_widget.dart';
 import '../widgets/custom_miscellaneous_widgets.dart';
 import '../widgets/custom_padding_widgets.dart';
@@ -21,6 +21,7 @@ class StudentProfileScreen extends ConsumerStatefulWidget {
 }
 
 class _StudentProfileScreenState extends ConsumerState<StudentProfileScreen> {
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   String formattedName = '';
 
   @override
@@ -51,36 +52,36 @@ class _StudentProfileScreenState extends ConsumerState<StudentProfileScreen> {
   Widget build(BuildContext context) {
     ref.watch(loadingProvider);
     return Scaffold(
-      appBar: appBarWidget(mayGoBack: true, actions: [
-        IconButton(
-            onPressed: () =>
-                Navigator.of(context).pushNamed(NavigatorRoutes.editProfile),
-            icon: Icon(Icons.edit))
-      ]),
-      drawer: appDrawer(context, ref, userType: UserTypes.student),
+      key: scaffoldKey,
+      drawer: studentAppDrawer(context, ref,
+          currentPath: NavigatorRoutes.studentProfile),
       body: switchedLoadingContainer(
           ref.read(loadingProvider).isLoading,
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: SingleChildScrollView(
-              child: all20Pix(
-                  child: Column(
-                children: [
-                  buildProfileImageWidget(
-                      profileImageURL:
-                          ref.read(userDataProvider).profileImageURL,
-                      radius: MediaQuery.of(context).size.width * 0.15),
-                  all10Pix(child: blackInterBold(formattedName, fontSize: 20)),
-                  if (ref.read(userDataProvider).profileImageURL.isNotEmpty)
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              studentRail(context, scaffoldKey,
+                  selectedIndex: 5,
+                  currentPath: NavigatorRoutes.studentProfile),
+              SizedBox(
+                width: MediaQuery.of(context).size.width - 50,
+                child: all20Pix(
+                    child: Column(
+                  children: [
+                    buildProfileImageWidget(
+                        profileImageURL:
+                            ref.read(userDataProvider).profileImageURL,
+                        radius: MediaQuery.of(context).size.width * 0.15),
+                    all10Pix(
+                        child: blackAndadaProBold(formattedName, fontSize: 20)),
                     ElevatedButton(
-                        onPressed: () => removeProfilePicture(context, ref),
-                        child: whiteInterBold('REMOVE PROFILE PICTURE')),
-                  ElevatedButton(
-                      onPressed: () => uploadProfilePicture(context, ref),
-                      child: whiteInterBold('UPLOAD PROFILE PICTURE'))
-                ],
-              )),
-            ),
+                        onPressed: () => Navigator.of(context)
+                            .pushNamed(NavigatorRoutes.editProfile),
+                        child: whiteAndadaProBold('EDIT PROFILE'))
+                  ],
+                )),
+              ),
+            ],
           )),
     );
   }

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../utils/color_util.dart';
-import '../utils/navigator_util.dart';
 import 'custom_text_widgets.dart';
 
-Widget studentBottomNavBar(BuildContext context, {required String path}) {
+/*Widget studentBottomNavBar(BuildContext context, {required String path}) {
   return BottomAppBar(
     color: CustomColors.latte,
     height: 85,
@@ -42,9 +41,9 @@ Widget studentBottomNavBar(BuildContext context, {required String path}) {
       ],
     ),
   );
-}
+}*/
 
-Widget teacherBottomNavBar(BuildContext context, {required String path}) {
+/*Widget teacherBottomNavBar(BuildContext context, {required String path}) {
   return BottomAppBar(
     color: CustomColors.latte,
     height: 85,
@@ -68,7 +67,7 @@ Widget teacherBottomNavBar(BuildContext context, {required String path}) {
       ],
     ),
   );
-}
+}*/
 
 Widget bottomButton(BuildContext context,
     {required IconData iconData,

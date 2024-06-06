@@ -99,7 +99,9 @@ class _AdminStudentUserScreenState
                 context: context,
                 builder: (context) =>
                     AlertDialog(content: Image.network(proofOfEnrollment))),
-            child: sangriaInterBold('VIEW PROOF OF ENROLLMENT'))
+            child: blackAndadaProRegular(
+                'VIEW PROOF OF ENROLLMENT/\nEMPLOYMENT',
+                textAlign: TextAlign.right))
       ]),
       body: switchedLoadingContainer(
           ref.read(loadingProvider).isLoading,
@@ -123,14 +125,15 @@ class _AdminStudentUserScreenState
 
   Widget _studentProfileDetails() {
     return Column(children: [
-      blackInterBold('Student Profile', fontSize: 40),
+      blackCinzelBold('Student Profile', fontSize: 40),
       all10Pix(
           child: buildProfileImageWidget(
               profileImageURL: profileImageURL,
               radius: MediaQuery.of(context).size.width * 0.2)),
-      interText(formattedName, fontSize: 20),
-      interText(
-          'Section: ${assignedSectionName.isNotEmpty ? assignedSectionName : 'N/A'}'),
+      blackCinzelRegular(formattedName, fontSize: 20),
+      blackCinzelRegular(
+          'Section: ${assignedSectionName.isNotEmpty ? assignedSectionName : 'N/A'}',
+          fontSize: 20),
       interText('Account Verified: ${accountVerified ? 'YES' : 'NO'}'),
       Gap(5)
     ]);
@@ -143,7 +146,7 @@ class _AdminStudentUserScreenState
         ElevatedButton(
             onPressed: () => approveThisUser(context, ref,
                 userType: UserTypes.student, userID: widget.userID),
-            child: whiteInterBold('VERIFY\n STUDENT')),
+            child: whiteAndadaProBold('VERIFY\n STUDENT')),
         ElevatedButton(
             onPressed: () => displayDeleteEntryDialog(context,
                 message:
@@ -151,7 +154,7 @@ class _AdminStudentUserScreenState
                 deleteWord: 'Deny',
                 deleteEntry: () => denyThisUser(context, ref,
                     userType: UserTypes.teacher, userID: widget.userID)),
-            child: whiteInterBold('DENY\nSTUDENT')),
+            child: whiteAndadaProBold('DENY\nSTUDENT')),
       ],
     );
   }
@@ -168,7 +171,7 @@ class _AdminStudentUserScreenState
           borderRadius: BorderRadius.circular(10), side: BorderSide()),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10), side: BorderSide()),
-      title: whiteInterBold('EXERCISE RESULTS', fontSize: 16),
+      title: whiteAndadaProBold('EXERCISE RESULTS', fontSize: 16),
       children: [
         exerciseResultDocs.isNotEmpty
             ? ListView.builder(
@@ -178,7 +181,7 @@ class _AdminStudentUserScreenState
                 },
                 itemCount: exerciseResultDocs.length)
             : vertical20Pix(
-                child: whiteInterBold('NO EXERCISE RESULTS AVAILABLE',
+                child: whiteAndadaProBold('NO EXERCISE RESULTS AVAILABLE',
                     fontSize: 20))
       ],
     ));
@@ -196,7 +199,7 @@ class _AdminStudentUserScreenState
           borderRadius: BorderRadius.circular(10), side: BorderSide()),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10), side: BorderSide()),
-      title: whiteInterBold('QUIZ RESULTS', fontSize: 16),
+      title: whiteAndadaProBold('QUIZ RESULTS', fontSize: 16),
       children: [
         quizResultDocs.isNotEmpty
             ? ListView.builder(
@@ -206,7 +209,7 @@ class _AdminStudentUserScreenState
                 },
                 itemCount: quizResultDocs.length)
             : vertical20Pix(
-                child: whiteInterBold('NO EXERCISE RESULTS AVAILABLE',
+                child: whiteAndadaProBold('NO EXERCISE RESULTS AVAILABLE',
                     fontSize: 20))
       ],
     ));
@@ -232,8 +235,8 @@ class _AdminStudentUserScreenState
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              whiteInterBold('Exercise: $exerciseIndex'),
-              whiteInterRegular(
+              whiteAndadaProBold('Exercise: $exerciseIndex'),
+              whiteAndadaProRegular(
                   'Score: $score / ${allExerciseModels[exerciseIndex - 1].tracingModels.length}')
             ],
           ),
@@ -260,8 +263,8 @@ class _AdminStudentUserScreenState
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              whiteInterBold('Quiz: $quizIndex'),
-              whiteInterRegular(
+              whiteAndadaProBold('Quiz: $quizIndex'),
+              whiteAndadaProRegular(
                   'Score: $score / ${allQuizModels[quizIndex - 1].wordsToWrite.length}')
             ],
           ),

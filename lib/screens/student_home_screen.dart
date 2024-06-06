@@ -8,15 +8,13 @@ import 'package:stenofied/models/quiz_model.dart';
 import 'package:stenofied/models/tracing_model.dart';
 import 'package:stenofied/providers/loading_provider.dart';
 import 'package:stenofied/utils/navigator_util.dart';
-import 'package:stenofied/widgets/app_bottom_nav_bar_widget.dart';
 import 'package:stenofied/widgets/custom_button_widgets.dart';
+import 'package:stenofied/widgets/navigator_rail_widget.dart';
 
 import '../providers/current_exercise_provider.dart';
 import '../providers/current_quiz_provider.dart';
 import '../providers/user_data_provider.dart';
-import '../utils/color_util.dart';
 import '../utils/string_util.dart';
-import '../widgets/app_bar_widget.dart';
 import '../widgets/app_drawer_widget.dart';
 import '../widgets/custom_miscellaneous_widgets.dart';
 
@@ -28,6 +26,7 @@ class StudentHomeScreen extends ConsumerStatefulWidget {
 }
 
 class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   String latestExerciseResultID = '';
   String latestQuizResultID = '';
 
@@ -76,20 +75,30 @@ class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
     return PopScope(
       canPop: false,
       child: Scaffold(
-          appBar: appBarWidget(mayGoBack: true),
-          bottomNavigationBar:
-              studentBottomNavBar(context, path: NavigatorRoutes.studentHome),
-          drawer: appDrawer(context, ref,
-              userType: UserTypes.student, isHome: true),
-          body: SingleChildScrollView(
-            child: Column(
+          key: scaffoldKey,
+          //appBar: appBarWidget(mayGoBack: true),
+          /*bottomNavigationBar:
+              studentBottomNavBar(context, path: NavigatorRoutes.studentHome),*/
+          drawer: studentAppDrawer(context, ref,
+              currentPath: NavigatorRoutes.studentHome),
+          body: SafeArea(
+            child: Row(
               children: [
-                welcomeWidgets(
-                    userType: ref.read(userDataProvider).userType,
-                    profileImageURL:
-                        ref.read(userDataProvider).profileImageURL),
-                Gap(40),
-                _homeButtons()
+                studentRail(context, scaffoldKey,
+                    selectedIndex: 0, currentPath: NavigatorRoutes.studentHome),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width - 50,
+                  child: Column(
+                    children: [
+                      welcomeWidgets(context,
+                          userType: ref.read(userDataProvider).userType,
+                          profileImageURL:
+                              ref.read(userDataProvider).profileImageURL),
+                      Gap(60),
+                      _homeButtons()
+                    ],
+                  ),
+                ),
               ],
             ),
           )),
@@ -97,31 +106,30 @@ class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
   }
 
   Widget _homeButtons() {
-    return Column(
+    return Wrap(
+      alignment: WrapAlignment.center,
+      spacing: 20,
+      runSpacing: 20,
       children: [
         homeButton(context,
+            imagePath: ImagePaths.tower,
             label: ref.read(userDataProvider).lessonIndex >=
                     allLessonModels.length
                 ? 'DONE WITH ALL LESSONS'
                 : 'YOUR CURRENT LESSON:\n\nLesson ${ref.read(userDataProvider).lessonIndex}',
-            width: MediaQuery.of(context).size.width * 0.9,
-            height: MediaQuery.of(context).size.width * 0.35 - 10,
-            color: CustomColors.ketchup,
             onPress: () =>
                 ref.read(userDataProvider).lessonIndex >= allLessonModels.length
                     ? null
                     : NavigatorRoutes.studentSelectedLesson(context,
                         lessonModel: allLessonModels[
                             ref.read(userDataProvider).lessonIndex - 1])),
-        Gap(20),
         homeButton(context,
+            imagePath: ImagePaths.tropic,
             label: ref.read(userDataProvider).lessonIndex >=
                     allExerciseModels.length
                 ? 'NO EXERCISES LEFT TO TAKE'
                 : 'YOUR CURRENT\nEXERCISE:\n\n${allExerciseModels[ref.read(userDataProvider).lessonIndex - 1].exerciseDescription}',
-            width: MediaQuery.of(context).size.width * 0.9,
-            height: MediaQuery.of(context).size.width * 0.35,
-            color: CustomColors.sangria, onPress: () {
+            onPress: () {
           if (ref.read(userDataProvider).lessonIndex >=
               allExerciseModels.length) return;
           if (latestExerciseResultID.isNotEmpty) {
@@ -136,15 +144,13 @@ class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
                 .pushNamed(NavigatorRoutes.studentTakeExercise);
           }
         }),
-        Gap(20),
         homeButton(context,
+            imagePath: ImagePaths.writing,
             label: ref.read(userDataProvider).lessonIndex >=
                     allQuizModels.length
                 ? 'NO QUIZZES LEFT TO TAKE'
                 : 'YOUR CURRENT QUIZ:\n\n${allQuizModels[ref.read(userDataProvider).lessonIndex - 1].quizDescription}',
-            width: MediaQuery.of(context).size.width * 0.9,
-            height: MediaQuery.of(context).size.width * 0.35,
-            color: CustomColors.blush, onPress: () {
+            onPress: () {
           if (ref.read(userDataProvider).lessonIndex >= allQuizModels.length)
             return;
           if (latestQuizResultID.isNotEmpty) {

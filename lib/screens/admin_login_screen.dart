@@ -43,7 +43,7 @@ class _AdminLoginScreenState extends ConsumerState<AdminLoginScreen> {
                   child: all20Pix(
                       child: Column(
                 children: [
-                  blackInterBold('ADMIN LOG-IN', fontSize: 35),
+                  blackJosefinSansBold('ADMIN LOG-IN', fontSize: 35),
                   authenticationIcon(context, iconData: Icons.book),
                   const Gap(20),
                   loginFieldsContainer(context, ref,

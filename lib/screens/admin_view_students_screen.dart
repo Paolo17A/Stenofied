@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stenofied/utils/color_util.dart';
+import 'package:gap/gap.dart';
 import 'package:stenofied/utils/future_util.dart';
 
 import '../providers/loading_provider.dart';
@@ -51,7 +51,8 @@ class _AdminViewStudentsScreenState
             child: all20Pix(
                 child: Column(
               children: [
-                blackInterBold('REGISTERED STUDENTS', fontSize: 40),
+                blackCinzelBold('REGISTERED STUDENTS', fontSize: 32),
+                Gap(20),
                 studentEntries()
               ],
             )),
@@ -60,24 +61,19 @@ class _AdminViewStudentsScreenState
   }
 
   Widget studentEntries() {
-    return Container(
-      decoration: BoxDecoration(
-          color: CustomColors.ketchup, borderRadius: BorderRadius.circular(10)),
-      padding: EdgeInsets.all(10),
-      child: studentDocs.isNotEmpty
-          ? ListView.builder(
-              shrinkWrap: true,
-              itemCount: studentDocs.length,
-              itemBuilder: (context, index) {
-                return userRecordEntry(
-                    userDoc: studentDocs[index],
-                    onTap: () => NavigatorRoutes.adminSelectedStudent(context,
-                        userID: studentDocs[index].id),
-                    displayVerificationStatus: true);
-              })
-          : all20Pix(
-              child: blackInterBold('NO REGISTERED STUDENTS AVAILABLE',
-                  fontSize: 25)),
-    );
+    return studentDocs.isNotEmpty
+        ? ListView.builder(
+            shrinkWrap: true,
+            itemCount: studentDocs.length,
+            itemBuilder: (context, index) {
+              return userRecordEntry(
+                  userDoc: studentDocs[index],
+                  onTap: () => NavigatorRoutes.adminSelectedStudent(context,
+                      userID: studentDocs[index].id),
+                  displayVerificationStatus: true);
+            })
+        : all20Pix(
+            child: blackAndadaProBold('NO REGISTERED STUDENTS AVAILABLE',
+                fontSize: 25));
   }
 }

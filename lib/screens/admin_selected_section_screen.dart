@@ -82,9 +82,15 @@ class _AdminSelectedSectionScreenState
                 child: Column(
               children: [
                 _selectedSectionHeader(),
-                _sectionTeacher(),
-                Divider(color: CustomColors.ketchup),
-                _expandableStudents()
+                Row(children: [
+                  vertical20Pix(
+                      child: interText('Section Teacher:', fontSize: 18))
+                ]),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [_sectionTeacher(), _sectionStudents()],
+                )
               ],
             )),
           )),
@@ -92,48 +98,105 @@ class _AdminSelectedSectionScreenState
   }
 
   Widget _selectedSectionHeader() {
-    return blackInterBold(sectionName, fontSize: 40);
+    return blackCinzelBold(sectionName, fontSize: 40);
   }
 
   Widget _sectionTeacher() {
-    return vertical20Pix(
-        child: Column(
+    return Column(
       children: [
-        Row(children: [
-          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            interText('Section Teacher:', fontSize: 24),
-            interText(
-                assignedTeacherName.isNotEmpty ? assignedTeacherName : 'N/A',
-                fontSize: 20)
-          ])
-        ]),
-        ElevatedButton(
-            onPressed: () {
-              availableTeacherDocs.isNotEmpty
-                  ? showAvailableTeachers()
-                  : ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('No available teachers.')));
-            },
-            child: whiteInterBold('ASSIGN NEW TEACHER'))
+        SizedBox(
+          width: MediaQuery.of(context).size.width * 0.4,
+          height: MediaQuery.of(context).size.height * 0.5,
+          child: Column(children: [
+            Container(
+              width: MediaQuery.of(context).size.width * 0.4,
+              decoration: BoxDecoration(
+                  color: CustomColors.ketchup,
+                  borderRadius: BorderRadius.circular(20)),
+              child: Column(
+                children: [
+                  vertical10Pix(child: whiteAndadaProBold('ASSIGNED TEACHER')),
+                  all10Pix(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: CustomColors.blush,
+                          borderRadius: BorderRadius.circular(20)),
+                      child: Container(
+                          child: whiteAndadaProRegular(
+                              assignedTeacherName.isNotEmpty
+                                  ? assignedTeacherName
+                                  : 'N/A',
+                              fontSize: 16)),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ]),
+        ),
+        SizedBox(
+          width: MediaQuery.of(context).size.width * 0.4,
+          child: ElevatedButton(
+              onPressed: () {
+                availableTeacherDocs.isNotEmpty
+                    ? showAvailableTeachers()
+                    : ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('No available teachers.')));
+              },
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 167, 137, 102)),
+              child: blackAndadaProBold('ASSIGN NEW TEACHER')),
+        )
       ],
-    ));
+    );
   }
 
-  Widget _expandableStudents() {
-    return vertical20Pix(
-      child: ExpansionTile(
-        collapsedBackgroundColor: CustomColors.sangria,
-        backgroundColor: CustomColors.ketchup,
-        textColor: Colors.white,
-        iconColor: Colors.white,
-        collapsedIconColor: Colors.white,
-        collapsedShape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10), side: BorderSide()),
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10), side: BorderSide()),
-        title: whiteInterBold('ASSIGNED STUDENTS', fontSize: 16),
-        children: [
-          ElevatedButton(
+  Widget _sectionStudents() {
+    return Column(
+      children: [
+        Container(
+          width: MediaQuery.of(context).size.width * 0.45,
+          height: MediaQuery.of(context).size.height * 0.5,
+          decoration: BoxDecoration(
+              color: CustomColors.ketchup,
+              borderRadius: BorderRadius.circular(20)),
+          child: Column(
+            children: [
+              vertical10Pix(child: whiteAndadaProBold('ASSIGNED STUDENTS')),
+              vertical10Pix(
+                child: sectionStudentDocs.isNotEmpty
+                    ? SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.4,
+                        child: ListView.builder(
+                            shrinkWrap: false,
+                            //physics: NeverScrollableScrollPhysics(),
+                            itemCount: sectionStudentDocs.length,
+                            itemBuilder: (context, index) {
+                              final userData = sectionStudentDocs[index].data()
+                                  as Map<dynamic, dynamic>;
+                              String formattedName =
+                                  '${userData[UserFields.firstName]}\n${userData[UserFields.lastName]}';
+                              return all10Pix(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: CustomColors.blush,
+                                      borderRadius: BorderRadius.circular(20)),
+                                  child: Container(
+                                      child: blackAndadaProRegular(
+                                          formattedName,
+                                          fontSize: 16)),
+                                ),
+                              );
+                            }),
+                      )
+                    : whiteAndadaProBold('NO AVAILABLE STUDENTS', fontSize: 16),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(
+          width: MediaQuery.of(context).size.width * 0.45,
+          child: ElevatedButton(
               onPressed: () {
                 studentsWithNoSectionDocs.isNotEmpty
                     ? showAvailableStudents()
@@ -141,23 +204,10 @@ class _AdminSelectedSectionScreenState
                         SnackBar(content: Text('No available students.')));
               },
               style: ElevatedButton.styleFrom(
-                  backgroundColor: CustomColors.parchment),
-              child: blackInterBold('ASSIGN NEW STUDENT')),
-          vertical20Pix(
-            child: sectionStudentDocs.isNotEmpty
-                ? SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.5,
-                    child: ListView.builder(
-                      shrinkWrap: false,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: sectionStudentDocs.length,
-                      itemBuilder: (context, index) => userRecordEntry(
-                          userDoc: sectionStudentDocs[index], onTap: () {}),
-                    ))
-                : whiteInterBold('NO AVAILABLE STUDENTS', fontSize: 16),
-          )
-        ],
-      ),
+                  backgroundColor: const Color.fromARGB(255, 167, 137, 102)),
+              child: blackAndadaProBold('ASSIGN NEW STUDENT')),
+        ),
+      ],
     );
   }
 
@@ -168,7 +218,7 @@ class _AdminSelectedSectionScreenState
               content: SingleChildScrollView(
                   child: Column(
                 children: [
-                  blackInterBold('AVAILABLE TEACHERS', fontSize: 20),
+                  blackAndadaProBold('AVAILABLE TEACHERS', fontSize: 20),
                   Column(
                     children: availableTeacherDocs.map((teacher) {
                       final teacherData =
@@ -180,7 +230,7 @@ class _AdminSelectedSectionScreenState
                               onPressed: () => assignUserToSection(context, ref,
                                   sectionID: widget.sectionID,
                                   userID: teacher.id),
-                              child: whiteInterBold(teacherName)));
+                              child: whiteAndadaProBold(teacherName)));
                     }).toList(),
                   ),
                 ],
@@ -195,7 +245,7 @@ class _AdminSelectedSectionScreenState
               content: SingleChildScrollView(
                   child: Column(
                 children: [
-                  blackInterBold('AVAILABLE STUDENTS', fontSize: 20),
+                  blackAndadaProBold('AVAILABLE STUDENTS', fontSize: 20),
                   Column(
                     children: studentsWithNoSectionDocs.map((student) {
                       final studentData =
@@ -207,7 +257,7 @@ class _AdminSelectedSectionScreenState
                               onPressed: () => assignUserToSection(context, ref,
                                   sectionID: widget.sectionID,
                                   userID: student.id),
-                              child: whiteInterBold(teacherName)));
+                              child: whiteAndadaProBold(teacherName)));
                     }).toList(),
                   ),
                 ],
