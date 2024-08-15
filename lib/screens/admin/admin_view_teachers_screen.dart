@@ -4,12 +4,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:stenofied/utils/future_util.dart';
 
-import '../providers/loading_provider.dart';
-import '../utils/navigator_util.dart';
-import '../widgets/app_bar_widget.dart';
-import '../widgets/custom_miscellaneous_widgets.dart';
-import '../widgets/custom_padding_widgets.dart';
-import '../widgets/custom_text_widgets.dart';
+import '../../providers/loading_provider.dart';
+import '../../utils/navigator_util.dart';
+import '../../widgets/app_bar_widget.dart';
+import '../../widgets/custom_miscellaneous_widgets.dart';
+import '../../widgets/custom_padding_widgets.dart';
+import '../../widgets/custom_text_widgets.dart';
 
 class AdminViewTeachersScreen extends ConsumerStatefulWidget {
   const AdminViewTeachersScreen({super.key});
@@ -29,7 +29,7 @@ class _AdminViewTeachersScreenState
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       try {
         ref.read(loadingProvider).toggleLoading(true);
-        teacherDocs = await getAllTeacherDocs();
+        teacherDocs = await UsersCollectionUtil.getAllTeacherDocs();
         ref.read(loadingProvider).toggleLoading(false);
       } catch (error) {
         ScaffoldMessenger.of(context).showSnackBar(

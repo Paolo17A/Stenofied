@@ -11,7 +11,7 @@ import 'package:stenofied/widgets/app_bar_widget.dart';
 import 'package:stenofied/widgets/custom_miscellaneous_widgets.dart';
 import 'package:stenofied/widgets/custom_padding_widgets.dart';
 
-import '../widgets/custom_text_widgets.dart';
+import '../../widgets/custom_text_widgets.dart';
 
 class AdminViewSectionsScreen extends ConsumerStatefulWidget {
   const AdminViewSectionsScreen({super.key});
@@ -29,7 +29,9 @@ class _AdminViewSectionsScreenState
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       try {
         ref.read(loadingProvider).toggleLoading(true);
-        ref.read(sectionsProvider).setSectionDocs(await getAllSectionDocs());
+        ref
+            .read(sectionsProvider)
+            .setSectionDocs(await SectionsCollectionUtil.getAllSectionDocs());
 
         //sectionDocs = await getAllSectionDocs();
         ref.read(loadingProvider).toggleLoading(false);

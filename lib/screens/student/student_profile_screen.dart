@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stenofied/widgets/navigator_rail_widget.dart';
 
-import '../providers/loading_provider.dart';
-import '../providers/user_data_provider.dart';
-import '../utils/future_util.dart';
-import '../utils/navigator_util.dart';
-import '../utils/string_util.dart';
-import '../widgets/app_drawer_widget.dart';
-import '../widgets/custom_miscellaneous_widgets.dart';
-import '../widgets/custom_padding_widgets.dart';
-import '../widgets/custom_text_widgets.dart';
+import '../../providers/loading_provider.dart';
+import '../../providers/user_data_provider.dart';
+import '../../utils/future_util.dart';
+import '../../utils/navigator_util.dart';
+import '../../utils/string_util.dart';
+import '../../widgets/app_drawer_widget.dart';
+import '../../widgets/custom_miscellaneous_widgets.dart';
+import '../../widgets/custom_padding_widgets.dart';
+import '../../widgets/custom_text_widgets.dart';
 
 class StudentProfileScreen extends ConsumerStatefulWidget {
   const StudentProfileScreen({super.key});
@@ -32,7 +32,7 @@ class _StudentProfileScreenState extends ConsumerState<StudentProfileScreen> {
       try {
         ref.read(loadingProvider).toggleLoading(true);
 
-        final userDoc = await getCurrentUserDoc();
+        final userDoc = await UsersCollectionUtil.getCurrentUserDoc();
         final userData = userDoc.data() as Map<dynamic, dynamic>;
         formattedName =
             '${userData[UserFields.firstName]} ${userData[UserFields.lastName]}';

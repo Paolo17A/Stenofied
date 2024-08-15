@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import 'package:gap/gap.dart';
 import 'package:screenshot/screenshot.dart';
-import 'package:stenofied/providers/current_exercise_provider.dart';
+import 'package:stenofied/providers/current_quiz_provider.dart';
 import 'package:stenofied/providers/loading_provider.dart';
 import 'package:stenofied/utils/color_util.dart';
 import 'package:stenofied/utils/future_util.dart';
@@ -12,77 +11,55 @@ import 'package:stenofied/widgets/custom_miscellaneous_widgets.dart';
 import 'package:stenofied/widgets/custom_padding_widgets.dart';
 import 'package:stenofied/widgets/custom_text_widgets.dart';
 
-import '../models/drawing_point.dart';
+import '../../models/drawing_point.dart';
 
-class StudentTakeExerciseScreen extends ConsumerStatefulWidget {
-  const StudentTakeExerciseScreen({super.key});
+class StudentTakeQuizScreen extends ConsumerStatefulWidget {
+  const StudentTakeQuizScreen({super.key});
 
   @override
-  ConsumerState<StudentTakeExerciseScreen> createState() =>
-      _StudentTakeExerciseScreenState();
+  ConsumerState<StudentTakeQuizScreen> createState() =>
+      _StudentTakeQuizScreenState();
 }
 
-class _StudentTakeExerciseScreenState
-    extends ConsumerState<StudentTakeExerciseScreen> {
+class _StudentTakeQuizScreenState extends ConsumerState<StudentTakeQuizScreen> {
   //var historyDrawingPoints = <DrawingPoint>[];
 
   var drawingPoints = <DrawingPoint>[];
   DrawingPoint? currentDrawingPoint;
   bool hasDoodle = false;
-  double doodleWidth = 5;
   ScreenshotController screenshotController = ScreenshotController();
-  FlutterTts flutterTts = FlutterTts();
-
-  @override
-  void dispose() {
-    super.dispose();
-    flutterTts.pause();
-    flutterTts.stop();
-  }
-
-  Future playback() async {
-    //await flutterTts.stop();
-    await flutterTts
-        .setLanguage('en-US'); // Set the language (adjust as needed)
-    await flutterTts.setPitch(1.0); // Set pitch (adjust as needed)
-    await flutterTts.setSpeechRate(0.5); // Set speech rate (adjust as needed)
-    String currentWord = ref
-        .read(currentExerciseProvider)
-        .currentExerciseModel!
-        .tracingModels[ref.read(currentExerciseProvider).tracingIndex]
-        .word;
-    await flutterTts.speak(currentWord);
-  }
+  double doodleWidth = 5;
 
   void onNextButtonPress() async {
     if (hasDoodle) {
       final traceOutput = await screenshotController.capture();
       if (traceOutput == null) return;
-      if (ref.read(currentExerciseProvider).isLookingAtCurrentTrace()) {
-        ref.read(currentExerciseProvider).addNewTraceOutput(traceOutput);
+      if (ref.read(currentQuizProvider).isLookingAtCurrentDoodle()) {
+        ref.read(currentQuizProvider).addNewDoodleOutput(traceOutput);
       } else {
-        ref.read(currentExerciseProvider).replaceTraceOutput(traceOutput);
+        ref.read(currentQuizProvider).replaceDoodleOutput(traceOutput);
       }
-      if (ref.read(currentExerciseProvider).isLookingAtLastWord()) {
-        submitNewExerciseResult(context, ref);
+      if (ref.read(currentQuizProvider).isLookingAtLastWord()) {
+        QuizzesCollectionUtil.submitNewQuizResult(context, ref);
       } else {
-        ref.read(currentExerciseProvider).incrementTracingIndex();
+        ref.read(currentQuizProvider).incrementQuizIndex();
       }
       drawingPoints.clear();
       hasDoodle = false;
-    } else if (!ref.read(currentExerciseProvider).isLookingAtCurrentTrace() &&
-        ref.read(currentExerciseProvider).getCurrentTrace() != null) {
-      ref.read(currentExerciseProvider).incrementTracingIndex();
+    } else if (ref.read(currentQuizProvider).questionIndex !=
+            ref.read(currentQuizProvider).doodleOutputList.length &&
+        ref.read(currentQuizProvider).getCurrentDoodle() != null) {
+      ref.read(currentQuizProvider).incrementQuizIndex();
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('You have not yet traced this word.')));
+          SnackBar(content: Text('You have not yet writted this word.')));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     ref.watch(loadingProvider);
-    ref.watch(currentExerciseProvider);
+    ref.watch(currentQuizProvider);
     return Scaffold(
       appBar: appBarWidget(mayGoBack: true),
       body: stackedLoadingContainer(
@@ -91,21 +68,21 @@ class _StudentTakeExerciseScreenState
           SizedBox(
             width: MediaQuery.of(context).size.width,
             child: SingleChildScrollView(
-              child: all10Pix(
+              child: all20Pix(
                   child: Column(
                 children: [
-                  _exerciseIndexHeader(),
-                  _tracingCanvas(),
+                  _quizIndexHeader(),
+                  _writingCanvas(),
                   ElevatedButton(
                       onPressed: () {
                         setState(() {
                           drawingPoints.clear();
                           hasDoodle = false;
                         });
-                        ref.read(currentExerciseProvider).deleteTraceOutput();
+                        ref.read(currentQuizProvider).deleteDoodleOutput();
                       },
-                      child: whiteAndadaProBold('RESET TRACE')),
-                  Gap(80),
+                      child: whiteAndadaProBold('RESET SHORTHAND')),
+                  Gap(100),
                   _navigatorButtons()
                 ],
               )),
@@ -114,13 +91,13 @@ class _StudentTakeExerciseScreenState
     );
   }
 
-  Widget _exerciseIndexHeader() {
+  Widget _quizIndexHeader() {
     return blackCinzelBold(
-        'Exercise ${ref.read(currentExerciseProvider).currentExerciseModel!.exerciseIndex.toString()}',
+        'Quiz ${ref.read(currentQuizProvider).currentQuizModel!.quizIndex.toString()}',
         fontSize: 40);
   }
 
-  Widget _tracingCanvas() {
+  Widget _writingCanvas() {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -135,48 +112,43 @@ class _StudentTakeExerciseScreenState
               width: MediaQuery.of(context).size.width * 0.8,
               height: MediaQuery.of(context).size.width * 0.6,
               decoration: BoxDecoration(
+                  color: Colors.white,
                   image: ref
-                              .read(currentExerciseProvider)
-                              .isLookingAtPreviousTrace() &&
-                          ref.read(currentExerciseProvider).getCurrentTrace() !=
+                              .read(currentQuizProvider)
+                              .isLookingAtPreviousDoodle() &&
+                          ref.read(currentQuizProvider).getCurrentDoodle() !=
                               null
                       ? DecorationImage(
                           fit: BoxFit.contain,
                           image: MemoryImage(ref
-                                  .read(currentExerciseProvider)
-                                  .traceOutputList[
-                              ref.read(currentExerciseProvider).tracingIndex]!))
-                      : DecorationImage(
-                          fit: BoxFit.contain,
-                          image: AssetImage(ref
-                              .read(currentExerciseProvider)
-                              .currentExerciseModel!
-                              .tracingModels[ref
-                                  .read(currentExerciseProvider)
-                                  .tracingIndex]
-                              .imagePath))),
+                                  .read(currentQuizProvider)
+                                  .doodleOutputList[
+                              ref.read(currentQuizProvider).questionIndex]!))
+                      : null),
               child: GestureDetector(
                 onPanStart: (details) {
                   if (!ref
-                          .read(currentExerciseProvider)
-                          .isLookingAtPreviousTrace() &&
-                      ref.read(currentExerciseProvider).getCurrentTrace() !=
-                          null) return;
+                          .read(currentQuizProvider)
+                          .isLookingAtPreviousDoodle() &&
+                      ref.read(currentQuizProvider).getCurrentDoodle() !=
+                          null) {
+                    print('may not draw');
+                    return;
+                  }
                   setState(() {
                     currentDrawingPoint = DrawingPoint(
                         id: DateTime.now().millisecondsSinceEpoch,
-                        offsets: [details.localPosition],
-                        width: doodleWidth);
+                        offsets: [details.localPosition]);
                     if (currentDrawingPoint == null) return;
                     drawingPoints.add(currentDrawingPoint!);
                   });
                 },
                 onPanUpdate: (details) {
                   if (!ref
-                          .read(currentExerciseProvider)
-                          .isLookingAtPreviousTrace() &&
-                      ref.read(currentExerciseProvider).getCurrentTrace() !=
-                          null) return;
+                          .read(currentQuizProvider)
+                          .isLookingAtPreviousDoodle() &&
+                      ref.read(currentQuizProvider).getCurrentDoodle() != null)
+                    return;
                   setState(() {
                     if (currentDrawingPoint == null) return;
                     currentDrawingPoint = currentDrawingPoint?.copyWith(
@@ -188,12 +160,14 @@ class _StudentTakeExerciseScreenState
                 onPanEnd: (details) {
                   currentDrawingPoint = null;
                   hasDoodle = true;
+                  print('drawing points: ${drawingPoints.length}');
                 },
                 child: CustomPaint(
                   painter: DrawingPainter(drawingPoints: drawingPoints),
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height,
+                    //color: Colors.grewen,
                   ),
                 ),
               ),
@@ -212,7 +186,7 @@ class _StudentTakeExerciseScreenState
                 });
               }),
           Gap(10),
-          whiteAndadaProBold('Trace the shorthanded word above.'),
+          whiteAndadaProBold('Write the word above in shorthand.'),
         ],
       ),
     );
@@ -220,32 +194,16 @@ class _StudentTakeExerciseScreenState
 
   Widget _currentWord() {
     String currentWord = ref
-        .read(currentExerciseProvider)
-        .currentExerciseModel!
-        .tracingModels[ref.read(currentExerciseProvider).tracingIndex]
-        .word;
-    int currentIndex = ref.read(currentExerciseProvider).tracingIndex + 1;
-    int totalWords = ref
-        .read(currentExerciseProvider)
-        .currentExerciseModel!
-        .tracingModels
-        .length;
+        .read(currentQuizProvider)
+        .currentQuizModel!
+        .wordsToWrite[ref.read(currentQuizProvider).questionIndex];
+    int currentIndex = ref.read(currentQuizProvider).questionIndex + 1;
+    int totalWords =
+        ref.read(currentQuizProvider).currentQuizModel!.wordsToWrite.length;
     return vertical20Pix(
-        child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        whiteAndadaProBold('Word $currentIndex/$totalWords: $currentWord',
-            fontSize: 24),
-        ElevatedButton(
-            onPressed: playback,
-            style: ElevatedButton.styleFrom(
-                shape: CircleBorder(), backgroundColor: Colors.white),
-            child: Icon(
-              Icons.volume_up,
-              color: CustomColors.ketchup,
-            ))
-      ],
-    ));
+        child: whiteAndadaProBold(
+            'Word $currentIndex/$totalWords: $currentWord',
+            fontSize: 24));
   }
 
   Widget _navigatorButtons() {
@@ -253,7 +211,7 @@ class _StudentTakeExerciseScreenState
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         ElevatedButton(
-            onPressed: ref.read(currentExerciseProvider).tracingIndex == 0
+            onPressed: ref.read(currentQuizProvider).questionIndex == 0
                 ? null
                 : () async {
                     if (hasDoodle) {
@@ -261,20 +219,20 @@ class _StudentTakeExerciseScreenState
                       if (traceOutput == null) return;
 
                       if (ref
-                          .read(currentExerciseProvider)
-                          .isLookingAtCurrentTrace()) {
+                          .read(currentQuizProvider)
+                          .isLookingAtCurrentDoodle()) {
                         ref
-                            .read(currentExerciseProvider)
-                            .addNewTraceOutput(traceOutput);
+                            .read(currentQuizProvider)
+                            .addNewDoodleOutput(traceOutput);
                       } else {
                         ref
-                            .read(currentExerciseProvider)
-                            .replaceTraceOutput(traceOutput);
+                            .read(currentQuizProvider)
+                            .replaceDoodleOutput(traceOutput);
                       }
                     }
                     drawingPoints.clear();
                     hasDoodle = false;
-                    ref.read(currentExerciseProvider).decrementTracingIndex();
+                    ref.read(currentQuizProvider).decrementQuizIndex();
                   },
             style: ElevatedButton.styleFrom(
                 disabledBackgroundColor: CustomColors.blush),
@@ -283,7 +241,7 @@ class _StudentTakeExerciseScreenState
           child: ElevatedButton(
               onPressed: () => onNextButtonPress(),
               child: whiteAndadaProBold(
-                  ref.read(currentExerciseProvider).isLookingAtLastWord()
+                  ref.read(currentQuizProvider).isLookingAtLastWord()
                       ? 'SUBMIT'
                       : 'NEXT')),
         )

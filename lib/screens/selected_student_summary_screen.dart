@@ -39,7 +39,8 @@ class _SelectedStudentSummaryScreenState
         ref.read(loadingProvider).toggleLoading(true);
 
         //  Get student data
-        final userDoc = await getThisUserDoc(widget.studentID);
+        final userDoc =
+            await UsersCollectionUtil.getThisUserDoc(widget.studentID);
         final userData = userDoc.data() as Map<dynamic, dynamic>;
         formattedName =
             '${userData[UserFields.firstName]} ${userData[UserFields.lastName]}';
@@ -47,7 +48,8 @@ class _SelectedStudentSummaryScreenState
 
         //  Get student results
         exerciseResultDocs =
-            await getStudentExerciseResultDocs(widget.studentID);
+            await ExercisesCollectionUtil.getStudentExerciseResultDocs(
+                widget.studentID);
         exerciseResultDocs = exerciseResultDocs.where((element) {
           final exerciseResultData = element.data() as Map<dynamic, dynamic>;
           return exerciseResultData[ExerciseResultFields.isGraded];
@@ -60,7 +62,8 @@ class _SelectedStudentSummaryScreenState
 
           return aIndex.compareTo(bIndex);
         });
-        quizResultDocs = await getStudentQuizResultDocs(widget.studentID);
+        quizResultDocs = await QuizzesCollectionUtil.getStudentQuizResultDocs(
+            widget.studentID);
         quizResultDocs = quizResultDocs.where((element) {
           final quizResultData = element.data() as Map<dynamic, dynamic>;
           return quizResultData[QuizResultFields.isGraded];

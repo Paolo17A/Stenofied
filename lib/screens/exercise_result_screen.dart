@@ -34,12 +34,11 @@ class _ExerciseResultScreenState extends ConsumerState<ExerciseResultScreen> {
       try {
         ref.read(loadingProvider).toggleLoading(true);
         final exerciseResult =
-            await getExerciseResultDoc(widget.exerciseResultID);
-        print('done getting exercise results');
+            await ExercisesCollectionUtil.getExerciseResultDoc(
+                widget.exerciseResultID);
         final exerciseResultData =
             exerciseResult.data() as Map<dynamic, dynamic>;
         exerciseIndex = exerciseResultData[ExerciseResultFields.exerciseIndex];
-        print('exercise index: $exerciseIndex');
         isGraded = exerciseResultData[ExerciseResultFields.isGraded];
         exerciseResults =
             exerciseResultData[ExerciseResultFields.exerciseResults];
@@ -72,9 +71,11 @@ class _ExerciseResultScreenState extends ConsumerState<ExerciseResultScreen> {
                             message:
                                 'Are you sure you wish to retake this exercise? Your current entry will be deleted.',
                             deleteWord: 'Retake',
-                            deleteEntry: () => retakeThisExercise(context, ref,
-                                exerciseResultID: widget.exerciseResultID,
-                                exerciseIndex: exerciseIndex));
+                            deleteEntry: () =>
+                                ExercisesCollectionUtil.retakeThisExercise(
+                                    context, ref,
+                                    exerciseResultID: widget.exerciseResultID,
+                                    exerciseIndex: exerciseIndex));
                       },
                       child: sangriaInterBold('RETAKE', fontSize: 16))
                 ]

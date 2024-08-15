@@ -33,15 +33,17 @@ class _TeacherAssignedSectionScreenState
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       try {
         ref.read(loadingProvider).toggleLoading(true);
-        final user = await getCurrentUserDoc();
+        final user = await UsersCollectionUtil.getCurrentUserDoc();
         final userData = user.data() as Map<dynamic, dynamic>;
 
         String sectionID = userData[UserFields.sectionID];
-        final section = await getThisSectionDoc(sectionID);
+        final section =
+            await SectionsCollectionUtil.getThisSectionDoc(sectionID);
         final sectionData = section.data() as Map<dynamic, dynamic>;
         sectionName = sectionData[SectionFields.name];
 
-        studentDocs = await getSectionStudentDocs(sectionID);
+        studentDocs =
+            await UsersCollectionUtil.getSectionStudentDocs(sectionID);
         ref.read(loadingProvider).toggleLoading(false);
       } catch (error) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(

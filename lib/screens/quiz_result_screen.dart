@@ -31,7 +31,8 @@ class _QuizResultScreenState extends ConsumerState<QuizResultScreen> {
       final scaffoldMessenger = ScaffoldMessenger.of(context);
       try {
         ref.read(loadingProvider).toggleLoading(true);
-        final quizResult = await getQuizResultDoc(widget.quizResultID);
+        final quizResult =
+            await QuizzesCollectionUtil.getQuizResultDoc(widget.quizResultID);
         final quizResultData = quizResult.data() as Map<dynamic, dynamic>;
         quizIndex = quizResultData[QuizResultFields.quizIndex];
         isGraded = quizResultData[QuizResultFields.isGraded];

@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
-import '../providers/loading_provider.dart';
-import '../utils/delete_entry_dialog_util.dart';
-import '../utils/future_util.dart';
-import '../utils/string_util.dart';
-import '../widgets/app_bar_widget.dart';
-import '../widgets/custom_miscellaneous_widgets.dart';
-import '../widgets/custom_padding_widgets.dart';
-import '../widgets/custom_text_widgets.dart';
+import '../../providers/loading_provider.dart';
+import '../../utils/delete_entry_dialog_util.dart';
+import '../../utils/future_util.dart';
+import '../../utils/string_util.dart';
+import '../../widgets/app_bar_widget.dart';
+import '../../widgets/custom_miscellaneous_widgets.dart';
+import '../../widgets/custom_padding_widgets.dart';
+import '../../widgets/custom_text_widgets.dart';
 
 class AdminSelectedTeacherScreen extends ConsumerStatefulWidget {
   final String userID;
@@ -34,7 +34,7 @@ class _AdminSelectedTeacherScreenState
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       try {
         ref.read(loadingProvider).toggleLoading(true);
-        final user = await getThisUserDoc(widget.userID);
+        final user = await UsersCollectionUtil.getThisUserDoc(widget.userID);
         final userData = user.data() as Map<dynamic, dynamic>;
         formattedName =
             '${userData[UserFields.firstName]} ${userData[UserFields.lastName]}';
@@ -43,7 +43,8 @@ class _AdminSelectedTeacherScreenState
         proofOfEmployment = userData[UserFields.proofOfEnrollment];
         String sectionID = userData[UserFields.sectionID];
         if (sectionID.isNotEmpty) {
-          final section = await getThisSectionDoc(sectionID);
+          final section =
+              await SectionsCollectionUtil.getThisSectionDoc(sectionID);
           final sectionData = section.data() as Map<dynamic, dynamic>;
           assignedSectionName = sectionData[SectionFields.name];
         }
@@ -84,18 +85,22 @@ class _AdminSelectedTeacherScreenState
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         ElevatedButton(
-                            onPressed: () => approveThisUser(context, ref,
-                                userType: UserTypes.teacher,
-                                userID: widget.userID),
+                            onPressed: () =>
+                                UsersCollectionUtil.approveThisUser(
+                                    context, ref,
+                                    userType: UserTypes.teacher,
+                                    userID: widget.userID),
                             child: whiteAndadaProBold('VERIFY\nTEACHER')),
                         ElevatedButton(
                             onPressed: () => displayDeleteEntryDialog(context,
                                 message:
                                     'Are you sure you wish to deny this teacher\'s verification?',
                                 deleteWord: 'Deny',
-                                deleteEntry: () => denyThisUser(context, ref,
-                                    userType: UserTypes.teacher,
-                                    userID: widget.userID)),
+                                deleteEntry: () =>
+                                    UsersCollectionUtil.denyThisUser(
+                                        context, ref,
+                                        userType: UserTypes.teacher,
+                                        userID: widget.userID)),
                             child: whiteAndadaProBold('DENY\nTEACHER')),
                       ],
                     ),

@@ -61,7 +61,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               emailController: emailController,
                               passwordController: passwordController),
                           loginButton(
-                              onPress: () => logInUser(context, ref,
+                              onPress: () => UsersCollectionUtil.logInUser(
+                                  context, ref,
                                   emailController: emailController,
                                   passwordController: passwordController)),
                         ],

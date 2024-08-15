@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
-import '../models/quiz_model.dart';
-import '../models/tracing_model.dart';
-import '../providers/loading_provider.dart';
-import '../utils/color_util.dart';
-import '../utils/delete_entry_dialog_util.dart';
-import '../utils/future_util.dart';
-import '../utils/navigator_util.dart';
-import '../utils/string_util.dart';
-import '../widgets/app_bar_widget.dart';
-import '../widgets/custom_miscellaneous_widgets.dart';
-import '../widgets/custom_padding_widgets.dart';
-import '../widgets/custom_text_widgets.dart';
+import '../../models/quiz_model.dart';
+import '../../models/tracing_model.dart';
+import '../../providers/loading_provider.dart';
+import '../../utils/color_util.dart';
+import '../../utils/delete_entry_dialog_util.dart';
+import '../../utils/future_util.dart';
+import '../../utils/navigator_util.dart';
+import '../../utils/string_util.dart';
+import '../../widgets/app_bar_widget.dart';
+import '../../widgets/custom_miscellaneous_widgets.dart';
+import '../../widgets/custom_padding_widgets.dart';
+import '../../widgets/custom_text_widgets.dart';
 
 class AdminSelectedStudentScreen extends ConsumerStatefulWidget {
   final String userID;
@@ -40,7 +40,7 @@ class _AdminStudentUserScreenState
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       try {
         ref.read(loadingProvider).toggleLoading(true);
-        final user = await getThisUserDoc(widget.userID);
+        final user = await UsersCollectionUtil.getThisUserDoc(widget.userID);
         final userData = user.data() as Map<dynamic, dynamic>;
         formattedName =
             '${userData[UserFields.firstName]} ${userData[UserFields.lastName]}';
@@ -49,12 +49,15 @@ class _AdminStudentUserScreenState
         proofOfEnrollment = userData[UserFields.proofOfEnrollment];
         String sectionID = userData[UserFields.sectionID];
         if (sectionID.isNotEmpty) {
-          final section = await getThisSectionDoc(sectionID);
+          final section =
+              await SectionsCollectionUtil.getThisSectionDoc(sectionID);
           final sectionData = section.data() as Map<dynamic, dynamic>;
           assignedSectionName = sectionData[SectionFields.name];
         }
         //  Get student results
-        exerciseResultDocs = await getStudentExerciseResultDocs(widget.userID);
+        exerciseResultDocs =
+            await ExercisesCollectionUtil.getStudentExerciseResultDocs(
+                widget.userID);
         exerciseResultDocs = exerciseResultDocs.where((element) {
           final exerciseResultData = element.data() as Map<dynamic, dynamic>;
           return exerciseResultData[ExerciseResultFields.isGraded];
@@ -67,7 +70,8 @@ class _AdminStudentUserScreenState
 
           return aIndex.compareTo(bIndex);
         });
-        quizResultDocs = await getStudentQuizResultDocs(widget.userID);
+        quizResultDocs =
+            await QuizzesCollectionUtil.getStudentQuizResultDocs(widget.userID);
         quizResultDocs = quizResultDocs.where((element) {
           final quizResultData = element.data() as Map<dynamic, dynamic>;
           return quizResultData[QuizResultFields.isGraded];
@@ -143,7 +147,7 @@ class _AdminStudentUserScreenState
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         ElevatedButton(
-            onPressed: () => approveThisUser(context, ref,
+            onPressed: () => UsersCollectionUtil.approveThisUser(context, ref,
                 userType: UserTypes.student, userID: widget.userID),
             child: whiteAndadaProBold('VERIFY\n STUDENT')),
         ElevatedButton(
@@ -151,7 +155,8 @@ class _AdminStudentUserScreenState
                 message:
                     'Are you sure you wish to deny this student\'s verification?',
                 deleteWord: 'Deny',
-                deleteEntry: () => denyThisUser(context, ref,
+                deleteEntry: () => UsersCollectionUtil.denyThisUser(
+                    context, ref,
                     userType: UserTypes.teacher, userID: widget.userID)),
             child: whiteAndadaProBold('DENY\nSTUDENT')),
       ],

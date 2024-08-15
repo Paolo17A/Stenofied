@@ -11,12 +11,12 @@ import 'package:stenofied/widgets/custom_miscellaneous_widgets.dart';
 import 'package:stenofied/widgets/custom_padding_widgets.dart';
 import 'package:stenofied/widgets/navigator_rail_widget.dart';
 
-import '../providers/loading_provider.dart';
-import '../providers/user_data_provider.dart';
-import '../utils/color_util.dart';
-import '../utils/future_util.dart';
-import '../utils/string_util.dart';
-import '../widgets/custom_text_widgets.dart';
+import '../../providers/loading_provider.dart';
+import '../../providers/user_data_provider.dart';
+import '../../utils/color_util.dart';
+import '../../utils/future_util.dart';
+import '../../utils/string_util.dart';
+import '../../widgets/custom_text_widgets.dart';
 
 class StudentQuizzesScreen extends ConsumerStatefulWidget {
   const StudentQuizzesScreen({super.key});
@@ -53,12 +53,13 @@ class _StudentQuizzesScreenState extends ConsumerState<StudentQuizzesScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       try {
         ref.read(loadingProvider).toggleLoading(true);
-        final user = await getCurrentUserDoc();
+        final user = await UsersCollectionUtil.getCurrentUserDoc();
         final userData = user.data() as Map<dynamic, dynamic>;
         ref
             .read(userDataProvider)
             .setLessonIndex(userData[UserFields.currentLessonIndex]);
-        submittedQuizResults = await getUserQuizResultDocs();
+        submittedQuizResults =
+            await QuizzesCollectionUtil.getUserQuizResultDocs();
         print(submittedQuizResults.map((e) => e.id).toList());
         ref.read(loadingProvider).toggleLoading(false);
       } catch (error) {

@@ -40,22 +40,27 @@ class _AdminSelectedSectionScreenState
         ref.read(loadingProvider).toggleLoading(true);
 
         //  SECTIONS
-        final section = await getThisSectionDoc(widget.sectionID);
+        final section =
+            await SectionsCollectionUtil.getThisSectionDoc(widget.sectionID);
         final sectionData = section.data() as Map<dynamic, dynamic>;
         sectionName = sectionData[SectionFields.name];
 
         //  TEACHERS
-        final teachers = await getSectionTeacherDoc(widget.sectionID);
+        final teachers =
+            await UsersCollectionUtil.getSectionTeacherDoc(widget.sectionID);
         if (teachers.isNotEmpty) {
           final teacherData = teachers.first.data() as Map<dynamic, dynamic>;
           assignedTeacherName =
               '${teacherData[UserFields.firstName]} ${teacherData[UserFields.lastName]}';
         }
-        availableTeacherDocs = await getAvailableTeacherDocs();
+        availableTeacherDocs =
+            await UsersCollectionUtil.getAvailableTeacherDocs();
 
         //  STUDENTS
-        sectionStudentDocs = await getSectionStudentDocs(widget.sectionID);
-        studentsWithNoSectionDocs = await getStudentsWithNoSectionDocs();
+        sectionStudentDocs =
+            await UsersCollectionUtil.getSectionStudentDocs(widget.sectionID);
+        studentsWithNoSectionDocs =
+            await UsersCollectionUtil.getStudentsWithNoSectionDocs();
         ref.read(loadingProvider).toggleLoading(false);
       } catch (error) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -227,9 +232,11 @@ class _AdminSelectedSectionScreenState
                           '${teacherData[UserFields.firstName]} ${teacherData[UserFields.lastName]}';
                       return vertical10Pix(
                           child: ElevatedButton(
-                              onPressed: () => assignUserToSection(context, ref,
-                                  sectionID: widget.sectionID,
-                                  userID: teacher.id),
+                              onPressed: () =>
+                                  SectionsCollectionUtil.assignUserToSection(
+                                      context, ref,
+                                      sectionID: widget.sectionID,
+                                      userID: teacher.id),
                               child: whiteAndadaProBold(teacherName)));
                     }).toList(),
                   ),
@@ -254,9 +261,11 @@ class _AdminSelectedSectionScreenState
                           '${studentData[UserFields.firstName]} ${studentData[UserFields.lastName]}';
                       return vertical10Pix(
                           child: ElevatedButton(
-                              onPressed: () => assignUserToSection(context, ref,
-                                  sectionID: widget.sectionID,
-                                  userID: student.id),
+                              onPressed: () =>
+                                  SectionsCollectionUtil.assignUserToSection(
+                                      context, ref,
+                                      sectionID: widget.sectionID,
+                                      userID: student.id),
                               child: whiteAndadaProBold(teacherName)));
                     }).toList(),
                   ),

@@ -77,8 +77,10 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                               ],
                             )),
                         sendPasswordResetEmailButton(
-                            onPress: () => sendResetPasswordEmail(context, ref,
-                                emailController: emailController)),
+                            onPress: () =>
+                                UsersCollectionUtil.sendResetPasswordEmail(
+                                    context, ref,
+                                    emailController: emailController)),
                       ],
                     ),
                   ),

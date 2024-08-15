@@ -31,7 +31,7 @@ class _StudentLessonsScreenState extends ConsumerState<StudentLessonsScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       try {
         ref.read(loadingProvider).toggleLoading(true);
-        final user = await getCurrentUserDoc();
+        final user = await UsersCollectionUtil.getCurrentUserDoc();
         final userData = user.data() as Map<dynamic, dynamic>;
         ref
             .read(userDataProvider)

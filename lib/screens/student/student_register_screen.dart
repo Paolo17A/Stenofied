@@ -5,10 +5,10 @@ import 'package:stenofied/utils/color_util.dart';
 import 'package:stenofied/utils/string_util.dart';
 import 'package:stenofied/widgets/custom_padding_widgets.dart';
 
-import '../providers/loading_provider.dart';
-import '../utils/future_util.dart';
-import '../widgets/custom_button_widgets.dart';
-import '../widgets/custom_miscellaneous_widgets.dart';
+import '../../providers/loading_provider.dart';
+import '../../utils/future_util.dart';
+import '../../widgets/custom_button_widgets.dart';
+import '../../widgets/custom_miscellaneous_widgets.dart';
 
 class StudentRegisterScreen extends ConsumerStatefulWidget {
   const StudentRegisterScreen({super.key});
@@ -81,14 +81,16 @@ class _StudentRegisterScreenState extends ConsumerState<StudentRegisterScreen> {
                                 userType: UserTypes.student),
                           ),
                           registerButton(
-                              onPress: () => registerNewUser(context, ref,
-                                  userType: UserTypes.student,
-                                  emailController: emailController,
-                                  passwordController: passwordController,
-                                  confirmPasswordController:
-                                      confirmPasswordController,
-                                  firstNameController: firstNameController,
-                                  lastNameController: lastNameController)),
+                              onPress: () =>
+                                  UsersCollectionUtil.registerNewUser(
+                                      context, ref,
+                                      userType: UserTypes.student,
+                                      emailController: emailController,
+                                      passwordController: passwordController,
+                                      confirmPasswordController:
+                                          confirmPasswordController,
+                                      firstNameController: firstNameController,
+                                      lastNameController: lastNameController)),
                         ],
                       ),
                     ),

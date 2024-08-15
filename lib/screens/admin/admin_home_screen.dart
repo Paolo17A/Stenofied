@@ -3,13 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:stenofied/utils/future_util.dart';
 import 'package:stenofied/widgets/navigator_rail_widget.dart';
-import '../providers/loading_provider.dart';
-import '../providers/user_data_provider.dart';
-import '../utils/navigator_util.dart';
-import '../utils/string_util.dart';
-import '../widgets/app_drawer_widget.dart';
-import '../widgets/custom_button_widgets.dart';
-import '../widgets/custom_miscellaneous_widgets.dart';
+
+import '../../providers/loading_provider.dart';
+import '../../providers/user_data_provider.dart';
+import '../../utils/navigator_util.dart';
+import '../../utils/string_util.dart';
+import '../../widgets/app_drawer_widget.dart';
+import '../../widgets/custom_button_widgets.dart';
+import '../../widgets/custom_miscellaneous_widgets.dart';
 
 class AdminHomeScreen extends ConsumerStatefulWidget {
   const AdminHomeScreen({super.key});
@@ -30,11 +31,11 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       ref.read(loadingProvider).toggleLoading(true);
-      final students = await getAllStudentDocs();
+      final students = await UsersCollectionUtil.getAllStudentDocs();
       studentsCount = students.length;
-      final teachers = await getAllTeacherDocs();
+      final teachers = await UsersCollectionUtil.getAllTeacherDocs();
       teachersCount = teachers.length;
-      final sections = await getAllSectionDocs();
+      final sections = await SectionsCollectionUtil.getAllSectionDocs();
       sectionsCount = sections.length;
       ref.read(loadingProvider).toggleLoading(false);
     });
@@ -52,28 +53,19 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen> {
             currentPath: NavigatorRoutes.adminHome),
         body: switchedLoadingContainer(
             ref.read(loadingProvider).isLoading,
-            SafeArea(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  adminRail(context, scaffoldKey,
-                      selectedIndex: 0, currentPath: NavigatorRoutes.adminHome),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width - 50,
-                    child: Column(
-                      children: [
-                        welcomeWidgets(context,
-                            userType: ref.read(userDataProvider).userType,
-                            profileImageURL:
-                                ref.read(userDataProvider).profileImageURL),
-                        Gap(60),
-                        _homeButtons()
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            )),
+            safeAreaWithRail(context,
+                railWidget: adminRail(context, scaffoldKey,
+                    selectedIndex: 0, currentPath: NavigatorRoutes.adminHome),
+                mainWidget: Column(
+                  children: [
+                    welcomeWidgets(context,
+                        userType: ref.read(userDataProvider).userType,
+                        profileImageURL:
+                            ref.read(userDataProvider).profileImageURL),
+                    Gap(60),
+                    _homeButtons()
+                  ],
+                ))),
       ),
     );
   }

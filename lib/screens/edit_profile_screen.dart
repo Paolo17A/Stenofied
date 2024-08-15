@@ -29,7 +29,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       try {
         ref.read(loadingProvider).toggleLoading(true);
-        final userDoc = await getCurrentUserDoc();
+        final userDoc = await UsersCollectionUtil.getCurrentUserDoc();
         final userData = userDoc.data() as Map<dynamic, dynamic>;
         firstNameController.text = userData[UserFields.firstName];
         lastNameController.text = userData[UserFields.lastName];
@@ -110,8 +110,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                       right: 0,
                                       bottom: 0,
                                       child: GestureDetector(
-                                        onTap: () =>
-                                            uploadProfilePicture(context, ref),
+                                        onTap: () => UsersCollectionUtil
+                                            .uploadProfilePicture(context, ref),
                                         child: Container(
                                           width: 30,
                                           decoration: BoxDecoration(
@@ -150,10 +150,12 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                           ),
                           Gap(40),
                           ElevatedButton(
-                              onPressed: () => updateProfile(context, ref,
-                                  firstNameController: firstNameController,
-                                  lastNameController: lastNameController,
-                                  userType: userType),
+                              onPressed: () =>
+                                  UsersCollectionUtil.updateProfile(
+                                      context, ref,
+                                      firstNameController: firstNameController,
+                                      lastNameController: lastNameController,
+                                      userType: userType),
                               child: whiteAndadaProBold('SAVE CHANGES'))
                         ],
                       )),

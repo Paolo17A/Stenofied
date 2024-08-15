@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
-import 'package:stenofied/providers/current_exercise_provider.dart';
+import 'package:stenofied/providers/current_quiz_provider.dart';
 import 'package:stenofied/providers/loading_provider.dart';
 import 'package:stenofied/utils/future_util.dart';
 import 'package:stenofied/utils/string_util.dart';
@@ -11,21 +11,22 @@ import 'package:stenofied/widgets/custom_miscellaneous_widgets.dart';
 import 'package:stenofied/widgets/custom_padding_widgets.dart';
 import 'package:stenofied/widgets/custom_text_widgets.dart';
 
-import '../utils/color_util.dart';
+import '../../utils/color_util.dart';
 
-class TeacherGradeExerciseScreen extends ConsumerStatefulWidget {
-  final String exerciseResultID;
-  const TeacherGradeExerciseScreen({super.key, required this.exerciseResultID});
+class TeacherGradeQuizScreen extends ConsumerStatefulWidget {
+  final String quizResultID;
+  const TeacherGradeQuizScreen({super.key, required this.quizResultID});
 
   @override
-  ConsumerState<TeacherGradeExerciseScreen> createState() =>
-      _TeacherGradeExerciseScreenState();
+  ConsumerState<TeacherGradeQuizScreen> createState() =>
+      _TeacherGradeQuizScreenState();
 }
 
-class _TeacherGradeExerciseScreenState
-    extends ConsumerState<TeacherGradeExerciseScreen> {
+class _TeacherGradeQuizScreenState
+    extends ConsumerState<TeacherGradeQuizScreen> {
   String formattedName = '';
-  List<dynamic> exerciseResults = [];
+  List<dynamic> quizResults = [];
+  String studentID = '';
   @override
   void initState() {
     super.initState();
@@ -33,21 +34,19 @@ class _TeacherGradeExerciseScreenState
       final scaffoldMessenger = ScaffoldMessenger.of(context);
       try {
         ref.read(loadingProvider).toggleLoading(true);
-        final exerciseResult =
-            await getExerciseResultDoc(widget.exerciseResultID);
-        final exerciseResultData =
-            exerciseResult.data() as Map<dynamic, dynamic>;
-        exerciseResults =
-            exerciseResultData[ExerciseResultFields.exerciseResults];
-        final student = await getThisUserDoc(
-            exerciseResultData[ExerciseResultFields.studentID]);
+        final quizResult =
+            await QuizzesCollectionUtil.getQuizResultDoc(widget.quizResultID);
+        final quizResultData = quizResult.data() as Map<dynamic, dynamic>;
+        quizResults = quizResultData[QuizResultFields.quizResults];
+        studentID = quizResultData[QuizResultFields.studentID];
+        final student = await UsersCollectionUtil.getThisUserDoc(studentID);
         final studentData = student.data() as Map<dynamic, dynamic>;
         formattedName =
             '${studentData[UserFields.firstName]} ${studentData[UserFields.lastName]}';
         ref.read(loadingProvider).toggleLoading(false);
       } catch (error) {
         scaffoldMessenger.showSnackBar(
-            SnackBar(content: Text('Error getting exercise content: $error')));
+            SnackBar(content: Text('Error getting quiz content: $error')));
         ref.read(loadingProvider).toggleLoading(false);
       }
     });
@@ -56,7 +55,7 @@ class _TeacherGradeExerciseScreenState
   @override
   Widget build(BuildContext context) {
     ref.watch(loadingProvider);
-    ref.watch(currentExerciseProvider);
+    ref.watch(currentQuizProvider);
     return Scaffold(
       appBar: appBarWidget(mayGoBack: true),
       body: switchedLoadingContainer(
@@ -70,9 +69,9 @@ class _TeacherGradeExerciseScreenState
               children: [
                 blackCinzelBold(formattedName, fontSize: 28),
                 blackCinzelRegular(
-                    '\t\tExercise ${ref.read(currentExerciseProvider).currentExerciseModel!.exerciseIndex.toString()}',
+                    '\t\tQuiz ${ref.read(currentQuizProvider).currentQuizModel!.quizIndex.toString()}',
                     fontSize: 20),
-                if (exerciseResults.isNotEmpty) _exerciseEntriesContainer(),
+                if (quizResults.isNotEmpty) _quizEntriesContainer(),
                 Gap(50),
                 _navigatorButtons()
               ],
@@ -83,24 +82,20 @@ class _TeacherGradeExerciseScreenState
 
   Widget _currentWord() {
     String currentWord = ref
-        .read(currentExerciseProvider)
-        .currentExerciseModel!
-        .tracingModels[ref.read(currentExerciseProvider).tracingIndex]
-        .word;
-    int currentIndex = ref.read(currentExerciseProvider).tracingIndex + 1;
-    int totalWords = ref
-        .read(currentExerciseProvider)
-        .currentExerciseModel!
-        .tracingModels
-        .length;
+        .read(currentQuizProvider)
+        .currentQuizModel!
+        .wordsToWrite[ref.read(currentQuizProvider).questionIndex];
+    int currentIndex = ref.read(currentQuizProvider).questionIndex + 1;
+    int totalWords =
+        ref.read(currentQuizProvider).currentQuizModel!.wordsToWrite.length;
     return vertical20Pix(
         child: whiteAndadaProBold(
             'Word $currentIndex/$totalWords: $currentWord',
             fontSize: 24));
   }
 
-  Widget _exerciseEntriesContainer() {
-    int currentIndex = ref.read(currentExerciseProvider).tracingIndex;
+  Widget _quizEntriesContainer() {
+    int currentIndex = ref.read(currentQuizProvider).questionIndex;
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -116,7 +111,7 @@ class _TeacherGradeExerciseScreenState
                 image: DecorationImage(
                     fit: BoxFit.contain,
                     image: NetworkImage(
-                        exerciseResults[currentIndex][EntryFields.imageURL]))),
+                        quizResults[currentIndex][EntryFields.imageURL]))),
           ),
           _gradingButtons(),
         ],
@@ -125,7 +120,7 @@ class _TeacherGradeExerciseScreenState
   }
 
   Widget _gradingButtons() {
-    int currentIndex = ref.read(currentExerciseProvider).tracingIndex;
+    int currentIndex = ref.read(currentQuizProvider).questionIndex;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -135,51 +130,46 @@ class _TeacherGradeExerciseScreenState
             answer: 'CORRECT',
             onTap: () {
               setState(() {
-                exerciseResults[currentIndex][EntryFields.isCorrect] = true;
+                quizResults[currentIndex][EntryFields.isCorrect] = true;
               });
             },
             isSelected:
-                exerciseResults[currentIndex][EntryFields.isCorrect] == true),
+                quizResults[currentIndex][EntryFields.isCorrect] == true),
         BoolAnswerButton(
             boolVal: false,
             answer: 'WRONG',
             onTap: () {
               setState(() {
-                exerciseResults[currentIndex][EntryFields.isCorrect] = false;
+                quizResults[currentIndex][EntryFields.isCorrect] = false;
               });
             },
             isSelected:
-                exerciseResults[currentIndex][EntryFields.isCorrect] == false)
+                quizResults[currentIndex][EntryFields.isCorrect] == false)
       ],
     );
   }
 
   Widget _navigatorButtons() {
-    bool isLastQuestion = ref.read(currentExerciseProvider).tracingIndex ==
-        ref
-                .read(currentExerciseProvider)
-                .currentExerciseModel!
-                .tracingModels
-                .length -
-            1;
+    bool isLastQuestion = ref.read(currentQuizProvider).questionIndex ==
+        ref.read(currentQuizProvider).currentQuizModel!.wordsToWrite.length - 1;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         ElevatedButton(
-            onPressed: ref.read(currentExerciseProvider).tracingIndex == 0
+            onPressed: ref.read(currentQuizProvider).questionIndex == 0
                 ? null
-                : () =>
-                    ref.read(currentExerciseProvider).decrementTracingIndex(),
+                : () => ref.read(currentQuizProvider).decrementQuizIndex(),
             style: ElevatedButton.styleFrom(
                 disabledBackgroundColor: CustomColors.blush),
             child: whiteAndadaProBold('PREV')),
         SizedBox(
           child: ElevatedButton(
               onPressed: () => isLastQuestion
-                  ? gradeExerciseOutput(context, ref,
-                      exerciseResultID: widget.exerciseResultID,
-                      exerciseResults: exerciseResults)
-                  : ref.read(currentExerciseProvider).incrementTracingIndex(),
+                  ? QuizzesCollectionUtil.gradeQuizOutput(context, ref,
+                      studentID: studentID,
+                      quizResultID: widget.quizResultID,
+                      quizResults: quizResults)
+                  : ref.read(currentQuizProvider).incrementQuizIndex(),
               child: whiteAndadaProBold(isLastQuestion ? 'SUBMIT' : 'NEXT')),
         )
       ],

@@ -11,12 +11,12 @@ import 'package:stenofied/utils/navigator_util.dart';
 import 'package:stenofied/widgets/custom_button_widgets.dart';
 import 'package:stenofied/widgets/navigator_rail_widget.dart';
 
-import '../providers/current_exercise_provider.dart';
-import '../providers/current_quiz_provider.dart';
-import '../providers/user_data_provider.dart';
-import '../utils/string_util.dart';
-import '../widgets/app_drawer_widget.dart';
-import '../widgets/custom_miscellaneous_widgets.dart';
+import '../../providers/current_exercise_provider.dart';
+import '../../providers/current_quiz_provider.dart';
+import '../../providers/user_data_provider.dart';
+import '../../utils/string_util.dart';
+import '../../widgets/app_drawer_widget.dart';
+import '../../widgets/custom_miscellaneous_widgets.dart';
 
 class StudentHomeScreen extends ConsumerStatefulWidget {
   const StudentHomeScreen({super.key});
@@ -76,29 +76,20 @@ class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
       canPop: false,
       child: Scaffold(
           key: scaffoldKey,
-          //appBar: appBarWidget(mayGoBack: true),
-          /*bottomNavigationBar:
-              studentBottomNavBar(context, path: NavigatorRoutes.studentHome),*/
           drawer: studentAppDrawer(context, ref,
               currentPath: NavigatorRoutes.studentHome),
-          body: SafeArea(
-            child: Row(
+          body: safeAreaWithRail(
+            context,
+            railWidget: studentRail(context, scaffoldKey,
+                selectedIndex: 0, currentPath: NavigatorRoutes.studentHome),
+            mainWidget: Column(
               children: [
-                studentRail(context, scaffoldKey,
-                    selectedIndex: 0, currentPath: NavigatorRoutes.studentHome),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width - 50,
-                  child: Column(
-                    children: [
-                      welcomeWidgets(context,
-                          userType: ref.read(userDataProvider).userType,
-                          profileImageURL:
-                              ref.read(userDataProvider).profileImageURL),
-                      Gap(60),
-                      _homeButtons()
-                    ],
-                  ),
-                ),
+                welcomeWidgets(context,
+                    userType: ref.read(userDataProvider).userType,
+                    profileImageURL:
+                        ref.read(userDataProvider).profileImageURL),
+                Gap(60),
+                _homeButtons()
               ],
             ),
           )),

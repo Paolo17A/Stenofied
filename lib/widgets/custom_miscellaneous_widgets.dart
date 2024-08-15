@@ -293,11 +293,20 @@ Widget userNameContainer(String formattedName) {
 
 Widget snapshotHandler(AsyncSnapshot snapshot) {
   if (snapshot.connectionState == ConnectionState.waiting) {
-    return const CircularProgressIndicator();
+    return Center(child: const CircularProgressIndicator());
   } else if (!snapshot.hasData) {
     return Text('No data found');
   } else if (snapshot.hasError) {
     return Text('Error gettin data: ${snapshot.error.toString()}');
   }
   return Container();
+}
+
+Widget safeAreaWithRail(BuildContext context,
+    {required Widget railWidget, required Widget mainWidget}) {
+  return SafeArea(
+      child: Row(children: [
+    railWidget,
+    SizedBox(width: MediaQuery.of(context).size.width - 50, child: mainWidget)
+  ]));
 }

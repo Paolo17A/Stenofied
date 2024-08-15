@@ -1,42 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:stenofied/models/lesson_model.dart';
-import 'package:stenofied/screens/admin_add_section_screen.dart';
-import 'package:stenofied/screens/admin_edit_section_screen.dart';
-import 'package:stenofied/screens/admin_selected_section_screen.dart';
-import 'package:stenofied/screens/admin_selected_student_screen.dart';
-import 'package:stenofied/screens/admin_selected_teacher_screen.dart';
-import 'package:stenofied/screens/admin_view_sections_screen.dart';
-import 'package:stenofied/screens/admin_view_students_screen.dart';
-import 'package:stenofied/screens/admin_view_teachers_screen.dart';
 import 'package:stenofied/screens/exercise_result_screen.dart';
 import 'package:stenofied/screens/login_screen.dart';
 import 'package:stenofied/screens/quiz_result_screen.dart';
 import 'package:stenofied/screens/selected_student_summary_screen.dart';
-import 'package:stenofied/screens/student_selected_lesson_screen.dart';
-import 'package:stenofied/screens/student_take_exercise_screen.dart';
-import 'package:stenofied/screens/student_take_quiz_screen.dart';
-import 'package:stenofied/screens/student_view_lessons_screen.dart';
-import 'package:stenofied/screens/student_view_quizzes_screen.dart';
-import 'package:stenofied/screens/teacher_assigned_section_screen.dart';
-import 'package:stenofied/screens/teacher_grade_exercise_screen.dart';
-import 'package:stenofied/screens/teacher_grade_quiz_screen.dart';
 
-import '../screens/admin_home_screen.dart';
+import '../screens/admin/admin_add_section_screen.dart';
+import '../screens/admin/admin_edit_section_screen.dart';
+import '../screens/admin/admin_home_screen.dart';
+import '../screens/admin/admin_selected_section_screen.dart';
+import '../screens/admin/admin_selected_student_screen.dart';
+import '../screens/admin/admin_selected_teacher_screen.dart';
+import '../screens/admin/admin_view_sections_screen.dart';
+import '../screens/admin/admin_view_students_screen.dart';
+import '../screens/admin/admin_view_teachers_screen.dart';
 import '../screens/edit_profile_screen.dart';
 import '../screens/forgot_password_screen.dart';
-import '../screens/select_user_type_screen.dart';
-import '../screens/student_home_screen.dart';
-import '../screens/student_profile_screen.dart';
-import '../screens/student_register_screen.dart';
-import '../screens/student_view_exercises_screen.dart';
-import '../screens/teacher_home_screen.dart';
-import '../screens/teacher_profile_screen.dart';
-import '../screens/teacher_register_screen.dart';
+import '../screens/student/student_home_screen.dart';
+import '../screens/student/student_profile_screen.dart';
+import '../screens/student/student_register_screen.dart';
+import '../screens/student/student_selected_lesson_screen.dart';
+import '../screens/student/student_take_exercise_screen.dart';
+import '../screens/student/student_take_quiz_screen.dart';
+import '../screens/student/student_view_exercises_screen.dart';
+import '../screens/student/student_view_lessons_screen.dart';
+import '../screens/student/student_view_quizzes_screen.dart';
+import '../screens/teacher/teacher_assigned_section_screen.dart';
+import '../screens/teacher/teacher_grade_exercise_screen.dart';
+import '../screens/teacher/teacher_grade_quiz_screen.dart';
+import '../screens/teacher/teacher_home_screen.dart';
+import '../screens/teacher/teacher_profile_screen.dart';
 
 class NavigatorRoutes {
-  //static const welcome = 'welcome';
   static const login = 'login';
-  static const selectUserType = 'selectUserType';
   static const forgotPassword = 'forgotPassword';
   static const editProfile = 'editProfile';
   static void selectedExerciseResult(BuildContext context,
@@ -135,7 +131,6 @@ class NavigatorRoutes {
 
 final Map<String, WidgetBuilder> routes = {
   NavigatorRoutes.login: (context) => const LoginScreen(),
-  NavigatorRoutes.selectUserType: (context) => const SelectUserTypeScreen(),
   NavigatorRoutes.forgotPassword: (context) => const ForgotPasswordScreen(),
   NavigatorRoutes.editProfile: (context) => const EditProfileScreen(),
 
@@ -151,7 +146,6 @@ final Map<String, WidgetBuilder> routes = {
   NavigatorRoutes.studentTakeQuiz: (context) => const StudentTakeQuizScreen(),
 
   //  TEACHERS
-  NavigatorRoutes.teacherRegister: (context) => const TeacherRegisterScreen(),
   NavigatorRoutes.teacherHome: (context) => const TeacherHomeScreen(),
   NavigatorRoutes.teacherProfile: (context) => const TeacherProfileScreen(),
   NavigatorRoutes.teacherAssignedSection: (context) =>

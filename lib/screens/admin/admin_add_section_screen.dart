@@ -3,42 +3,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stenofied/providers/loading_provider.dart';
 import 'package:stenofied/utils/color_util.dart';
 import 'package:stenofied/utils/future_util.dart';
-import 'package:stenofied/utils/string_util.dart';
 import 'package:stenofied/widgets/app_bar_widget.dart';
 import 'package:stenofied/widgets/custom_miscellaneous_widgets.dart';
 import 'package:stenofied/widgets/custom_padding_widgets.dart';
 import 'package:stenofied/widgets/custom_text_widgets.dart';
 
-class AdminEditSectionScreen extends ConsumerStatefulWidget {
-  final String sectionID;
-  const AdminEditSectionScreen({super.key, required this.sectionID});
+class AdminAddSectionScreen extends ConsumerStatefulWidget {
+  const AdminAddSectionScreen({super.key});
 
   @override
-  ConsumerState<AdminEditSectionScreen> createState() =>
-      _AdminEditSectionScreenState();
+  ConsumerState<AdminAddSectionScreen> createState() =>
+      _AdminAddSectionScreenState();
 }
 
-class _AdminEditSectionScreenState
-    extends ConsumerState<AdminEditSectionScreen> {
+class _AdminAddSectionScreenState extends ConsumerState<AdminAddSectionScreen> {
   final nameController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      try {
-        ref.read(loadingProvider).toggleLoading(true);
-        final section = await getThisSectionDoc(widget.sectionID);
-        final sectionData = section.data() as Map<dynamic, dynamic>;
-        nameController.text = sectionData[SectionFields.name];
-        ref.read(loadingProvider).toggleLoading(false);
-      } catch (error) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error getting section details: $error')));
-        ref.read(loadingProvider).toggleLoading(false);
-      }
-    });
-  }
 
   @override
   void dispose() {
@@ -60,7 +39,7 @@ class _AdminEditSectionScreenState
                 child: all20Pix(
                     child: Column(
               children: [
-                blackCinzelBold('EDIT SECTION', fontSize: 25),
+                blackCinzelBold('CREATE NEW SECTION', fontSize: 25),
                 sectionDetails(),
                 createSectionButton()
               ],
@@ -82,8 +61,8 @@ class _AdminEditSectionScreenState
   Widget createSectionButton() {
     return vertical10Pix(
         child: ElevatedButton(
-            onPressed: () => editThisSection(context, ref,
-                sectionID: widget.sectionID, nameController: nameController),
-            child: whiteAndadaProBold('EDIT SECTION')));
+            onPressed: () => SectionsCollectionUtil.addNewSection(context, ref,
+                nameController: nameController),
+            child: whiteAndadaProBold('CREATE SECTION')));
   }
 }
