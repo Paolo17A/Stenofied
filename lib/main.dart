@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stenofied/utils/navigator_util.dart';
+import 'package:stenofied/utils/shorthand_util.dart';
 import 'package:stenofied/utils/theme_util.dart';
 
 import 'firebase_options.dart';
@@ -12,6 +13,7 @@ void main() async {
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  await ShortHandUtil.initializeVectorMap();
   runApp(const ProviderScope(child: Stenofied()));
 }
 

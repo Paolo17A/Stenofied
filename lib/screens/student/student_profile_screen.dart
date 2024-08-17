@@ -61,7 +61,7 @@ class _StudentProfileScreenState extends ConsumerState<StudentProfileScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               studentRail(context, scaffoldKey,
-                  selectedIndex: 5,
+                  selectedIndex: 4,
                   currentPath: NavigatorRoutes.studentProfile),
               SizedBox(
                 width: MediaQuery.of(context).size.width - 50,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 void displayDeleteEntryDialog(BuildContext context,
     {required String message,
     String deleteWord = 'Delete',
+    bool doublePop = false,
     required Function deleteEntry}) async {
   return showDialog(
       context: context,
@@ -19,6 +20,7 @@ void displayDeleteEntryDialog(BuildContext context,
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
+                if (doublePop) Navigator.of(context).pop();
                 deleteEntry();
               },
               child: Text(deleteWord),

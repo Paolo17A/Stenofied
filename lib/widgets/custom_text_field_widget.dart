@@ -12,6 +12,9 @@ class CustomTextField extends StatefulWidget {
   final bool hasSearchButton;
   final Function? onSearchPress;
   final Color? fillColor;
+  final TextStyle? textStyle;
+  final BorderSide? borderSide;
+  final FocusNode? focusNode;
   const CustomTextField(
       {super.key,
       required this.text,
@@ -21,7 +24,10 @@ class CustomTextField extends StatefulWidget {
       this.enabled = true,
       this.hasSearchButton = false,
       this.fillColor,
-      this.onSearchPress});
+      this.onSearchPress,
+      this.textStyle,
+      this.focusNode,
+      this.borderSide});
 
   @override
   State<CustomTextField> createState() => _LiliwECommerceTextFieldState();
@@ -40,6 +46,7 @@ class _LiliwECommerceTextFieldState extends State<CustomTextField> {
   Widget build(BuildContext context) {
     return TextField(
         enabled: widget.enabled,
+        focusNode: widget.focusNode,
         controller: widget.controller,
         obscureText: isObscured,
         cursorColor: Colors.black,
@@ -49,7 +56,8 @@ class _LiliwECommerceTextFieldState extends State<CustomTextField> {
             widget.onSearchPress!();
           }
         },
-        style: TextStyle(color: Colors.black.withOpacity(0.9)),
+        style:
+            widget.textStyle ?? TextStyle(color: Colors.black.withOpacity(0.9)),
         decoration: InputDecoration(
             alignLabelWithHint: true,
             labelText: widget.text,
@@ -62,7 +70,8 @@ class _LiliwECommerceTextFieldState extends State<CustomTextField> {
             fillColor: widget.fillColor ?? Colors.white.withOpacity(0.9),
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
-                borderSide: const BorderSide(color: Colors.black, width: 3.0)),
+                borderSide: widget.borderSide ??
+                    const BorderSide(color: Colors.black, width: 3.0)),
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
             prefixIcon: widget.displayPrefixIcon,
@@ -94,6 +103,6 @@ class _LiliwECommerceTextFieldState extends State<CustomTextField> {
                       )
                     : null),
         keyboardType: widget.textInputType,
-        maxLines: widget.textInputType == TextInputType.multiline ? 6 : 1);
+        maxLines: widget.textInputType == TextInputType.multiline ? 10 : 1);
   }
 }

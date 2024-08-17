@@ -20,6 +20,9 @@ class ImagePaths {
   static const String exercises = 'assets/images/icons/exercise.png';
   static const String quizzes = 'assets/images/icons/quiz.png';
   static const String camera = 'assets/images/icons/camera.png';
+  static const String notes = 'assets/images/icons/notes.png';
+  static const String edit = 'assets/images/icons/edit.png';
+  static const String convert = 'assets/images/icons/convert.png';
 }
 
 class StorageFields {
@@ -41,6 +44,7 @@ class Collections {
   static const String faqs = 'faqs';
   static const String exerciseResults = 'exerciseResults';
   static const String quizResults = 'quizResults';
+  static const String notes = 'notes';
 }
 
 class UserFields {
@@ -84,6 +88,14 @@ class EntryFields {
 class FAQFields {
   static const String question = 'question';
   static const String answer = 'answer';
+}
+
+class NotesFields {
+  static const String studentID = 'studentID';
+  static const String title = 'title';
+  static const String content = 'content';
+  static const String dateCreated = 'dateCreated';
+  static const String dateModified = 'dateModified';
 }
 
 String generateRandomHexString(int length) {

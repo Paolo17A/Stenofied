@@ -10,10 +10,7 @@ PreferredSizeWidget appBarWidget(
           ? null
           : Row(
               mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Image.asset(ImagePaths.logo, scale: 9),
-              ],
-            ),
+              children: [Image.asset(ImagePaths.logo, scale: 9)]),
       iconTheme: const IconThemeData(color: CustomColors.sangria),
       actions: actions);
 }

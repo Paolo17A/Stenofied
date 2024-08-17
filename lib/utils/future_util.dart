@@ -11,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:stenofied/models/tracing_model.dart';
 import 'package:stenofied/providers/current_exercise_provider.dart';
 import 'package:stenofied/providers/current_quiz_provider.dart';
+import 'package:stenofied/providers/notes_provider.dart';
 import 'package:stenofied/providers/proof_of_enrollment_provider.dart';
 import 'package:stenofied/providers/sections_provider.dart';
 
@@ -841,6 +842,107 @@ class QuizzesCollectionUtil {
       scaffoldMessenger.showSnackBar(
           SnackBar(content: Text('Error grading this quiz output: $error')));
       ref.read(loadingProvider).toggleLoading(false);
+    }
+  }
+}
+
+//==============================================================================
+//NOTES=========================================================================
+//==============================================================================
+class NotesCollectionUtil {
+  static Future<List<DocumentSnapshot>> getCurrentUserNotes() {
+    return getAllStudentNotes(FirebaseAuth.instance.currentUser!.uid);
+  }
+
+  static Future<List<DocumentSnapshot>> getAllStudentNotes(
+      String studentID) async {
+    final notes = await FirebaseFirestore.instance
+        .collection(Collections.notes)
+        .where(NotesFields.studentID, isEqualTo: studentID)
+        .get();
+    return notes.docs;
+  }
+
+  static Future<DocumentSnapshot> getThisNote(String noteID) async {
+    return await FirebaseFirestore.instance
+        .collection(Collections.notes)
+        .doc(noteID)
+        .get();
+  }
+
+  static Future addNote(BuildContext context, WidgetRef ref,
+      {required String title, required String content}) async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
+    if (title.isEmpty || content.isEmpty) {
+      scaffoldMessenger.showSnackBar(
+          SnackBar(content: Text('Please provide a title and content.')));
+      return;
+    }
+    try {
+      ref.read(loadingProvider).toggleLoading(true);
+      await FirebaseFirestore.instance.collection(Collections.notes).add({
+        NotesFields.title: title,
+        NotesFields.content: content,
+        NotesFields.dateCreated: DateTime.now(),
+        NotesFields.dateModified: DateTime.now(),
+        NotesFields.studentID: FirebaseAuth.instance.currentUser!.uid
+      });
+      scaffoldMessenger.showSnackBar(
+          SnackBar(content: Text('Successfully created new note.')));
+      ref.read(loadingProvider).toggleLoading(false);
+      navigator.pop();
+      navigator.pushReplacementNamed(NavigatorRoutes.studentNotes);
+    } catch (error) {
+      ref.read(loadingProvider).toggleLoading(false);
+      scaffoldMessenger.showSnackBar(
+          SnackBar(content: Text('Error adding new note: $error')));
+    }
+  }
+
+  static Future editThisNote(BuildContext context, WidgetRef ref,
+      {required String noteID,
+      required String title,
+      required String content}) async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
+    try {
+      ref.read(loadingProvider).toggleLoading(true);
+      await FirebaseFirestore.instance
+          .collection(Collections.notes)
+          .doc(noteID)
+          .update({
+        NotesFields.title: title,
+        NotesFields.content: content,
+        NotesFields.dateModified: DateTime.now()
+      });
+      scaffoldMessenger.showSnackBar(
+          SnackBar(content: Text('Successfully edited this note.')));
+      ref.read(loadingProvider).toggleLoading(false);
+      navigator.pop();
+      navigator.pushReplacementNamed(NavigatorRoutes.studentNotes);
+    } catch (error) {
+      ref.read(loadingProvider).toggleLoading(false);
+      scaffoldMessenger.showSnackBar(
+          SnackBar(content: Text('Error editing this note: $error')));
+    }
+  }
+
+  static Future deleteThisNote(BuildContext context, WidgetRef ref,
+      {required String noteID}) async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    try {
+      ref.read(loadingProvider).toggleLoading(true);
+      await FirebaseFirestore.instance
+          .collection(Collections.notes)
+          .doc(noteID)
+          .delete();
+      ref.read(notesProvider).setNotesDocs(await getCurrentUserNotes());
+      ref.read(loadingProvider).toggleLoading(false);
+    } catch (error) {
+      ref.read(loadingProvider).toggleLoading(false);
+      scaffoldMessenger.showSnackBar(
+          SnackBar(content: Text('Error deleting this note: $error')));
     }
   }
 }

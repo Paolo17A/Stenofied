@@ -4,6 +4,9 @@ import 'package:stenofied/screens/exercise_result_screen.dart';
 import 'package:stenofied/screens/login_screen.dart';
 import 'package:stenofied/screens/quiz_result_screen.dart';
 import 'package:stenofied/screens/selected_student_summary_screen.dart';
+import 'package:stenofied/screens/student/student_add_note_screen.dart';
+import 'package:stenofied/screens/student/student_edit_note_screen.dart';
+import 'package:stenofied/screens/student/student_notes_screen.dart';
 
 import '../screens/admin/admin_add_section_screen.dart';
 import '../screens/admin/admin_edit_section_screen.dart';
@@ -71,6 +74,12 @@ class NavigatorRoutes {
   static const studentTakeExercise = 'studentTakeExercise';
   static const studentQuizzes = 'studentQuizzes';
   static const studentTakeQuiz = 'studentTakeQuiz';
+  static const studentNotes = 'studentNotes';
+  static const studentAddNote = 'studentAddNote';
+  static void studentEditNote(BuildContext context, {required String noteID}) {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (_) => StudentEditNoteScreen(noteID: noteID)));
+  }
 
   //  TEACHERS
   static const teacherRegister = 'teacherRegister';
@@ -144,6 +153,8 @@ final Map<String, WidgetBuilder> routes = {
       const StudentTakeExerciseScreen(),
   NavigatorRoutes.studentQuizzes: (context) => const StudentQuizzesScreen(),
   NavigatorRoutes.studentTakeQuiz: (context) => const StudentTakeQuizScreen(),
+  NavigatorRoutes.studentNotes: (context) => const StudentNotesScreen(),
+  NavigatorRoutes.studentAddNote: (context) => const StudentAddNoteScreen(),
 
   //  TEACHERS
   NavigatorRoutes.teacherHome: (context) => const TeacherHomeScreen(),

@@ -187,11 +187,12 @@ Text blackAndadaProBold(String label,
     {double? fontSize,
     TextAlign textAlign = TextAlign.center,
     TextOverflow? textOverflow,
-    TextDecoration? textDecoration}) {
+    TextDecoration? textDecoration,
+    int maxLines = 5}) {
   return Text(label,
       textAlign: textAlign,
       overflow: textOverflow,
-      maxLines: 5,
+      maxLines: maxLines,
       style: GoogleFonts.andadaPro(
           fontSize: fontSize,
           color: Colors.black,
@@ -203,11 +204,12 @@ Text blackAndadaProRegular(String label,
     {double? fontSize,
     TextAlign textAlign = TextAlign.center,
     TextOverflow? textOverflow,
-    TextDecoration? textDecoration}) {
+    TextDecoration? textDecoration,
+    int maxLines = 5}) {
   return Text(label,
       textAlign: textAlign,
       overflow: textOverflow,
-      maxLines: 5,
+      maxLines: maxLines,
       style: GoogleFonts.andadaPro(
           fontSize: fontSize, color: Colors.black, decoration: textDecoration));
 }
@@ -224,52 +226,3 @@ Text sangriaInterBold(String label,
           decoration: textDecoration,
           fontWeight: FontWeight.bold));
 }
-
-/*Text whiteInterBold(String label,
-    {double? fontSize,
-    TextAlign textAlign = TextAlign.center,
-    TextOverflow? textOverflow,
-    TextDecoration? textDecoration}) {
-  return Text(label,
-      textAlign: textAlign,
-      overflow: textOverflow,
-      maxLines: 5,
-      style: GoogleFonts.inter(
-          fontSize: fontSize,
-          color: Colors.white,
-          decoration: textDecoration,
-          fontWeight: FontWeight.bold));
-}
-
-Text whiteInterRegular(String label,
-    {double? fontSize,
-    TextAlign textAlign = TextAlign.center,
-    TextDecoration? textDecoration}) {
-  return Text(label,
-      textAlign: textAlign,
-      style: GoogleFonts.inter(
-          fontSize: fontSize, color: Colors.white, decoration: textDecoration));
-}
-
-Text blackInterBold(String label,
-    {double? fontSize,
-    TextAlign textAlign = TextAlign.center,
-    TextDecoration? textDecoration}) {
-  return Text(label,
-      textAlign: textAlign,
-      style: GoogleFonts.inter(
-          fontSize: fontSize,
-          color: Colors.black,
-          decoration: textDecoration,
-          fontWeight: FontWeight.bold));
-}
-
-Text blackInterRegular(String label,
-    {double? fontSize,
-    TextAlign textAlign = TextAlign.center,
-    TextDecoration? textDecoration}) {
-  return Text(label,
-      textAlign: textAlign,
-      style: GoogleFonts.inter(
-          fontSize: fontSize, color: Colors.black, decoration: textDecoration));
-}*/
