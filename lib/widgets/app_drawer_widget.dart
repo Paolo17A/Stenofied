@@ -96,6 +96,11 @@ Drawer studentAppDrawer(BuildContext context, WidgetRef ref,
                   currentPath: currentPath,
                   thisPath: NavigatorRoutes.studentNotes),
               _drawerTile(context,
+                  label: 'TRANSLATOR',
+                  imagePath: ImagePaths.translator,
+                  currentPath: currentPath,
+                  thisPath: NavigatorRoutes.studentTranslate),
+              _drawerTile(context,
                   label: 'PROFILE',
                   imagePath: ImagePaths.profile,
                   currentPath: currentPath,
@@ -153,94 +158,6 @@ Drawer teacherAppDrawer(BuildContext context, WidgetRef ref,
     ),
   );
 }
-
-/*Widget _home(BuildContext context,
-    {required String userType, required bool isHome}) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 10),
-    child: ListTile(
-      leading: Image.asset(ImagePaths.home, scale: 20),
-      title: whiteInterBold('HOME'),
-      onTap: () {
-        Navigator.of(context).pop();
-        if (isHome) {
-          return;
-        }
-        if (userType == UserTypes.admin) {
-          Navigator.of(context).pushReplacementNamed(NavigatorRoutes.adminHome);
-        } else if (userType == UserTypes.teacher) {
-          Navigator.of(context)
-              .pushReplacementNamed(NavigatorRoutes.teacherHome);
-        } else if (userType == UserTypes.student) {
-          Navigator.of(context)
-              .pushReplacementNamed(NavigatorRoutes.studentHome);
-        }
-      },
-    ),
-  );
-}
-
-Widget _lessons(BuildContext context) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 10),
-    child: ListTile(
-      leading: Image.asset(ImagePaths.lessons, scale: 20),
-      title: whiteInterBold('LESSONS'),
-      onTap: () {
-        Navigator.of(context).pop();
-
-        Navigator.of(context).pushNamed(NavigatorRoutes.studentLessons);
-      },
-    ),
-  );
-}
-
-Widget _section(BuildContext context) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 10),
-    child: ListTile(
-      leading: Image.asset(ImagePaths.section, scale: 20),
-      title: whiteInterBold('SECTIONS'),
-      onTap: () {
-        Navigator.of(context).pop();
-
-        Navigator.of(context).pushNamed(NavigatorRoutes.adminViewSections);
-      },
-    ),
-  );
-}
-
-Widget _faq(BuildContext context) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 10),
-    child: ListTile(
-      leading: Image.asset(ImagePaths.faqs, scale: 20),
-      title: whiteInterBold('FAQs'),
-      onTap: () {
-        Navigator.of(context).pop();
-      },
-    ),
-  );
-}
-
-Widget _profile(BuildContext context, {required String userType}) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 10),
-    child: ListTile(
-      leading: const Icon(Icons.person, color: Colors.white),
-      title: whiteInterBold('PROFILE'),
-      onTap: () {
-        Navigator.of(context).pop();
-
-        if (userType == UserTypes.teacher) {
-          Navigator.of(context).pushNamed(NavigatorRoutes.teacherProfile);
-        } else if (userType == UserTypes.student) {
-          Navigator.of(context).pushNamed(NavigatorRoutes.studentProfile);
-        }
-      },
-    ),
-  );
-}*/
 
 Widget _drawerTile(BuildContext context,
     {required String label,

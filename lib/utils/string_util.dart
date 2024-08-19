@@ -23,6 +23,7 @@ class ImagePaths {
   static const String notes = 'assets/images/icons/notes.png';
   static const String edit = 'assets/images/icons/edit.png';
   static const String convert = 'assets/images/icons/convert.png';
+  static const String translator = 'assets/images/icons/translator.png';
 }
 
 class StorageFields {

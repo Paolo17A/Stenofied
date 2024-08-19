@@ -7,6 +7,7 @@ import 'package:stenofied/screens/selected_student_summary_screen.dart';
 import 'package:stenofied/screens/student/student_add_note_screen.dart';
 import 'package:stenofied/screens/student/student_edit_note_screen.dart';
 import 'package:stenofied/screens/student/student_notes_screen.dart';
+import 'package:stenofied/screens/student/student_translate_screen.dart';
 
 import '../screens/admin/admin_add_section_screen.dart';
 import '../screens/admin/admin_edit_section_screen.dart';
@@ -80,6 +81,8 @@ class NavigatorRoutes {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (_) => StudentEditNoteScreen(noteID: noteID)));
   }
+
+  static const studentTranslate = 'studentTranslate';
 
   //  TEACHERS
   static const teacherRegister = 'teacherRegister';
@@ -155,6 +158,7 @@ final Map<String, WidgetBuilder> routes = {
   NavigatorRoutes.studentTakeQuiz: (context) => const StudentTakeQuizScreen(),
   NavigatorRoutes.studentNotes: (context) => const StudentNotesScreen(),
   NavigatorRoutes.studentAddNote: (context) => const StudentAddNoteScreen(),
+  NavigatorRoutes.studentTranslate: (context) => const StudentTranslateScreen(),
 
   //  TEACHERS
   NavigatorRoutes.teacherHome: (context) => const TeacherHomeScreen(),
