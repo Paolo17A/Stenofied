@@ -201,7 +201,10 @@ class _StudentEditNoteScreenState extends ConsumerState<StudentEditNoteScreen> {
                 child: SvgPicture.asset(ShortHandUtil.vectorMap[word]!,
                     fit: BoxFit.fill));
           } else {
-            return blackAndadaProBold(word, fontSize: 20);
+            return Wrap(
+                children: getLetters(word)
+                    .map((e) => blackAndadaProBold(e))
+                    .toList());
           }
         }).toList());
   }

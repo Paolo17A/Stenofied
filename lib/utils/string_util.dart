@@ -109,3 +109,19 @@ String generateRandomHexString(int length) {
       codeUnits.map((value) => value.toRadixString(16).padLeft(2, '0')).join();
   return hexString;
 }
+
+List<String> getLetters(String input) {
+  // Create a list to hold the individual letters
+  List<String> letters = [];
+
+  // Iterate through each character in the input string
+  for (int i = 0; i < input.length; i++) {
+    // Check if the character is a letter
+    if (RegExp(r'[a-zA-Z]').hasMatch(input[i])) {
+      // Add the letter to the list
+      letters.add(input[i]);
+    }
+  }
+
+  return letters;
+}
