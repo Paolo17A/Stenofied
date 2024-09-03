@@ -1,3 +1,4 @@
+import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -15,6 +16,7 @@ import 'package:stenofied/widgets/custom_padding_widgets.dart';
 import 'package:stenofied/widgets/custom_text_field_widget.dart';
 
 import '../../widgets/custom_text_widgets.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 class StudentAddNoteScreen extends ConsumerStatefulWidget {
   const StudentAddNoteScreen({super.key});
@@ -33,6 +35,10 @@ class _StudentAddNoteScreenState extends ConsumerState<StudentAddNoteScreen> {
   bool isLowerCase = true;
   final titleController = TextEditingController();
   final contentController = TextEditingController();
+
+  //  SPEECH TO TEXT VARIABLES
+  late stt.SpeechToText _speech;
+  bool _isListening = false;
 
   void toggleIsViewingShortHand() {
     FocusScope.of(context).unfocus();
@@ -54,6 +60,7 @@ class _StudentAddNoteScreenState extends ConsumerState<StudentAddNoteScreen> {
         isViewingShortHand = false;
       });
     });
+    _speech = stt.SpeechToText();
   }
 
   @override
@@ -61,6 +68,71 @@ class _StudentAddNoteScreenState extends ConsumerState<StudentAddNoteScreen> {
     super.dispose();
     _titleFocusNode.dispose();
     _contentFocusNode.dispose();
+  }
+
+  void _listen() async {
+    if (_isListening) {
+      _stopListening();
+      return;
+    }
+    _isListening = true;
+    bool available = await _speech.initialize(
+        finalTimeout: Duration(seconds: 4),
+        onStatus: (val) {
+          if (val == 'done') {
+            setState(() {
+              _isListening = false;
+              _speech.stop();
+            });
+          }
+        },
+        onError: (val) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content:
+                  Text('Error initializing microphone: ${val.toString()}')));
+        });
+    if (available) {
+      setState(() {
+        _isListening = true;
+      });
+
+      _speech.listen(
+          /*listenFor: const Duration(seconds: 10),
+          listenOptions:
+              stt.SpeechListenOptions(listenMode: stt.ListenMode.dictation),*/
+          onResult: (val) {
+        setState(() {
+          if (val.hasConfidenceRating && val.confidence > 0) {
+            //  We must first determine if the app detected words from the mic
+            int words = _getDetectedWords(val.recognizedWords);
+            if (words > 1) {
+              contentController.text += ' ' + val.recognizedWords + ' ';
+            }
+
+            _speech.stop();
+            _isListening = false;
+          }
+        });
+      });
+    }
+    //  This is for handling initialization failure
+    else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Something happened')));
+      _stopListening();
+    }
+  }
+
+  void _stopListening() async {
+    setState(() {
+      _isListening = false;
+      _speech.stop();
+    });
+  }
+
+  int _getDetectedWords(String sentence) {
+    List<String> words = sentence.split(' ');
+    return words.length;
   }
 
   @override
@@ -85,6 +157,19 @@ class _StudentAddNoteScreenState extends ConsumerState<StudentAddNoteScreen> {
         onTap: () => FocusScope.of(context).unfocus(),
         child: Scaffold(
           appBar: appBarWidget(mayGoBack: true, actions: [_saveButton()]),
+          floatingActionButton: AvatarGlow(
+            animate: _isListening,
+            glowColor: CustomColors.blush,
+            child: SizedBox(
+              height: 70,
+              child: ElevatedButton(
+                  onPressed: _listen,
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(60))),
+                  child: Icon(Icons.mic, color: Colors.white)),
+            ),
+          ),
           body: stackedLoadingContainer(
               context,
               ref.read(loadingProvider).isLoading,
@@ -167,23 +252,25 @@ class _StudentAddNoteScreenState extends ConsumerState<StudentAddNoteScreen> {
     contentController.text.replaceAll('.', '');
     contentController.text.replaceAll(',', '');
     List<String> fragmentedWords = contentController.text.split(' ');
-    return Wrap(
-        spacing: 4,
-        runSpacing: 4,
-        children: fragmentedWords.map((word) {
-          if (ShortHandUtil.vectorMap.keys.contains(word)) {
-            return Container(
-                width: 50,
-                height: 50,
-                child: SvgPicture.asset(ShortHandUtil.vectorMap[word]!,
-                    fit: BoxFit.fill));
-          } else {
-            return Wrap(
-                children: getLetters(word)
-                    .map((e) => blackAndadaProBold(e))
-                    .toList());
-          }
-        }).toList());
+    return SingleChildScrollView(
+      child: Wrap(
+          spacing: 4,
+          runSpacing: 4,
+          children: fragmentedWords.map((word) {
+            if (ShortHandUtil.vectorMap.keys.contains(word)) {
+              return Container(
+                  width: 50,
+                  height: 50,
+                  child: SvgPicture.asset(ShortHandUtil.vectorMap[word]!,
+                      fit: BoxFit.fill));
+            } else {
+              return Wrap(
+                  children: getLetters(word)
+                      .map((e) => blackAndadaProBold(e))
+                      .toList());
+            }
+          }).toList()),
+    );
   }
 
   Widget customShorthandKeyboard() {
