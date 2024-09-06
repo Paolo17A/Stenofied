@@ -182,20 +182,6 @@ class _StudentEditNoteScreenState extends ConsumerState<StudentEditNoteScreen> {
         onTap: () => FocusScope.of(context).unfocus(),
         child: Scaffold(
           appBar: appBarWidget(mayGoBack: true, actions: [_saveButton()]),
-          floatingActionButton: AvatarGlow(
-            animate: _isListening,
-            glowColor: CustomColors.blush,
-            child: SizedBox(
-              height: 70,
-              child: ElevatedButton(
-                  onPressed: () => _listen(),
-                  style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(40))),
-                  child: Icon(_isListening ? Icons.mic_outlined : Icons.mic,
-                      color: Colors.white)),
-            ),
-          ),
           body: stackedLoadingContainer(
               context,
               ref.read(loadingProvider).isLoading,
@@ -211,6 +197,7 @@ class _StudentEditNoteScreenState extends ConsumerState<StudentEditNoteScreen> {
                             child: Column(
                               children: [
                                 _titleAndConvertWidgets(),
+                                Gap(12),
                                 _contentContainer(),
                               ],
                             ),
@@ -238,7 +225,7 @@ class _StudentEditNoteScreenState extends ConsumerState<StudentEditNoteScreen> {
   Widget _titleAndConvertWidgets() {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       SizedBox(
-        width: MediaQuery.of(context).size.width * 0.7,
+        width: MediaQuery.of(context).size.width * 0.5,
         child: CustomTextField(
             text: 'Title',
             focusNode: _titleFocusNode,
@@ -249,9 +236,20 @@ class _StudentEditNoteScreenState extends ConsumerState<StudentEditNoteScreen> {
                 fontSize: 16, fontWeight: FontWeight.bold),
             displayPrefixIcon: null),
       ),
-      IconButton(
-          onPressed: () => toggleIsViewingShortHand(),
-          icon: Image.asset(ImagePaths.convert, scale: 1))
+      AvatarGlow(
+        animate: _isListening,
+        glowColor: CustomColors.blush,
+        child: Container(
+          height: 50,
+          child: ElevatedButton(
+              onPressed: () => _listen(),
+              style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(90))),
+              child: Icon(_isListening ? Icons.mic_outlined : Icons.mic,
+                  color: Colors.white)),
+        ),
+      )
     ]);
   }
 
@@ -260,21 +258,33 @@ class _StudentEditNoteScreenState extends ConsumerState<StudentEditNoteScreen> {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20), color: CustomColors.sangria),
       padding: EdgeInsets.all(12),
-      child: isViewingShortHand
-          ? Container(
-              width: MediaQuery.of(context).size.width * 0.9,
-              height: MediaQuery.of(context).size.height * 0.3,
-              child: shortHandedContent())
-          : CustomTextField(
-              text: 'Insert your content here...',
-              focusNode: _contentFocusNode,
-              controller: contentController,
-              textInputType: TextInputType.multiline,
-              fillColor: Colors.transparent,
-              borderSide: BorderSide.none,
-              textStyle: GoogleFonts.josefinSans(
-                  fontSize: 16, fontWeight: FontWeight.bold),
-              displayPrefixIcon: null),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              IconButton(
+                  onPressed: () => toggleIsViewingShortHand(),
+                  icon: Image.asset(ImagePaths.convert, scale: 1)),
+            ],
+          ),
+          isViewingShortHand
+              ? Container(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  height: MediaQuery.of(context).size.height * 0.3,
+                  child: shortHandedContent())
+              : CustomTextField(
+                  text: 'Insert your content here...',
+                  focusNode: _contentFocusNode,
+                  controller: contentController,
+                  textInputType: TextInputType.multiline,
+                  fillColor: Colors.transparent,
+                  borderSide: BorderSide.none,
+                  textStyle: GoogleFonts.josefinSans(
+                      fontSize: 16, fontWeight: FontWeight.bold),
+                  displayPrefixIcon: null),
+        ],
+      ),
     );
   }
 
@@ -296,7 +306,14 @@ class _StudentEditNoteScreenState extends ConsumerState<StudentEditNoteScreen> {
             } else {
               return Wrap(
                   children: getLetters(word)
-                      .map((e) => blackAndadaProBold(e))
+                      .map((letter) => Container(
+                          width: 50,
+                          height: 50,
+                          child: ShortHandUtil.vectorMap[letter] != null
+                              ? SvgPicture.asset(
+                                  ShortHandUtil.vectorMap[letter]!,
+                                  fit: BoxFit.fill)
+                              : Text(letter)))
                       .toList());
             }
           }).toList()),

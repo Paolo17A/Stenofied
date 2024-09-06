@@ -137,8 +137,8 @@ class _StudentQuizzesScreenState extends ConsumerState<StudentQuizzesScreen> {
                   children: [
                     whiteAndadaProBold('Quiz ${quizModel.quizIndex}',
                         fontSize: 20),
-                    whiteAndadaProRegular(quizModel.quizDescription,
-                        fontSize: 16)
+                    /*whiteAndadaProRegular(quizModel.quizDescription,
+                        fontSize: 16)*/
                   ],
                 )),
           );

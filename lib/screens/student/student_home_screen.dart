@@ -140,7 +140,7 @@ class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
             label: ref.read(userDataProvider).lessonIndex >=
                     allQuizModels.length
                 ? 'NO QUIZZES LEFT TO TAKE'
-                : 'YOUR CURRENT QUIZ:\n\n${allQuizModels[ref.read(userDataProvider).lessonIndex - 1].quizDescription}',
+                : 'YOUR CURRENT QUIZ:\n\n${allQuizModels[ref.read(userDataProvider).lessonIndex - 1].quizIndex}',
             onPress: () {
           if (ref.read(userDataProvider).lessonIndex >= allQuizModels.length)
             return;
