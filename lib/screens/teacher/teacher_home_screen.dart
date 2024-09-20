@@ -71,16 +71,29 @@ class _TeacherHomeScreenState extends ConsumerState<TeacherHomeScreen> {
                   railWidget: teacherRail(context, scaffoldKey,
                       selectedIndex: 0,
                       currentPath: NavigatorRoutes.teacherHome),
-                  mainWidget: vertical20Pix(
-                    child: Column(
-                      children: [
-                        welcomeWidgets(context,
-                            userType: UserTypes.teacher,
-                            profileImageURL:
-                                ref.read(userDataProvider).profileImageURL),
-                        exercisesToGrade(),
-                        quizzesToGrade()
-                      ],
+                  mainWidget: SizedBox(
+                    height: MediaQuery.of(context).size.height,
+                    child: SingleChildScrollView(
+                      child: vertical20Pix(
+                        child: Column(
+                          children: [
+                            welcomeWidgets(context,
+                                userType: UserTypes.teacher,
+                                profileImageURL:
+                                    ref.read(userDataProvider).profileImageURL),
+                            all10Pix(
+                              child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    exercisesToGrade(),
+                                    quizzesToGrade()
+                                  ]),
+                            )
+                          ],
+                        ),
+                      ),
                     ),
                   )))),
     );
@@ -90,22 +103,23 @@ class _TeacherHomeScreenState extends ConsumerState<TeacherHomeScreen> {
       {required String title,
       required String unavailableLabel,
       required List<DocumentSnapshot> gradableDocs,
-      required Widget ungradedDocsBuilder}) {
-    return all20Pix(
-        child: Container(
-      width: MediaQuery.of(context).size.width,
+      required Widget ungradedDocsBuilder,
+      required String imagePath}) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.38,
       decoration: BoxDecoration(
           color: CustomColors.ketchup, borderRadius: BorderRadius.circular(10)),
       padding: EdgeInsets.all(10),
       child: Column(children: [
-        whiteAndadaProBold(title, fontSize: 24),
+        Image.asset(imagePath, height: 100),
+        vertical10Pix(child: whiteAndadaProBold(title, fontSize: 16)),
         if (gradableDocs.isNotEmpty)
           if (gradableDocs.isNotEmpty)
             ungradedDocsBuilder
           else
             whiteAndadaProRegular(unavailableLabel)
       ]),
-    ));
+    );
   }
 
   Widget exercisesToGrade() {
@@ -113,6 +127,7 @@ class _TeacherHomeScreenState extends ConsumerState<TeacherHomeScreen> {
         title: 'Ungraded Exercises',
         unavailableLabel: 'No Exercises to Grade',
         gradableDocs: ungradedExerciseDocs,
+        imagePath: ImagePaths.tropic,
         ungradedDocsBuilder: ListView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
@@ -125,6 +140,7 @@ class _TeacherHomeScreenState extends ConsumerState<TeacherHomeScreen> {
     return gradablesTemplateWidget(context,
         title: 'Ungraded Quizzes',
         unavailableLabel: 'No Quizzes to Grade',
+        imagePath: ImagePaths.writing,
         gradableDocs: ungradedQuizDocs,
         ungradedDocsBuilder: ListView.builder(
             shrinkWrap: true,
@@ -158,8 +174,9 @@ class _TeacherHomeScreenState extends ConsumerState<TeacherHomeScreen> {
               return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    whiteAndadaProBold('Student: $formattedName'),
-                    whiteAndadaProRegular(label)
+                    whiteAndadaProBold(formattedName,
+                        textAlign: TextAlign.left),
+                    whiteAndadaProRegular(label, textAlign: TextAlign.left)
                   ]);
             }),
       ),

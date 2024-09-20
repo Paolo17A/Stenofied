@@ -56,15 +56,17 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen> {
             safeAreaWithRail(context,
                 railWidget: adminRail(context, scaffoldKey,
                     selectedIndex: 0, currentPath: NavigatorRoutes.adminHome),
-                mainWidget: Column(
-                  children: [
-                    welcomeWidgets(context,
-                        userType: ref.read(userDataProvider).userType,
-                        profileImageURL:
-                            ref.read(userDataProvider).profileImageURL),
-                    Gap(60),
-                    _homeButtons()
-                  ],
+                mainWidget: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      welcomeWidgets(context,
+                          userType: ref.read(userDataProvider).userType,
+                          profileImageURL:
+                              ref.read(userDataProvider).profileImageURL),
+                      Gap(60),
+                      _homeButtons()
+                    ],
+                  ),
                 ))),
       ),
     );

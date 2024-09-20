@@ -10,9 +10,68 @@ class ExerciseModel {
       required this.tracingModels});
 }
 
+final alphabetExercise = ExerciseModel(
+    exerciseIndex: 1,
+    exerciseDescription: 'Alphabet',
+    tracingModels: [
+      TracingModel(
+          word: 'A', imagePath: '${ImagePaths.tracingPath}/alphabet/A.jpg'),
+      TracingModel(
+          word: 'B', imagePath: '${ImagePaths.tracingPath}/alphabet/B.jpg'),
+      TracingModel(
+          word: 'C', imagePath: '${ImagePaths.tracingPath}/alphabet/C.jpg'),
+      TracingModel(
+          word: 'D', imagePath: '${ImagePaths.tracingPath}/alphabet/D.jpg'),
+      TracingModel(
+          word: 'E', imagePath: '${ImagePaths.tracingPath}/alphabet/E.jpg'),
+      TracingModel(
+          word: 'F', imagePath: '${ImagePaths.tracingPath}/alphabet/F.jpg'),
+      TracingModel(
+          word: 'G', imagePath: '${ImagePaths.tracingPath}/alphabet/G.jpg'),
+      TracingModel(
+          word: 'H', imagePath: '${ImagePaths.tracingPath}/alphabet/H.jpg'),
+      TracingModel(
+          word: 'I', imagePath: '${ImagePaths.tracingPath}/alphabet/I.jpg'),
+      TracingModel(
+          word: 'J', imagePath: '${ImagePaths.tracingPath}/alphabet/J.jpg'),
+      TracingModel(
+          word: 'K', imagePath: '${ImagePaths.tracingPath}/alphabet/K.jpg'),
+      TracingModel(
+          word: 'L', imagePath: '${ImagePaths.tracingPath}/alphabet/L.jpg'),
+      TracingModel(
+          word: 'M', imagePath: '${ImagePaths.tracingPath}/alphabet/M.jpg'),
+      TracingModel(
+          word: 'N', imagePath: '${ImagePaths.tracingPath}/alphabet/N.jpg'),
+      TracingModel(
+          word: 'O', imagePath: '${ImagePaths.tracingPath}/alphabet/O.jpg'),
+      TracingModel(
+          word: 'P', imagePath: '${ImagePaths.tracingPath}/alphabet/P.jpg'),
+      TracingModel(
+          word: 'Q', imagePath: '${ImagePaths.tracingPath}/alphabet/Q.jpg'),
+      TracingModel(
+          word: 'R', imagePath: '${ImagePaths.tracingPath}/alphabet/R.jpg'),
+      TracingModel(
+          word: 'S', imagePath: '${ImagePaths.tracingPath}/alphabet/S.jpg'),
+      TracingModel(
+          word: 'T', imagePath: '${ImagePaths.tracingPath}/alphabet/T.jpg'),
+      TracingModel(
+          word: 'U', imagePath: '${ImagePaths.tracingPath}/alphabet/U.jpg'),
+      TracingModel(
+          word: 'V', imagePath: '${ImagePaths.tracingPath}/alphabet/V.jpg'),
+      TracingModel(
+          word: 'W', imagePath: '${ImagePaths.tracingPath}/alphabet/W.jpg'),
+      TracingModel(
+          word: 'X', imagePath: '${ImagePaths.tracingPath}/alphabet/X.jpg'),
+      TracingModel(
+          word: 'Y', imagePath: '${ImagePaths.tracingPath}/alphabet/Y.jpg'),
+      TracingModel(
+          word: 'Z', imagePath: '${ImagePaths.tracingPath}/alphabet/Z.jpg')
+    ]);
+
 final allExerciseModels = [
+  alphabetExercise,
   ExerciseModel(
-      exerciseIndex: 1,
+      exerciseIndex: 2,
       exerciseDescription: 'T, D Words',
       tracingModels: [
         TracingModel(
@@ -35,7 +94,7 @@ final allExerciseModels = [
             word: 'tame', imagePath: '${ImagePaths.tracingPath}/L1T9.png'),
       ]),
   ExerciseModel(
-      exerciseIndex: 2,
+      exerciseIndex: 3,
       exerciseDescription: 'H, I, -ing Words',
       tracingModels: [
         TracingModel(
@@ -74,7 +133,7 @@ final allExerciseModels = [
             word: 'tied', imagePath: '${ImagePaths.tracingPath}/L2T17.png')
       ]),
   ExerciseModel(
-      exerciseIndex: 3,
+      exerciseIndex: 4,
       exerciseDescription: 'O, R, L words',
       tracingModels: [
         TracingModel(
@@ -155,7 +214,7 @@ final allExerciseModels = [
             word: 'mailing', imagePath: '${ImagePaths.tracingPath}/L3T38.png'),
       ]),
   ExerciseModel(
-      exerciseIndex: 4,
+      exerciseIndex: 5,
       exerciseDescription:
           'Omission of Minor Vowel Words & Shorthand Principle for the Sound of Short I',
       tracingModels: [
@@ -197,7 +256,7 @@ final allExerciseModels = [
             word: 'Tim', imagePath: '${ImagePaths.tracingPath}/L4T18.png'),
       ]),
   ExerciseModel(
-      exerciseIndex: 5,
+      exerciseIndex: 6,
       exerciseDescription:
           'Shorthand Principles for the Sounds of S, F, V, FR, FL, and O',
       tracingModels: [
@@ -309,7 +368,7 @@ final allExerciseModels = [
             word: 'Tom', imagePath: '${ImagePaths.tracingPath}/L5T51.png'),
       ]),
   ExerciseModel(
-      exerciseIndex: 6,
+      exerciseIndex: 7,
       exerciseDescription: 'In & Oo Words, and Sounds of K, G, W, SW, WH',
       tracingModels: [
         TracingModel(
@@ -438,7 +497,7 @@ final allExerciseModels = [
             word: 'why', imagePath: '${ImagePaths.tracingPath}/L6T60.png'),
       ]),
   ExerciseModel(
-      exerciseIndex: 7,
+      exerciseIndex: 8,
       exerciseDescription: 'Sounds of S, P, B, and OO',
       tracingModels: [
         TracingModel(
@@ -565,7 +624,7 @@ final allExerciseModels = [
             word: 'took', imagePath: '${ImagePaths.tracingPath}/L7T59.png'),
       ]),
   ExerciseModel(
-      exerciseIndex: 8,
+      exerciseIndex: 9,
       exerciseDescription: 'Brief Forms, Derivates, and Phrases',
       tracingModels: [
         TracingModel(
@@ -743,7 +802,7 @@ final allExerciseModels = [
             word: 'it is', imagePath: '${ImagePaths.tracingPath}/L8T74.png'),
       ]),
   ExerciseModel(
-      exerciseIndex: 9,
+      exerciseIndex: 10,
       exerciseDescription: 'Sound of Th, Sh, Ch, and J Words',
       tracingModels: [
         TracingModel(
@@ -789,7 +848,7 @@ final allExerciseModels = [
             word: 'sheep', imagePath: '${ImagePaths.tracingPath}/L9T20.png'),
       ]),
   ExerciseModel(
-      exerciseIndex: 10,
+      exerciseIndex: 11,
       exerciseDescription: 'Brief Forms and -ly words',
       tracingModels: [
         TracingModel(

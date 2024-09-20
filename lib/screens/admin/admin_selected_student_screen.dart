@@ -117,8 +117,10 @@ class _AdminStudentUserScreenState
                   _studentProfileDetails(),
                   if (!accountVerified) _verificationWidgets(),
                   Divider(color: CustomColors.ketchup),
-                  //_exerciseResults(),
-                  // _quizResults()
+                  Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [_exerciseResults(), _quizResults()])
                 ],
               )),
             ),
@@ -165,18 +167,15 @@ class _AdminStudentUserScreenState
 
   Widget _exerciseResults() {
     return vertical20Pix(
-        child: ExpansionTile(
-      collapsedBackgroundColor: CustomColors.sangria,
-      backgroundColor: CustomColors.ketchup,
-      textColor: Colors.white,
-      iconColor: Colors.white,
-      collapsedIconColor: Colors.white,
-      collapsedShape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10), side: BorderSide()),
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10), side: BorderSide()),
-      title: whiteAndadaProBold('EXERCISE RESULTS', fontSize: 16),
-      children: [
+        child: Container(
+      width: MediaQuery.of(context).size.width * 0.4,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20), color: CustomColors.ketchup),
+      padding: EdgeInsets.all(12),
+      child: Column(children: [
+        Image.asset(ImagePaths.tropic, height: 100, fit: BoxFit.fill),
+        Gap(12),
+        whiteAndadaProBold('EXERCISE RESULTS', fontSize: 16),
         exerciseResultDocs.isNotEmpty
             ? ListView.builder(
                 shrinkWrap: true,
@@ -187,24 +186,21 @@ class _AdminStudentUserScreenState
             : vertical20Pix(
                 child: whiteAndadaProBold('NO EXERCISE RESULTS AVAILABLE',
                     fontSize: 20))
-      ],
+      ]),
     ));
   }
 
   Widget _quizResults() {
     return vertical20Pix(
-        child: ExpansionTile(
-      collapsedBackgroundColor: CustomColors.sangria,
-      backgroundColor: CustomColors.ketchup,
-      textColor: Colors.white,
-      iconColor: Colors.white,
-      collapsedIconColor: Colors.white,
-      collapsedShape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10), side: BorderSide()),
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10), side: BorderSide()),
-      title: whiteAndadaProBold('QUIZ RESULTS', fontSize: 16),
-      children: [
+        child: Container(
+      width: MediaQuery.of(context).size.width * 0.4,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20), color: CustomColors.ketchup),
+      padding: EdgeInsets.all(12),
+      child: Column(children: [
+        Image.asset(ImagePaths.writing, height: 100, fit: BoxFit.fill),
+        Gap(12),
+        whiteAndadaProBold('QUIZ RESULTS', fontSize: 16),
         quizResultDocs.isNotEmpty
             ? ListView.builder(
                 shrinkWrap: true,
@@ -215,7 +211,7 @@ class _AdminStudentUserScreenState
             : vertical20Pix(
                 child: whiteAndadaProBold('NO EXERCISE RESULTS AVAILABLE',
                     fontSize: 20))
-      ],
+      ]),
     ));
   }
 

@@ -82,15 +82,17 @@ class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
             context,
             railWidget: studentRail(context, scaffoldKey,
                 selectedIndex: 0, currentPath: NavigatorRoutes.studentHome),
-            mainWidget: Column(
-              children: [
-                welcomeWidgets(context,
-                    userType: ref.read(userDataProvider).userType,
-                    profileImageURL:
-                        ref.read(userDataProvider).profileImageURL),
-                Gap(60),
-                _homeButtons()
-              ],
+            mainWidget: SingleChildScrollView(
+              child: Column(
+                children: [
+                  welcomeWidgets(context,
+                      userType: ref.read(userDataProvider).userType,
+                      profileImageURL:
+                          ref.read(userDataProvider).profileImageURL),
+                  Gap(60),
+                  _homeButtons()
+                ],
+              ),
             ),
           )),
     );
@@ -107,7 +109,7 @@ class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
             label: ref.read(userDataProvider).lessonIndex >=
                     allLessonModels.length
                 ? 'DONE WITH ALL LESSONS'
-                : 'YOUR CURRENT LESSON:\n\nLesson ${ref.read(userDataProvider).lessonIndex}',
+                : 'YOUR CURRENT LESSON:\n\nLesson #${ref.read(userDataProvider).lessonIndex}',
             onPress: () =>
                 ref.read(userDataProvider).lessonIndex >= allLessonModels.length
                     ? null
@@ -140,7 +142,7 @@ class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
             label: ref.read(userDataProvider).lessonIndex >=
                     allQuizModels.length
                 ? 'NO QUIZZES LEFT TO TAKE'
-                : 'YOUR CURRENT QUIZ:\n\n${allQuizModels[ref.read(userDataProvider).lessonIndex - 1].quizIndex}',
+                : 'YOUR CURRENT QUIZ:\n\n Quiz #${allQuizModels[ref.read(userDataProvider).lessonIndex - 1].quizIndex}',
             onPress: () {
           if (ref.read(userDataProvider).lessonIndex >= allQuizModels.length)
             return;
