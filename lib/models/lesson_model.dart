@@ -5,7 +5,10 @@ class LessonModel {
 }
 
 final allLessonModels = [
-  LessonModel(lessonIndex: 1, modulePath: 'assets/documents/testDoc.pdf'),
+  LessonModel(
+      lessonIndex: 1,
+      modulePath:
+          'assets/documents/Lesson-1_-The-Gregg-Shorthand-Alphabet.pdf'),
   LessonModel(
       lessonIndex: 2, modulePath: 'assets/documents/Unit-1_Lesson-1.pdf'),
   LessonModel(
