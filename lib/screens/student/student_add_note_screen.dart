@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:stenofied/providers/loading_provider.dart';
 import 'package:stenofied/utils/color_util.dart';
 import 'package:stenofied/utils/delete_entry_dialog_util.dart';
@@ -35,6 +39,9 @@ class _StudentAddNoteScreenState extends ConsumerState<StudentAddNoteScreen> {
   bool isLowerCase = true;
   final titleController = TextEditingController();
   final contentController = TextEditingController();
+  ImagePicker imagePicker = ImagePicker();
+  TextRecognizer textRecognizer =
+      TextRecognizer(script: TextRecognitionScript.latin);
 
   //  SPEECH TO TEXT VARIABLES
   late stt.SpeechToText _speech;
@@ -135,6 +142,44 @@ class _StudentAddNoteScreenState extends ConsumerState<StudentAddNoteScreen> {
     return words.length;
   }
 
+  _imgFromCamera() async {
+    XFile? pickedFile = await imagePicker.pickImage(source: ImageSource.camera);
+    if (pickedFile == null) return;
+    File image = File(pickedFile.path);
+    setState(() {
+      doTextRecognition(image);
+    });
+  }
+
+  doTextRecognition(File _image) async {
+    InputImage inputImage = InputImage.fromFile(_image);
+
+    final RecognizedText recognizedText =
+        await textRecognizer.processImage(inputImage);
+
+    //String text = recognizedText.text;
+    String result = "";
+    for (TextBlock block in recognizedText.blocks) {
+      // final Rect rect = block.boundingBox;
+      // final List<Point<int>> cornerPoints = block.cornerPoints;
+      // final String text = block.text;
+      // final List<String> languages = block.recognizedLanguages;
+
+      for (TextLine line in block.lines) {
+        // Same getters as TextBlock
+        for (TextElement element in line.elements) {
+          // Same getters as TextBlock
+          result += "${element.text} ";
+        }
+        result += "\n";
+      }
+      result += "\n";
+    }
+    setState(() {
+      contentController.text += result;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     ref.watch(loadingProvider);
@@ -196,7 +241,7 @@ class _StudentAddNoteScreenState extends ConsumerState<StudentAddNoteScreen> {
   Widget _titleAndConvertWidgets() {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       SizedBox(
-        width: MediaQuery.of(context).size.width * 0.65,
+        width: MediaQuery.of(context).size.width * 0.5,
         child: CustomTextField(
             text: 'Title',
             focusNode: _titleFocusNode,
@@ -219,6 +264,15 @@ class _StudentAddNoteScreenState extends ConsumerState<StudentAddNoteScreen> {
                       borderRadius: BorderRadius.circular(60))),
               child: Icon(Icons.mic, color: Colors.white)),
         ),
+      ),
+      SizedBox(
+        height: 50,
+        child: ElevatedButton(
+            onPressed: _imgFromCamera,
+            style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(60))),
+            child: Icon(Icons.camera_alt, color: Colors.white)),
       ),
     ]);
   }

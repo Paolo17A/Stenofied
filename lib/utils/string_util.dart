@@ -119,7 +119,7 @@ List<String> getLetters(String input) {
     // Check if the character is a letter
     if (RegExp(r'[a-zA-Z]').hasMatch(input[i])) {
       // Add the letter to the list
-      letters.add(input[i]);
+      letters.add(input[i].toLowerCase());
     }
   }
 
