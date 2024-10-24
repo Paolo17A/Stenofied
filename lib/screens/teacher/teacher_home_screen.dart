@@ -106,7 +106,7 @@ class _TeacherHomeScreenState extends ConsumerState<TeacherHomeScreen> {
       required Widget ungradedDocsBuilder,
       required String imagePath}) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.38,
+      width: MediaQuery.of(context).size.width * 0.4,
       decoration: BoxDecoration(
           color: CustomColors.ketchup, borderRadius: BorderRadius.circular(10)),
       padding: EdgeInsets.all(10),

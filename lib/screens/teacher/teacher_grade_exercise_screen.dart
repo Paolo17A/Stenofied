@@ -1,14 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:intl/intl.dart';
 import 'package:stenofied/providers/current_exercise_provider.dart';
 import 'package:stenofied/providers/loading_provider.dart';
 import 'package:stenofied/utils/future_util.dart';
 import 'package:stenofied/utils/string_util.dart';
 import 'package:stenofied/widgets/app_bar_widget.dart';
-import 'package:stenofied/widgets/bool_answer_button.dart';
 import 'package:stenofied/widgets/custom_miscellaneous_widgets.dart';
 import 'package:stenofied/widgets/custom_padding_widgets.dart';
+import 'package:stenofied/widgets/custom_text_field_widget.dart';
 import 'package:stenofied/widgets/custom_text_widgets.dart';
 
 import '../../utils/color_util.dart';
@@ -25,7 +27,9 @@ class TeacherGradeExerciseScreen extends ConsumerStatefulWidget {
 class _TeacherGradeExerciseScreenState
     extends ConsumerState<TeacherGradeExerciseScreen> {
   String formattedName = '';
+  DateTime dateAnswered = DateTime.now();
   List<dynamic> exerciseResults = [];
+  TextEditingController feedbackController = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -40,6 +44,9 @@ class _TeacherGradeExerciseScreenState
             exerciseResult.data() as Map<dynamic, dynamic>;
         exerciseResults =
             exerciseResultData[ExerciseResultFields.exerciseResults];
+        dateAnswered =
+            (exerciseResultData[ExerciseResultFields.dateAnswered] as Timestamp)
+                .toDate();
         final student = await UsersCollectionUtil.getThisUserDoc(
             exerciseResultData[ExerciseResultFields.studentID]);
         final studentData = student.data() as Map<dynamic, dynamic>;
@@ -52,6 +59,12 @@ class _TeacherGradeExerciseScreenState
         ref.read(loadingProvider).toggleLoading(false);
       }
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    feedbackController.dispose();
   }
 
   @override
@@ -70,6 +83,9 @@ class _TeacherGradeExerciseScreenState
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 blackCinzelBold(formattedName, fontSize: 28),
+                blackCinzelRegular(
+                    '\t\tDate Answered: ${DateFormat('MMM dd, yyyy').format(dateAnswered)}',
+                    fontSize: 22),
                 blackCinzelRegular(
                     '\t\tExercise ${ref.read(currentExerciseProvider).currentExerciseModel!.exerciseIndex.toString()}',
                     fontSize: 20),
@@ -127,32 +143,33 @@ class _TeacherGradeExerciseScreenState
 
   Widget _gradingButtons() {
     int currentIndex = ref.read(currentExerciseProvider).tracingIndex;
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        BoolAnswerButton(
-            boolVal: true,
-            answer: 'CORRECT',
-            onTap: () {
-              setState(() {
-                exerciseResults[currentIndex][EntryFields.isCorrect] = true;
-              });
-            },
-            isSelected:
-                exerciseResults[currentIndex][EntryFields.isCorrect] == true),
-        BoolAnswerButton(
-            boolVal: false,
-            answer: 'WRONG',
-            onTap: () {
-              setState(() {
-                exerciseResults[currentIndex][EntryFields.isCorrect] = false;
-              });
-            },
-            isSelected:
-                exerciseResults[currentIndex][EntryFields.isCorrect] == false)
-      ],
-    );
+    return Column(children: [
+      whiteAndadaProBold(
+          'Accuracy: ${((exerciseResults[currentIndex][EntryFields.accuracy] as num).toDouble() * 100).toStringAsFixed(2)}%',
+          fontSize: 20),
+      Slider(
+          value: (exerciseResults[currentIndex][EntryFields.accuracy] as num)
+              .toDouble(),
+          thumbColor: Colors.white,
+          activeColor: Colors.white,
+          inactiveColor: Colors.white70,
+          onChanged: ((value) {
+            setState(() {
+              exerciseResults[currentIndex][EntryFields.accuracy] = value;
+            });
+          })),
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          whiteAndadaProBold('FEEDBACK (OPTIONAL):', fontSize: 16),
+          CustomTextField(
+              text: exerciseResults[currentIndex][EntryFields.feedback],
+              controller: feedbackController,
+              textInputType: TextInputType.text,
+              displayPrefixIcon: null),
+        ],
+      )
+    ]);
   }
 
   Widget _navigatorButtons() {
@@ -169,18 +186,39 @@ class _TeacherGradeExerciseScreenState
         ElevatedButton(
             onPressed: ref.read(currentExerciseProvider).tracingIndex == 0
                 ? null
-                : () =>
-                    ref.read(currentExerciseProvider).decrementTracingIndex(),
+                : () {
+                    exerciseResults[
+                            ref.read(currentExerciseProvider).tracingIndex]
+                        [EntryFields.feedback] = feedbackController.text;
+                    ref.read(currentExerciseProvider).decrementTracingIndex();
+                    setState(() {
+                      feedbackController.text = exerciseResults[ref
+                          .read(currentExerciseProvider)
+                          .tracingIndex][EntryFields.feedback];
+                    });
+                  },
             style: ElevatedButton.styleFrom(
                 disabledBackgroundColor: CustomColors.blush),
             child: whiteAndadaProBold('PREV')),
         SizedBox(
           child: ElevatedButton(
-              onPressed: () => isLastQuestion
-                  ? ExercisesCollectionUtil.gradeExerciseOutput(context, ref,
+              onPressed: () {
+                setState(() {
+                  exerciseResults[
+                          ref.read(currentExerciseProvider).tracingIndex]
+                      [EntryFields.feedback] = feedbackController.text;
+                });
+                if (isLastQuestion) {
+                  ExercisesCollectionUtil.gradeExerciseOutput(context, ref,
                       exerciseResultID: widget.exerciseResultID,
-                      exerciseResults: exerciseResults)
-                  : ref.read(currentExerciseProvider).incrementTracingIndex(),
+                      exerciseResults: exerciseResults);
+                } else {
+                  ref.read(currentExerciseProvider).incrementTracingIndex();
+                  feedbackController.text = exerciseResults[ref
+                      .read(currentExerciseProvider)
+                      .tracingIndex][EntryFields.feedback];
+                }
+              },
               child: whiteAndadaProBold(isLastQuestion ? 'SUBMIT' : 'NEXT')),
         )
       ],

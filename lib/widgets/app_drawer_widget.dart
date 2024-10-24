@@ -180,7 +180,7 @@ Widget _logOutButton(BuildContext context) {
     padding: const EdgeInsets.all(20),
     child: ListTile(
       leading: Image.asset(ImagePaths.logout, scale: 15),
-      title: Center(child: blackCinzelBold('LOG OUT')),
+      title: Center(child: whiteCinzelBold('LOG OUT')),
       onTap: () {
         FirebaseAuth.instance.signOut().then((value) {
           Navigator.popUntil(context, (route) => route.isFirst);

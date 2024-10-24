@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:stenofied/models/quiz_model.dart';
 import 'package:stenofied/providers/loading_provider.dart';
 import 'package:stenofied/providers/user_data_provider.dart';
@@ -22,8 +24,11 @@ class QuizResultScreen extends ConsumerStatefulWidget {
 class _QuizResultScreenState extends ConsumerState<QuizResultScreen> {
   List<dynamic> quizResults = [];
   int quizIndex = 0;
-  int score = 0;
+  num averageAccuracy = 0;
   bool isGraded = false;
+  Duration elapsedTime = Duration();
+  DateTime dateAnswered = DateTime.now();
+
   @override
   void initState() {
     super.initState();
@@ -37,9 +42,21 @@ class _QuizResultScreenState extends ConsumerState<QuizResultScreen> {
         quizIndex = quizResultData[QuizResultFields.quizIndex];
         isGraded = quizResultData[QuizResultFields.isGraded];
         quizResults = quizResultData[QuizResultFields.quizResults];
+        num totalAccuracy = 0;
         for (var result in quizResults) {
-          if (result[EntryFields.isCorrect]) score++;
+          totalAccuracy += result[EntryFields.accuracy];
         }
+        averageAccuracy = totalAccuracy / quizResults.length;
+        elapsedTime = Duration(minutes: 15) -
+            Duration(
+                hours: quizResultData[QuizResultFields.elapsedTime]['hours'],
+                minutes: quizResultData[QuizResultFields.elapsedTime]
+                    ['minutes'],
+                seconds: quizResultData[QuizResultFields.elapsedTime]
+                    ['seconds']);
+        dateAnswered =
+            (quizResultData[QuizResultFields.dateAnswered] as Timestamp)
+                .toDate();
         ref.read(loadingProvider).toggleLoading(false);
       } catch (error) {
         scaffoldMessenger.showSnackBar(
@@ -78,8 +95,18 @@ class _QuizResultScreenState extends ConsumerState<QuizResultScreen> {
             whiteAndadaProBold('NOT YET GRADED', fontSize: 22)
           else if (quizIndex > 0)
             whiteAndadaProRegular(
-                'Score: ${score}/${allQuizModels[quizIndex - 1].wordsToWrite.length}',
+                'Average Accuracy: ${(averageAccuracy * 100).toStringAsFixed(2)}%',
                 fontSize: 22),
+          Row(children: [
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              whiteAndadaProRegular(
+                  'Date Answered: ${DateFormat('MMM dd, yyyy').format(dateAnswered)}',
+                  fontSize: 16),
+              whiteAndadaProRegular(
+                  'Elapsed Time: ${elapsedTime.inMinutes} mins ${elapsedTime.inSeconds % 60} seconds',
+                  fontSize: 16),
+            ])
+          ]),
           Divider(color: Colors.white),
           ListView.builder(
               shrinkWrap: true,
@@ -96,7 +123,7 @@ class _QuizResultScreenState extends ConsumerState<QuizResultScreen> {
 
   Widget answerEntry(int index, Map<dynamic, dynamic> answerData) {
     return Container(
-      height: 80,
+      height: answerData[EntryFields.feedback].toString().isNotEmpty ? 120 : 80,
       decoration: BoxDecoration(color: CustomColors.blush),
       padding: EdgeInsets.all(4),
       child: Row(
@@ -141,7 +168,14 @@ class _QuizResultScreenState extends ConsumerState<QuizResultScreen> {
                   fontSize: 16),
               if (isGraded)
                 whiteAndadaProBold(
-                    'Result: ${answerData[EntryFields.isCorrect] ? 'CORRECT' : 'WRONG'}')
+                    'Accuracy: ${((answerData[EntryFields.accuracy] as num) * 100).toStringAsFixed(2)}%'),
+              if (answerData[EntryFields.feedback].toString().isNotEmpty)
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  child: whiteAndadaProRegular(
+                      'Feedback: ${answerData[EntryFields.feedback]}',
+                      textAlign: TextAlign.left),
+                ),
             ],
           )
         ],

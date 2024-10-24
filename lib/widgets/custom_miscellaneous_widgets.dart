@@ -305,7 +305,7 @@ Widget snapshotHandler(AsyncSnapshot snapshot) {
 Widget safeAreaWithRail(BuildContext context,
     {required Widget railWidget, required Widget mainWidget}) {
   return SafeArea(
-      child: Row(children: [
+      child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
     railWidget,
     SizedBox(width: MediaQuery.of(context).size.width - 50, child: mainWidget)
   ]));

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
@@ -37,6 +38,32 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen> {
       teachersCount = teachers.length;
       final sections = await SectionsCollectionUtil.getAllSectionDocs();
       sectionsCount = sections.length;
+
+      final exercises = await FirebaseFirestore.instance
+          .collection(Collections.exerciseResults)
+          .get();
+      for (var exercise in exercises.docs) {
+        final exerciseData = exercise.data();
+        if (!exerciseData.containsKey(ExerciseResultFields.dateAnswered)) {
+          await FirebaseFirestore.instance
+              .collection(Collections.exerciseResults)
+              .doc(exercise.id)
+              .update({ExerciseResultFields.dateAnswered: DateTime.now()});
+        }
+      }
+
+      final quizzes = await FirebaseFirestore.instance
+          .collection(Collections.quizResults)
+          .get();
+      for (var quiz in quizzes.docs) {
+        final quizData = quiz.data();
+        if (!quizData.containsKey(QuizResultFields.dateAnswered)) {
+          await FirebaseFirestore.instance
+              .collection(Collections.quizResults)
+              .doc(quiz.id)
+              .update({QuizResultFields.dateAnswered: DateTime.now()});
+        }
+      }
       ref.read(loadingProvider).toggleLoading(false);
     });
   }

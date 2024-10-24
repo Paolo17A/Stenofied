@@ -324,7 +324,7 @@ class _StudentEditNoteScreenState extends ConsumerState<StudentEditNoteScreen> {
           isViewingShortHand
               ? Container(
                   width: MediaQuery.of(context).size.width * 0.9,
-                  height: MediaQuery.of(context).size.height * 0.3,
+                  height: MediaQuery.of(context).size.height * 0.25,
                   child: shortHandedContent())
               : CustomTextField(
                   text: 'Insert your content here...',

@@ -123,15 +123,15 @@ class _AdminSelectedSectionScreenState
                   vertical10Pix(child: whiteAndadaProBold('ASSIGNED TEACHER')),
                   all10Pix(
                     child: Container(
+                      width: MediaQuery.of(context).size.width * 0.4,
                       decoration: BoxDecoration(
                           color: CustomColors.blush,
                           borderRadius: BorderRadius.circular(20)),
-                      child: Container(
-                          child: whiteAndadaProRegular(
-                              assignedTeacherName.isNotEmpty
-                                  ? assignedTeacherName
-                                  : 'N/A',
-                              fontSize: 16)),
+                      child: blackAndadaProRegular(
+                          assignedTeacherName.isNotEmpty
+                              ? assignedTeacherName
+                              : 'N/A',
+                          fontSize: 16),
                     ),
                   )
                 ],

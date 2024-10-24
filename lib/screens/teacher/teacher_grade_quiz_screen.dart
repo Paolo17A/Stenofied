@@ -1,17 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:intl/intl.dart';
 import 'package:stenofied/providers/current_quiz_provider.dart';
 import 'package:stenofied/providers/loading_provider.dart';
 import 'package:stenofied/utils/future_util.dart';
 import 'package:stenofied/utils/string_util.dart';
 import 'package:stenofied/widgets/app_bar_widget.dart';
-import 'package:stenofied/widgets/bool_answer_button.dart';
 import 'package:stenofied/widgets/custom_miscellaneous_widgets.dart';
 import 'package:stenofied/widgets/custom_padding_widgets.dart';
 import 'package:stenofied/widgets/custom_text_widgets.dart';
 
 import '../../utils/color_util.dart';
+import '../../widgets/custom_text_field_widget.dart';
 
 class TeacherGradeQuizScreen extends ConsumerStatefulWidget {
   final String quizResultID;
@@ -25,8 +27,11 @@ class TeacherGradeQuizScreen extends ConsumerStatefulWidget {
 class _TeacherGradeQuizScreenState
     extends ConsumerState<TeacherGradeQuizScreen> {
   String formattedName = '';
+  DateTime dateAnswered = DateTime.now();
   List<dynamic> quizResults = [];
   String studentID = '';
+  TextEditingController feedbackController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -39,6 +44,9 @@ class _TeacherGradeQuizScreenState
         final quizResultData = quizResult.data() as Map<dynamic, dynamic>;
         quizResults = quizResultData[QuizResultFields.quizResults];
         studentID = quizResultData[QuizResultFields.studentID];
+        dateAnswered =
+            (quizResultData[ExerciseResultFields.dateAnswered] as Timestamp)
+                .toDate();
         final student = await UsersCollectionUtil.getThisUserDoc(studentID);
         final studentData = student.data() as Map<dynamic, dynamic>;
         formattedName =
@@ -68,6 +76,9 @@ class _TeacherGradeQuizScreenState
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 blackCinzelBold(formattedName, fontSize: 28),
+                blackCinzelRegular(
+                    '\t\tDate Answered: ${DateFormat('MMM dd, yyyy').format(dateAnswered)}',
+                    fontSize: 22),
                 blackCinzelRegular(
                     '\t\tQuiz ${ref.read(currentQuizProvider).currentQuizModel!.quizIndex.toString()}',
                     fontSize: 20),
@@ -121,32 +132,33 @@ class _TeacherGradeQuizScreenState
 
   Widget _gradingButtons() {
     int currentIndex = ref.read(currentQuizProvider).questionIndex;
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        BoolAnswerButton(
-            boolVal: true,
-            answer: 'CORRECT',
-            onTap: () {
-              setState(() {
-                quizResults[currentIndex][EntryFields.isCorrect] = true;
-              });
-            },
-            isSelected:
-                quizResults[currentIndex][EntryFields.isCorrect] == true),
-        BoolAnswerButton(
-            boolVal: false,
-            answer: 'WRONG',
-            onTap: () {
-              setState(() {
-                quizResults[currentIndex][EntryFields.isCorrect] = false;
-              });
-            },
-            isSelected:
-                quizResults[currentIndex][EntryFields.isCorrect] == false)
-      ],
-    );
+    return Column(children: [
+      whiteAndadaProBold(
+          'Accuracy: ${((quizResults[currentIndex][EntryFields.accuracy] as num).toDouble() * 100).toStringAsFixed(2)}%',
+          fontSize: 20),
+      Slider(
+          value: (quizResults[currentIndex][EntryFields.accuracy] as num)
+              .toDouble(),
+          thumbColor: Colors.white,
+          activeColor: Colors.white,
+          inactiveColor: Colors.white70,
+          onChanged: ((value) {
+            setState(() {
+              quizResults[currentIndex][EntryFields.accuracy] = value;
+            });
+          })),
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          whiteAndadaProBold('FEEDBACK (OPTIONAL):', fontSize: 16),
+          CustomTextField(
+              text: quizResults[currentIndex][EntryFields.feedback],
+              controller: feedbackController,
+              textInputType: TextInputType.text,
+              displayPrefixIcon: null),
+        ],
+      )
+    ]);
   }
 
   Widget _navigatorButtons() {
@@ -158,18 +170,41 @@ class _TeacherGradeQuizScreenState
         ElevatedButton(
             onPressed: ref.read(currentQuizProvider).questionIndex == 0
                 ? null
-                : () => ref.read(currentQuizProvider).decrementQuizIndex(),
+                : () {
+                    //  Save input to quizResults map
+                    quizResults[ref.read(currentQuizProvider).questionIndex]
+                        [EntryFields.feedback] = feedbackController.text;
+                    //  Decrement quiz Index
+                    ref.read(currentQuizProvider).decrementQuizIndex();
+                    //  DIsplay feedback of previous map
+                    setState(() {
+                      feedbackController.text = quizResults[ref
+                          .read(currentQuizProvider)
+                          .questionIndex][EntryFields.feedback];
+                    });
+                  },
             style: ElevatedButton.styleFrom(
                 disabledBackgroundColor: CustomColors.blush),
             child: whiteAndadaProBold('PREV')),
         SizedBox(
           child: ElevatedButton(
-              onPressed: () => isLastQuestion
-                  ? QuizzesCollectionUtil.gradeQuizOutput(context, ref,
+              onPressed: () {
+                setState(() {
+                  quizResults[ref.read(currentQuizProvider).questionIndex]
+                      [EntryFields.feedback] = feedbackController.text;
+                });
+                if (isLastQuestion) {
+                  QuizzesCollectionUtil.gradeQuizOutput(context, ref,
                       studentID: studentID,
                       quizResultID: widget.quizResultID,
-                      quizResults: quizResults)
-                  : ref.read(currentQuizProvider).incrementQuizIndex(),
+                      quizResults: quizResults);
+                } else {
+                  ref.read(currentQuizProvider).incrementQuizIndex();
+                  feedbackController.text =
+                      quizResults[ref.read(currentQuizProvider).questionIndex]
+                          [EntryFields.feedback];
+                }
+              },
               child: whiteAndadaProBold(isLastQuestion ? 'SUBMIT' : 'NEXT')),
         )
       ],

@@ -2,8 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
-import 'package:stenofied/models/quiz_model.dart';
-import 'package:stenofied/models/tracing_model.dart';
 import 'package:stenofied/providers/loading_provider.dart';
 import 'package:stenofied/utils/future_util.dart';
 import 'package:stenofied/utils/navigator_util.dart';
@@ -27,6 +25,8 @@ class SelectedStudentSummaryScreen extends ConsumerStatefulWidget {
 class _SelectedStudentSummaryScreenState
     extends ConsumerState<SelectedStudentSummaryScreen> {
   String formattedName = '';
+  String profileImageURL = '';
+
   int currentQuizIndex = 1;
   List<DocumentSnapshot> exerciseResultDocs = [];
   List<DocumentSnapshot> quizResultDocs = [];
@@ -45,6 +45,7 @@ class _SelectedStudentSummaryScreenState
         final userData = userDoc.data() as Map<dynamic, dynamic>;
         formattedName =
             '${userData[UserFields.firstName]} ${userData[UserFields.lastName]}';
+        profileImageURL = userData[UserFields.profileImageURL];
         currentQuizIndex = userData[UserFields.currentLessonIndex];
 
         //  Get student results
@@ -113,12 +114,24 @@ class _SelectedStudentSummaryScreenState
 
   Widget _headerWidgets() {
     return all10Pix(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          blackCinzelBold(formattedName, fontSize: 26),
-          blackCinzelRegular('Current Level: $currentQuizIndex')
-        ],
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.9,
+        decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(color: Colors.black, width: 2),
+            borderRadius: BorderRadius.circular(20)),
+        padding: EdgeInsets.all(12),
+        child: Column(
+          //crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            all10Pix(
+                child: buildProfileImageWidget(
+                    profileImageURL: profileImageURL,
+                    radius: MediaQuery.of(context).size.width * 0.2)),
+            blackCinzelBold(formattedName, fontSize: 26),
+            blackCinzelRegular('Current Level: $currentQuizIndex')
+          ],
+        ),
       ),
     );
   }
@@ -126,7 +139,7 @@ class _SelectedStudentSummaryScreenState
   Widget _exerciseResults() {
     return vertical20Pix(
         child: Container(
-      width: MediaQuery.of(context).size.width * 0.4,
+      width: MediaQuery.of(context).size.width * 0.45,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20), color: CustomColors.ketchup),
       padding: EdgeInsets.all(12),
@@ -151,7 +164,7 @@ class _SelectedStudentSummaryScreenState
   Widget _quizResults() {
     return vertical20Pix(
         child: Container(
-      width: MediaQuery.of(context).size.width * 0.4,
+      width: MediaQuery.of(context).size.width * 0.45,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20), color: CustomColors.ketchup),
       padding: EdgeInsets.all(12),
@@ -179,10 +192,12 @@ class _SelectedStudentSummaryScreenState
     int exerciseIndex = exerciseResultData[ExerciseResultFields.exerciseIndex];
     List<dynamic> exerciseResults =
         exerciseResultData[ExerciseResultFields.exerciseResults];
-    int score = 1;
+    num totalAccuracy = 0;
+    num averageAccuracy = 0;
     for (var result in exerciseResults) {
-      if (result[EntryFields.isCorrect]) score++;
+      totalAccuracy += result[EntryFields.accuracy];
     }
+    averageAccuracy = totalAccuracy / exerciseResults.length;
     return InkWell(
       onTap: () => NavigatorRoutes.selectedExerciseResult(context,
           exerciseResultID: exerciseResultDoc.id),
@@ -195,7 +210,9 @@ class _SelectedStudentSummaryScreenState
             children: [
               whiteAndadaProBold('Exercise: $exerciseIndex'),
               whiteAndadaProRegular(
-                  'Score: $score / ${allExerciseModels[exerciseIndex - 1].tracingModels.length}')
+                  'Average Accuracy:${(averageAccuracy * 100).toStringAsFixed(2)}%',
+                  textAlign: TextAlign.left,
+                  fontSize: 12)
             ],
           ),
         ),
@@ -207,10 +224,12 @@ class _SelectedStudentSummaryScreenState
     final quizResultData = quizResultDoc.data() as Map<dynamic, dynamic>;
     int quizIndex = quizResultData[QuizResultFields.quizIndex];
     List<dynamic> quizResults = quizResultData[QuizResultFields.quizResults];
-    int score = 0;
+    num totalAccuracy = 0;
+    num averageAccuracy = 0;
     for (var result in quizResults) {
-      if (result[EntryFields.isCorrect]) score++;
+      totalAccuracy += result[EntryFields.accuracy];
     }
+    averageAccuracy == totalAccuracy / quizResults.length;
     return InkWell(
       onTap: () => NavigatorRoutes.selectedQuizResult(context,
           quizResultID: quizResultDoc.id),
@@ -223,7 +242,9 @@ class _SelectedStudentSummaryScreenState
             children: [
               whiteAndadaProBold('Quiz: $quizIndex'),
               whiteAndadaProRegular(
-                  'Score: $score / ${allQuizModels[quizIndex - 1].wordsToWrite.length}')
+                  'Average Accuracy: ${(averageAccuracy * 100).toStringAsFixed(2)}%',
+                  textAlign: TextAlign.left,
+                  fontSize: 12)
             ],
           ),
         ),

@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
-import '../../models/quiz_model.dart';
-import '../../models/tracing_model.dart';
 import '../../providers/loading_provider.dart';
 import '../../utils/color_util.dart';
 import '../../utils/delete_entry_dialog_util.dart';
@@ -115,7 +113,6 @@ class _AdminStudentUserScreenState
                   child: Column(
                 children: [
                   _studentProfileDetails(),
-                  if (!accountVerified) _verificationWidgets(),
                   Divider(color: CustomColors.ketchup),
                   Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,19 +126,27 @@ class _AdminStudentUserScreenState
   }
 
   Widget _studentProfileDetails() {
-    return Column(children: [
-      blackCinzelBold('Student Profile', fontSize: 40),
-      all10Pix(
-          child: buildProfileImageWidget(
-              profileImageURL: profileImageURL,
-              radius: MediaQuery.of(context).size.width * 0.2)),
-      blackCinzelRegular(formattedName, fontSize: 20),
-      blackCinzelRegular(
-          'Section: ${assignedSectionName.isNotEmpty ? assignedSectionName : 'N/A'}',
-          fontSize: 20),
-      interText('Account Verified: ${accountVerified ? 'YES' : 'NO'}'),
-      Gap(5)
-    ]);
+    return Container(
+      decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: Colors.black, width: 2),
+          borderRadius: BorderRadius.circular(20)),
+      padding: EdgeInsets.all(12),
+      child: Column(children: [
+        blackCinzelBold('Student Profile', fontSize: 40),
+        all10Pix(
+            child: buildProfileImageWidget(
+                profileImageURL: profileImageURL,
+                radius: MediaQuery.of(context).size.width * 0.2)),
+        blackCinzelRegular(formattedName, fontSize: 20),
+        blackCinzelRegular(
+            'Section: ${assignedSectionName.isNotEmpty ? assignedSectionName : 'N/A'}',
+            fontSize: 20),
+        interText('Account Verified: ${accountVerified ? 'YES' : 'NO'}'),
+        Gap(5),
+        if (!accountVerified) _verificationWidgets(),
+      ]),
+    );
   }
 
   Widget _verificationWidgets() {
@@ -221,10 +226,12 @@ class _AdminStudentUserScreenState
     int exerciseIndex = exerciseResultData[ExerciseResultFields.exerciseIndex];
     List<dynamic> exerciseResults =
         exerciseResultData[ExerciseResultFields.exerciseResults];
-    int score = 1;
+    num totalAccuracy = 0;
+    num averageAccuracy = 0;
     for (var result in exerciseResults) {
-      if (result[EntryFields.isCorrect]) score++;
+      totalAccuracy += result[EntryFields.accuracy];
     }
+    averageAccuracy = totalAccuracy / averageAccuracy;
     return InkWell(
       onTap: () => NavigatorRoutes.selectedExerciseResult(context,
           exerciseResultID: exerciseResultDoc.id),
@@ -237,7 +244,7 @@ class _AdminStudentUserScreenState
             children: [
               whiteAndadaProBold('Exercise: $exerciseIndex'),
               whiteAndadaProRegular(
-                  'Score: $score / ${allExerciseModels[exerciseIndex - 1].tracingModels.length}')
+                  'Average Score: ${(averageAccuracy * 100).toStringAsFixed(2)}')
             ],
           ),
         ),
@@ -249,10 +256,14 @@ class _AdminStudentUserScreenState
     final quizResultData = quizResultDoc.data() as Map<dynamic, dynamic>;
     int quizIndex = quizResultData[QuizResultFields.quizIndex];
     List<dynamic> quizResults = quizResultData[QuizResultFields.quizResults];
-    int score = 0;
+    //int score = 0;
+    num totalAccuracy = 0;
+    num averageAccuracy = 0;
     for (var result in quizResults) {
-      if (result[EntryFields.isCorrect]) score++;
+      totalAccuracy += result[EntryFields.accuracy];
+      //if (result[EntryFields.isCorrect]) score++;
     }
+    averageAccuracy = totalAccuracy / quizResults.length;
     return InkWell(
       onTap: () => NavigatorRoutes.selectedQuizResult(context,
           quizResultID: quizResultDoc.id),
@@ -265,7 +276,7 @@ class _AdminStudentUserScreenState
             children: [
               whiteAndadaProBold('Quiz: $quizIndex'),
               whiteAndadaProRegular(
-                  'Score: $score / ${allQuizModels[quizIndex - 1].wordsToWrite.length}')
+                  'Average Score: ${(averageAccuracy * 100).toStringAsFixed(2)}')
             ],
           ),
         ),

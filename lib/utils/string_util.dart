@@ -72,6 +72,8 @@ class ExerciseResultFields {
   static const String exerciseIndex = 'exerciseIndex';
   static const String exerciseResults = 'exerciseResults';
   static const String isGraded = 'isGraded';
+  static const String dateAnswered = 'dateAnswered';
+  static const String elapsedTime = 'elapsedTime';
 }
 
 class QuizResultFields {
@@ -79,11 +81,15 @@ class QuizResultFields {
   static const String quizIndex = 'quizIndex';
   static const String quizResults = 'quizResults';
   static const String isGraded = 'isGraded';
+  static const String dateAnswered = 'dateAnswered';
+  static const String elapsedTime = 'elapsedTime';
 }
 
 class EntryFields {
-  static const String isCorrect = 'isCorrect';
+  //static const String isCorrect = 'isCorrect';
   static const String imageURL = 'imageURL';
+  static const String accuracy = 'accuracy';
+  static const String feedback = 'feedback';
 }
 
 class FAQFields {

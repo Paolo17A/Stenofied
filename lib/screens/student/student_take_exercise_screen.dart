@@ -8,6 +8,7 @@ import 'package:stenofied/providers/loading_provider.dart';
 import 'package:stenofied/utils/color_util.dart';
 import 'package:stenofied/utils/future_util.dart';
 import 'package:stenofied/widgets/app_bar_widget.dart';
+import 'package:stenofied/widgets/countdown_widget.dart';
 import 'package:stenofied/widgets/custom_miscellaneous_widgets.dart';
 import 'package:stenofied/widgets/custom_padding_widgets.dart';
 import 'package:stenofied/widgets/custom_text_widgets.dart';
@@ -24,15 +25,15 @@ class StudentTakeExerciseScreen extends ConsumerStatefulWidget {
 
 class _StudentTakeExerciseScreenState
     extends ConsumerState<StudentTakeExerciseScreen> {
-  //var historyDrawingPoints = <DrawingPoint>[];
-
   var drawingPoints = <DrawingPoint>[];
   DrawingPoint? currentDrawingPoint;
   bool hasDoodle = false;
   double doodleWidth = 5;
   ScreenshotController screenshotController = ScreenshotController();
   FlutterTts flutterTts = FlutterTts();
-
+  //  TIMER VARIABLES
+  Duration elapsedTime = Duration.zero;
+  Duration elapsedCountdown = const Duration(hours: 1);
   @override
   void dispose() {
     super.dispose();
@@ -64,7 +65,8 @@ class _StudentTakeExerciseScreenState
         ref.read(currentExerciseProvider).replaceTraceOutput(traceOutput);
       }
       if (ref.read(currentExerciseProvider).isLookingAtLastWord()) {
-        ExercisesCollectionUtil.submitNewExerciseResult(context, ref);
+        ExercisesCollectionUtil.submitNewExerciseResult(context, ref,
+            elapsedTime: elapsedTime);
       } else {
         ref.read(currentExerciseProvider).incrementTracingIndex();
       }
@@ -77,6 +79,39 @@ class _StudentTakeExerciseScreenState
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('You have not yet traced this word.')));
     }
+  }
+
+  void updateElapsedTime(Duration duration) {
+    elapsedTime = duration;
+  }
+
+  void updateCountdownTime(Duration duration) {
+    elapsedCountdown = duration;
+  }
+
+  void _showOutOfTimeDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return PopScope(
+          canPop: false,
+          child: AlertDialog(
+            title: const Text('Countdown Timer Complete'),
+            content: const Text('You ran out of time!'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                },
+                child: const Text('EXIT'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -94,6 +129,11 @@ class _StudentTakeExerciseScreenState
               child: all10Pix(
                   child: Column(
                 children: [
+                  CountdownTimerWidget(
+                      startingDuration: Duration(minutes: 15),
+                      onCountdownTick: updateCountdownTime,
+                      onTimerTick: updateElapsedTime,
+                      onCountdownComplete: _showOutOfTimeDialog),
                   _exerciseIndexHeader(),
                   _tracingCanvas(),
                   ElevatedButton(

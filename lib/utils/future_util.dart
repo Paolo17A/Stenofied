@@ -593,8 +593,8 @@ class SectionsCollectionUtil {
 //==============================================================================
 
 class ExercisesCollectionUtil {
-  static Future submitNewExerciseResult(
-      BuildContext context, WidgetRef ref) async {
+  static Future submitNewExerciseResult(BuildContext context, WidgetRef ref,
+      {required Duration elapsedTime}) async {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     final navigator = Navigator.of(context);
     try {
@@ -607,7 +607,13 @@ class ExercisesCollectionUtil {
             .read(currentExerciseProvider)
             .currentExerciseModel!
             .exerciseIndex,
-        ExerciseResultFields.isGraded: false
+        ExerciseResultFields.isGraded: false,
+        ExerciseResultFields.dateAnswered: DateTime.now(),
+        ExerciseResultFields.elapsedTime: {
+          'hours': elapsedTime.inHours,
+          'minutes': elapsedTime.inMinutes % 60,
+          'seconds': elapsedTime.inSeconds % 60
+        }
       });
 
       List<Map<dynamic, dynamic>> exerciseResults = [];
@@ -621,8 +627,11 @@ class ExercisesCollectionUtil {
         final uploadTask = storageRef.putData(traceImage!);
         final taskSnapshot = await uploadTask;
         final String downloadURL = await taskSnapshot.ref.getDownloadURL();
-        exerciseResults.add(
-            {EntryFields.isCorrect: false, EntryFields.imageURL: downloadURL});
+        exerciseResults.add({
+          EntryFields.accuracy: 0,
+          EntryFields.imageURL: downloadURL,
+          EntryFields.feedback: ''
+        });
       }
 
       await FirebaseFirestore.instance
@@ -753,7 +762,8 @@ class QuizzesCollectionUtil {
     return getStudentQuizResultDocs(FirebaseAuth.instance.currentUser!.uid);
   }
 
-  static Future submitNewQuizResult(BuildContext context, WidgetRef ref) async {
+  static Future submitNewQuizResult(BuildContext context, WidgetRef ref,
+      {required Duration elapsedTime}) async {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     final navigator = Navigator.of(context);
     try {
@@ -764,7 +774,13 @@ class QuizzesCollectionUtil {
         QuizResultFields.studentID: FirebaseAuth.instance.currentUser!.uid,
         QuizResultFields.quizIndex:
             ref.read(currentQuizProvider).currentQuizModel!.quizIndex,
-        ExerciseResultFields.isGraded: false
+        QuizResultFields.isGraded: false,
+        QuizResultFields.dateAnswered: DateTime.now(),
+        QuizResultFields.elapsedTime: {
+          'hours': elapsedTime.inHours,
+          'minutes': elapsedTime.inMinutes % 60,
+          'seconds': elapsedTime.inSeconds % 60
+        }
       });
 
       List<Map<dynamic, dynamic>> quizResults = [];
@@ -777,8 +793,11 @@ class QuizzesCollectionUtil {
         final uploadTask = storageRef.putData(doodleImage!);
         final taskSnapshot = await uploadTask;
         final String downloadURL = await taskSnapshot.ref.getDownloadURL();
-        quizResults.add(
-            {EntryFields.isCorrect: false, EntryFields.imageURL: downloadURL});
+        quizResults.add({
+          EntryFields.accuracy: 0,
+          EntryFields.imageURL: downloadURL,
+          EntryFields.feedback: ''
+        });
       }
 
       await FirebaseFirestore.instance

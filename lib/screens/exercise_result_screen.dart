@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:stenofied/models/tracing_model.dart';
 import 'package:stenofied/providers/loading_provider.dart';
 import 'package:stenofied/providers/user_data_provider.dart';
@@ -24,8 +26,11 @@ class ExerciseResultScreen extends ConsumerStatefulWidget {
 class _ExerciseResultScreenState extends ConsumerState<ExerciseResultScreen> {
   List<dynamic> exerciseResults = [];
   int exerciseIndex = 0;
-  int score = 0;
+  num averageAccuracy = 0;
   bool isGraded = false;
+  Duration elapsedTime = Duration();
+  DateTime dateAnswered = DateTime.now();
+
   @override
   void initState() {
     super.initState();
@@ -42,9 +47,23 @@ class _ExerciseResultScreenState extends ConsumerState<ExerciseResultScreen> {
         isGraded = exerciseResultData[ExerciseResultFields.isGraded];
         exerciseResults =
             exerciseResultData[ExerciseResultFields.exerciseResults];
+        num totalAccuracy = 0;
         for (var result in exerciseResults) {
-          if (result[EntryFields.isCorrect]) score++;
+          totalAccuracy += result[EntryFields.accuracy];
+          //if (result[EntryFields.isCorrect]) score++;
         }
+        averageAccuracy = totalAccuracy / exerciseResults.length;
+        elapsedTime = Duration(minutes: 15) -
+            Duration(
+                hours: exerciseResultData[ExerciseResultFields.elapsedTime]
+                    ['hours'],
+                minutes: exerciseResultData[ExerciseResultFields.elapsedTime]
+                    ['minutes'],
+                seconds: exerciseResultData[ExerciseResultFields.elapsedTime]
+                    ['seconds']);
+        dateAnswered =
+            (exerciseResultData[ExerciseResultFields.dateAnswered] as Timestamp)
+                .toDate();
         ref.read(loadingProvider).toggleLoading(false);
       } catch (error) {
         scaffoldMessenger.showSnackBar(
@@ -105,8 +124,18 @@ class _ExerciseResultScreenState extends ConsumerState<ExerciseResultScreen> {
             whiteAndadaProBold('NOT YET GRADED', fontSize: 22)
           else if (exerciseIndex > 0)
             whiteAndadaProBold(
-                'Score: ${score}/${allExerciseModels[exerciseIndex - 1].tracingModels.length}',
+                'Average Accuracy: ${(averageAccuracy * 100).toStringAsFixed(2)}%',
                 fontSize: 22),
+          Row(children: [
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              whiteAndadaProRegular(
+                  'Date Answered: ${DateFormat('MMM dd, yyyy').format(dateAnswered)}',
+                  fontSize: 16),
+              whiteAndadaProRegular(
+                  'Elapsed Time: ${elapsedTime.inMinutes} mins ${elapsedTime.inSeconds % 60} seconds',
+                  fontSize: 16)
+            ])
+          ]),
           Divider(color: Colors.white),
           ListView.builder(
               shrinkWrap: true,
@@ -168,7 +197,7 @@ class _ExerciseResultScreenState extends ConsumerState<ExerciseResultScreen> {
                   fontSize: 16),
               if (isGraded)
                 whiteAndadaProRegular(
-                    'Result: ${answerData[EntryFields.isCorrect] ? 'CORRECT' : 'WRONG'}')
+                    'Accuracy: ${((answerData[EntryFields.accuracy] as num) * 100).toStringAsFixed(2)}%')
             ],
           )
         ],

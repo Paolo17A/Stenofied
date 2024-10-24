@@ -12,6 +12,7 @@ import 'package:stenofied/widgets/custom_padding_widgets.dart';
 import 'package:stenofied/widgets/custom_text_widgets.dart';
 
 import '../../models/drawing_point.dart';
+import '../../widgets/countdown_widget.dart';
 
 class StudentTakeQuizScreen extends ConsumerStatefulWidget {
   const StudentTakeQuizScreen({super.key});
@@ -22,13 +23,14 @@ class StudentTakeQuizScreen extends ConsumerStatefulWidget {
 }
 
 class _StudentTakeQuizScreenState extends ConsumerState<StudentTakeQuizScreen> {
-  //var historyDrawingPoints = <DrawingPoint>[];
-
   var drawingPoints = <DrawingPoint>[];
   DrawingPoint? currentDrawingPoint;
   bool hasDoodle = false;
   ScreenshotController screenshotController = ScreenshotController();
   double doodleWidth = 5;
+  //  TIMER VARIABLES
+  Duration elapsedTime = Duration.zero;
+  Duration elapsedCountdown = const Duration(hours: 1);
 
   void onNextButtonPress() async {
     if (hasDoodle) {
@@ -40,7 +42,8 @@ class _StudentTakeQuizScreenState extends ConsumerState<StudentTakeQuizScreen> {
         ref.read(currentQuizProvider).replaceDoodleOutput(traceOutput);
       }
       if (ref.read(currentQuizProvider).isLookingAtLastWord()) {
-        QuizzesCollectionUtil.submitNewQuizResult(context, ref);
+        QuizzesCollectionUtil.submitNewQuizResult(context, ref,
+            elapsedTime: elapsedTime);
       } else {
         ref.read(currentQuizProvider).incrementQuizIndex();
       }
@@ -54,6 +57,39 @@ class _StudentTakeQuizScreenState extends ConsumerState<StudentTakeQuizScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('You have not yet writted this word.')));
     }
+  }
+
+  void updateElapsedTime(Duration duration) {
+    elapsedTime = duration;
+  }
+
+  void updateCountdownTime(Duration duration) {
+    elapsedCountdown = duration;
+  }
+
+  void _showOutOfTimeDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return PopScope(
+          canPop: false,
+          child: AlertDialog(
+            title: const Text('Countdown Timer Complete'),
+            content: const Text('You ran out of time!'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                },
+                child: const Text('EXIT'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -71,6 +107,11 @@ class _StudentTakeQuizScreenState extends ConsumerState<StudentTakeQuizScreen> {
               child: all20Pix(
                   child: Column(
                 children: [
+                  CountdownTimerWidget(
+                      startingDuration: Duration(minutes: 15),
+                      onCountdownTick: updateCountdownTime,
+                      onTimerTick: updateElapsedTime,
+                      onCountdownComplete: _showOutOfTimeDialog),
                   _quizIndexHeader(),
                   _writingCanvas(),
                   ElevatedButton(
@@ -138,7 +179,8 @@ class _StudentTakeQuizScreenState extends ConsumerState<StudentTakeQuizScreen> {
                   setState(() {
                     currentDrawingPoint = DrawingPoint(
                         id: DateTime.now().millisecondsSinceEpoch,
-                        offsets: [details.localPosition]);
+                        offsets: [details.localPosition],
+                        width: doodleWidth);
                     if (currentDrawingPoint == null) return;
                     drawingPoints.add(currentDrawingPoint!);
                   });
