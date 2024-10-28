@@ -28,7 +28,6 @@ class _ExerciseResultScreenState extends ConsumerState<ExerciseResultScreen> {
   int exerciseIndex = 0;
   num averageAccuracy = 0;
   bool isGraded = false;
-  Duration elapsedTime = Duration();
   DateTime dateAnswered = DateTime.now();
 
   @override
@@ -45,22 +44,22 @@ class _ExerciseResultScreenState extends ConsumerState<ExerciseResultScreen> {
             exerciseResult.data() as Map<dynamic, dynamic>;
         exerciseIndex = exerciseResultData[ExerciseResultFields.exerciseIndex];
         isGraded = exerciseResultData[ExerciseResultFields.isGraded];
+        if (!exerciseResultData
+            .containsKey(ExerciseResultFields.exerciseResults)) {
+          ref.read(loadingProvider).toggleLoading(false);
+          Navigator.of(context).pop();
+          scaffoldMessenger.showSnackBar(SnackBar(
+              content: Text(
+                  'The data in this quiz is corrupted. Please delete it in the database')));
+          return;
+        }
         exerciseResults =
             exerciseResultData[ExerciseResultFields.exerciseResults];
         num totalAccuracy = 0;
         for (var result in exerciseResults) {
           totalAccuracy += result[EntryFields.accuracy];
-          //if (result[EntryFields.isCorrect]) score++;
         }
         averageAccuracy = totalAccuracy / exerciseResults.length;
-        elapsedTime = Duration(minutes: 15) -
-            Duration(
-                hours: exerciseResultData[ExerciseResultFields.elapsedTime]
-                    ['hours'],
-                minutes: exerciseResultData[ExerciseResultFields.elapsedTime]
-                    ['minutes'],
-                seconds: exerciseResultData[ExerciseResultFields.elapsedTime]
-                    ['seconds']);
         dateAnswered =
             (exerciseResultData[ExerciseResultFields.dateAnswered] as Timestamp)
                 .toDate();
@@ -131,9 +130,6 @@ class _ExerciseResultScreenState extends ConsumerState<ExerciseResultScreen> {
               whiteAndadaProRegular(
                   'Date Answered: ${DateFormat('MMM dd, yyyy').format(dateAnswered)}',
                   fontSize: 16),
-              whiteAndadaProRegular(
-                  'Elapsed Time: ${elapsedTime.inMinutes} mins ${elapsedTime.inSeconds % 60} seconds',
-                  fontSize: 16)
             ])
           ]),
           Divider(color: Colors.white),
@@ -152,7 +148,7 @@ class _ExerciseResultScreenState extends ConsumerState<ExerciseResultScreen> {
 
   Widget answerEntry(int index, Map<dynamic, dynamic> answerData) {
     return Container(
-      height: 80,
+      height: answerData[EntryFields.feedback].toString().isNotEmpty ? 120 : 80,
       decoration: BoxDecoration(color: CustomColors.blush),
       padding: EdgeInsets.all(4),
       child: Row(
@@ -197,7 +193,13 @@ class _ExerciseResultScreenState extends ConsumerState<ExerciseResultScreen> {
                   fontSize: 16),
               if (isGraded)
                 whiteAndadaProRegular(
-                    'Accuracy: ${((answerData[EntryFields.accuracy] as num) * 100).toStringAsFixed(2)}%')
+                    'Accuracy: ${((answerData[EntryFields.accuracy] as num) * 100).toStringAsFixed(2)}%'),
+              if (answerData[EntryFields.feedback].toString().isNotEmpty)
+                SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    child: whiteAndadaProRegular(
+                        'Feedback: ${answerData[EntryFields.feedback]}',
+                        textAlign: TextAlign.left)),
             ],
           )
         ],

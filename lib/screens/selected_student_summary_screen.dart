@@ -139,7 +139,7 @@ class _SelectedStudentSummaryScreenState
   Widget _exerciseResults() {
     return vertical20Pix(
         child: Container(
-      width: MediaQuery.of(context).size.width * 0.45,
+      width: MediaQuery.of(context).size.width * 0.4,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20), color: CustomColors.ketchup),
       padding: EdgeInsets.all(12),
@@ -164,7 +164,7 @@ class _SelectedStudentSummaryScreenState
   Widget _quizResults() {
     return vertical20Pix(
         child: Container(
-      width: MediaQuery.of(context).size.width * 0.45,
+      width: MediaQuery.of(context).size.width * 0.4,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20), color: CustomColors.ketchup),
       padding: EdgeInsets.all(12),
@@ -229,7 +229,7 @@ class _SelectedStudentSummaryScreenState
     for (var result in quizResults) {
       totalAccuracy += result[EntryFields.accuracy];
     }
-    averageAccuracy == totalAccuracy / quizResults.length;
+    averageAccuracy = totalAccuracy / quizResults.length;
     return InkWell(
       onTap: () => NavigatorRoutes.selectedQuizResult(context,
           quizResultID: quizResultDoc.id),

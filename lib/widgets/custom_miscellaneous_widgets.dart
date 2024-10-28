@@ -65,8 +65,39 @@ Widget loginFieldsContainer(BuildContext context, WidgetRef ref,
                     children: [
                       SizedBox(width: MediaQuery.of(context).size.width * 0.4),
                       InkWell(
-                          onTap: () => Navigator.of(context)
-                              .pushNamed(NavigatorRoutes.studentRegister),
+                          onTap: () {
+                            showModalBottomSheet(
+                                context: context,
+                                builder: (context) => ListView(
+                                      shrinkWrap: true,
+                                      children: [
+                                        ListTile(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(20),
+                                                    topRight:
+                                                        Radius.circular(20))),
+                                            onTap: () {
+                                              Navigator.of(context).pop();
+                                              Navigator.of(context).pushNamed(
+                                                  NavigatorRoutes
+                                                      .studentRegister);
+                                            },
+                                            title: blackJosefinSansBold(
+                                                'REGSITER AS STUDENT')),
+                                        ListTile(
+                                            onTap: () {
+                                              Navigator.of(context).pop();
+                                              Navigator.of(context).pushNamed(
+                                                  NavigatorRoutes
+                                                      .teacherRegister);
+                                            },
+                                            title: blackJosefinSansBold(
+                                                'REGISTER AS TEACHER'))
+                                      ],
+                                    ));
+                          },
                           child: blackJosefinSansBold('Sign Up')),
                     ],
                   ),
@@ -184,7 +215,11 @@ Widget proofOfEnrollmentUploadWidget(BuildContext context, WidgetRef ref,
     width: double.infinity,
     child: Column(
       children: [
-        blackJosefinSansBold('Certificate of Registration', fontSize: 18),
+        blackJosefinSansBold(
+            userType == UserTypes.student
+                ? 'Certificate of Registration'
+                : 'Class Schedule',
+            fontSize: 18),
         if (ref.read(proofOfEnrollmentProvider).proofOfEnrollmentFile != null)
           Image.file(ref.read(proofOfEnrollmentProvider).proofOfEnrollmentFile!,
               width: MediaQuery.of(context).size.width * 0.3),

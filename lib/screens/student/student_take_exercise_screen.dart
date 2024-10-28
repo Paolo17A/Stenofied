@@ -8,7 +8,6 @@ import 'package:stenofied/providers/loading_provider.dart';
 import 'package:stenofied/utils/color_util.dart';
 import 'package:stenofied/utils/future_util.dart';
 import 'package:stenofied/widgets/app_bar_widget.dart';
-import 'package:stenofied/widgets/countdown_widget.dart';
 import 'package:stenofied/widgets/custom_miscellaneous_widgets.dart';
 import 'package:stenofied/widgets/custom_padding_widgets.dart';
 import 'package:stenofied/widgets/custom_text_widgets.dart';
@@ -81,39 +80,6 @@ class _StudentTakeExerciseScreenState
     }
   }
 
-  void updateElapsedTime(Duration duration) {
-    elapsedTime = duration;
-  }
-
-  void updateCountdownTime(Duration duration) {
-    elapsedCountdown = duration;
-  }
-
-  void _showOutOfTimeDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return PopScope(
-          canPop: false,
-          child: AlertDialog(
-            title: const Text('Countdown Timer Complete'),
-            content: const Text('You ran out of time!'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pop();
-                },
-                child: const Text('EXIT'),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     ref.watch(loadingProvider);
@@ -125,31 +91,24 @@ class _StudentTakeExerciseScreenState
           ref.read(loadingProvider).isLoading,
           SizedBox(
             width: MediaQuery.of(context).size.width,
-            child: SingleChildScrollView(
-              child: all10Pix(
-                  child: Column(
-                children: [
-                  CountdownTimerWidget(
-                      startingDuration: Duration(minutes: 15),
-                      onCountdownTick: updateCountdownTime,
-                      onTimerTick: updateElapsedTime,
-                      onCountdownComplete: _showOutOfTimeDialog),
-                  _exerciseIndexHeader(),
-                  _tracingCanvas(),
-                  ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          drawingPoints.clear();
-                          hasDoodle = false;
-                        });
-                        ref.read(currentExerciseProvider).deleteTraceOutput();
-                      },
-                      child: whiteAndadaProBold('RESET TRACE')),
-                  Gap(80),
-                  _navigatorButtons()
-                ],
-              )),
-            ),
+            child: all10Pix(
+                child: Column(
+              children: [
+                _exerciseIndexHeader(),
+                _tracingCanvas(),
+                ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        drawingPoints.clear();
+                        hasDoodle = false;
+                      });
+                      ref.read(currentExerciseProvider).deleteTraceOutput();
+                    },
+                    child: whiteAndadaProBold('RESET TRACE')),
+                Gap(40),
+                _navigatorButtons()
+              ],
+            )),
           )),
     );
   }

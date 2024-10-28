@@ -12,6 +12,8 @@ import 'package:stenofied/widgets/custom_padding_widgets.dart';
 import 'package:stenofied/widgets/custom_text_widgets.dart';
 import 'package:stenofied/widgets/navigator_rail_widget.dart';
 
+import '../../widgets/custom_text_field_widget.dart';
+
 class TeacherAssignedSectionScreen extends ConsumerStatefulWidget {
   const TeacherAssignedSectionScreen({super.key});
 
@@ -26,10 +28,27 @@ class _TeacherAssignedSectionScreenState
 
   String sectionName = '';
   List<DocumentSnapshot> studentDocs = [];
+  List<DocumentSnapshot> filteredStudentDocs = [];
+  final searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    searchController.addListener(() {
+      String lowerCasedSearchInput = searchController.text.trim().toLowerCase();
+      setState(() {
+        filteredStudentDocs = studentDocs.where((student) {
+          final studentData = student.data() as Map<dynamic, dynamic>;
+          String firstName =
+              studentData[UserFields.firstName].toString().toLowerCase();
+          String lastName =
+              studentData[UserFields.lastName].toString().toLowerCase();
+
+          return firstName.contains(lowerCasedSearchInput) ||
+              lastName.contains(lowerCasedSearchInput);
+        }).toList();
+      });
+    });
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       try {
         ref.read(loadingProvider).toggleLoading(true);
@@ -44,6 +63,7 @@ class _TeacherAssignedSectionScreenState
 
         studentDocs =
             await UsersCollectionUtil.getSectionStudentDocs(sectionID);
+        filteredStudentDocs = studentDocs;
         ref.read(loadingProvider).toggleLoading(false);
       } catch (error) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -74,8 +94,15 @@ class _TeacherAssignedSectionScreenState
                   child: all20Pix(
                       child: Column(
                     children: [
-                      Gap(20),
-                      blackCinzelBold(sectionName, fontSize: 26),
+                      Gap(28),
+                      blackCinzelBold('Section: $sectionName', fontSize: 26),
+                      vertical10Pix(
+                        child: CustomTextField(
+                            text: 'Search for a student...',
+                            controller: searchController,
+                            textInputType: TextInputType.text,
+                            displayPrefixIcon: Icon(Icons.search)),
+                      ),
                       _expandableStudents()
                     ],
                   )),
@@ -92,12 +119,12 @@ class _TeacherAssignedSectionScreenState
         shrinkWrap: true,
         padding: EdgeInsetsDirectional.zero,
         physics: NeverScrollableScrollPhysics(),
-        itemCount: studentDocs.length,
+        itemCount: filteredStudentDocs.length,
         itemBuilder: (context, index) => all10Pix(
           child: userRecordEntry(
-              userDoc: studentDocs[index],
+              userDoc: filteredStudentDocs[index],
               onTap: () => NavigatorRoutes.selectedStudentSummary(context,
-                  studentID: studentDocs[index].id)),
+                  studentID: filteredStudentDocs[index].id)),
         ),
       ),
     );

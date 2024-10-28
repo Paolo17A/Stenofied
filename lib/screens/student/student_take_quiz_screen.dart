@@ -103,31 +103,29 @@ class _StudentTakeQuizScreenState extends ConsumerState<StudentTakeQuizScreen> {
           ref.read(loadingProvider).isLoading,
           SizedBox(
             width: MediaQuery.of(context).size.width,
-            child: SingleChildScrollView(
-              child: all20Pix(
-                  child: Column(
-                children: [
-                  CountdownTimerWidget(
-                      startingDuration: Duration(minutes: 15),
-                      onCountdownTick: updateCountdownTime,
-                      onTimerTick: updateElapsedTime,
-                      onCountdownComplete: _showOutOfTimeDialog),
-                  _quizIndexHeader(),
-                  _writingCanvas(),
-                  ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          drawingPoints.clear();
-                          hasDoodle = false;
-                        });
-                        ref.read(currentQuizProvider).deleteDoodleOutput();
-                      },
-                      child: whiteAndadaProBold('RESET SHORTHAND')),
-                  Gap(100),
-                  _navigatorButtons()
-                ],
-              )),
-            ),
+            child: all10Pix(
+                child: Column(
+              children: [
+                CountdownTimerWidget(
+                    startingDuration: Duration(minutes: 15),
+                    onCountdownTick: updateCountdownTime,
+                    onTimerTick: updateElapsedTime,
+                    onCountdownComplete: _showOutOfTimeDialog),
+                _quizIndexHeader(),
+                _writingCanvas(),
+                ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        drawingPoints.clear();
+                        hasDoodle = false;
+                      });
+                      ref.read(currentQuizProvider).deleteDoodleOutput();
+                    },
+                    child: whiteAndadaProBold('RESET SHORTHAND')),
+                Gap(40),
+                _navigatorButtons()
+              ],
+            )),
           )),
     );
   }

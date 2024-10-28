@@ -8,6 +8,7 @@ import 'package:stenofied/screens/student/student_add_note_screen.dart';
 import 'package:stenofied/screens/student/student_edit_note_screen.dart';
 import 'package:stenofied/screens/student/student_notes_screen.dart';
 import 'package:stenofied/screens/student/student_translate_screen.dart';
+import 'package:stenofied/screens/teacher/teacher_register_screen.dart';
 
 import '../screens/admin/admin_add_section_screen.dart';
 import '../screens/admin/admin_edit_section_screen.dart';
@@ -161,6 +162,7 @@ final Map<String, WidgetBuilder> routes = {
   NavigatorRoutes.studentTranslate: (context) => const StudentTranslateScreen(),
 
   //  TEACHERS
+  NavigatorRoutes.teacherRegister: (context) => const TeacherRegisterScreen(),
   NavigatorRoutes.teacherHome: (context) => const TeacherHomeScreen(),
   NavigatorRoutes.teacherProfile: (context) => const TeacherProfileScreen(),
   NavigatorRoutes.teacherAssignedSection: (context) =>

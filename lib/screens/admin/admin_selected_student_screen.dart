@@ -184,6 +184,7 @@ class _AdminStudentUserScreenState
         exerciseResultDocs.isNotEmpty
             ? ListView.builder(
                 shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   return exerciseResultEntry(exerciseResultDocs[index]);
                 },
@@ -209,6 +210,7 @@ class _AdminStudentUserScreenState
         quizResultDocs.isNotEmpty
             ? ListView.builder(
                 shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   return quizResultEntry(quizResultDocs[index]);
                 },
@@ -231,7 +233,7 @@ class _AdminStudentUserScreenState
     for (var result in exerciseResults) {
       totalAccuracy += result[EntryFields.accuracy];
     }
-    averageAccuracy = totalAccuracy / averageAccuracy;
+    averageAccuracy = totalAccuracy / exerciseResults.length;
     return InkWell(
       onTap: () => NavigatorRoutes.selectedExerciseResult(context,
           exerciseResultID: exerciseResultDoc.id),

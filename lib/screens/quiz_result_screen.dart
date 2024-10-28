@@ -171,11 +171,10 @@ class _QuizResultScreenState extends ConsumerState<QuizResultScreen> {
                     'Accuracy: ${((answerData[EntryFields.accuracy] as num) * 100).toStringAsFixed(2)}%'),
               if (answerData[EntryFields.feedback].toString().isNotEmpty)
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  child: whiteAndadaProRegular(
-                      'Feedback: ${answerData[EntryFields.feedback]}',
-                      textAlign: TextAlign.left),
-                ),
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    child: whiteAndadaProRegular(
+                        'Feedback: ${answerData[EntryFields.feedback]}',
+                        textAlign: TextAlign.left)),
             ],
           )
         ],

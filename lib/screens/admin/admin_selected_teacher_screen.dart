@@ -68,54 +68,61 @@ class _AdminSelectedTeacherScreenState
             width: MediaQuery.of(context).size.width,
             child: SingleChildScrollView(
               child: all20Pix(
-                  child: Column(
-                children: [
-                  blackAndadaProBold('Professor Profile', fontSize: 40),
-                  all10Pix(
-                      child: buildProfileImageWidget(
-                          profileImageURL: profileImageURL,
-                          radius: MediaQuery.of(context).size.width * 0.2)),
-                  interText(formattedName, fontSize: 20),
-                  interText(
-                      'Section: ${assignedSectionName.isNotEmpty ? assignedSectionName : 'N/A'}'),
-                  interText(
-                      'Account Verified: ${accountVerified ? 'YES' : 'NO'}'),
-                  if (!accountVerified)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ElevatedButton(
-                            onPressed: () =>
-                                UsersCollectionUtil.approveThisUser(
-                                    context, ref,
-                                    userType: UserTypes.teacher,
-                                    userID: widget.userID),
-                            child: whiteAndadaProBold('VERIFY\nTEACHER')),
-                        ElevatedButton(
-                            onPressed: () => displayDeleteEntryDialog(context,
-                                message:
-                                    'Are you sure you wish to deny this teacher\'s verification?',
-                                deleteWord: 'Deny',
-                                deleteEntry: () =>
-                                    UsersCollectionUtil.denyThisUser(
-                                        context, ref,
-                                        userType: UserTypes.teacher,
-                                        userID: widget.userID)),
-                            child: whiteAndadaProBold('DENY\nTEACHER')),
-                      ],
-                    ),
-                  //Divider(color: CustomColors.turquoise),
-                  Gap(40),
-                  /*Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                        border: Border.all(color: CustomColors.turquoise)),
-                    padding: EdgeInsets.all(10),
-                    child: Column(
-                      children: [blackInterBold('COLLECTED LINO HISTORY')],
-                    ),
-                  )*/
-                ],
+                  child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: Colors.black, width: 2),
+                    borderRadius: BorderRadius.circular(20)),
+                padding: EdgeInsets.all(12),
+                child: Column(
+                  children: [
+                    blackAndadaProBold('Professor Profile', fontSize: 40),
+                    all10Pix(
+                        child: buildProfileImageWidget(
+                            profileImageURL: profileImageURL,
+                            radius: MediaQuery.of(context).size.width * 0.2)),
+                    interText(formattedName, fontSize: 20),
+                    interText(
+                        'Section: ${assignedSectionName.isNotEmpty ? assignedSectionName : 'N/A'}'),
+                    interText(
+                        'Account Verified: ${accountVerified ? 'YES' : 'NO'}'),
+                    if (!accountVerified)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton(
+                              onPressed: () =>
+                                  UsersCollectionUtil.approveThisUser(
+                                      context, ref,
+                                      userType: UserTypes.teacher,
+                                      userID: widget.userID),
+                              child: whiteAndadaProBold('VERIFY\nTEACHER')),
+                          ElevatedButton(
+                              onPressed: () => displayDeleteEntryDialog(context,
+                                  message:
+                                      'Are you sure you wish to deny this teacher\'s verification?',
+                                  deleteWord: 'Deny',
+                                  deleteEntry: () =>
+                                      UsersCollectionUtil.denyThisUser(
+                                          context, ref,
+                                          userType: UserTypes.teacher,
+                                          userID: widget.userID)),
+                              child: whiteAndadaProBold('DENY\nTEACHER')),
+                        ],
+                      ),
+                    //Divider(color: CustomColors.turquoise),
+                    Gap(40),
+                    /*Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          border: Border.all(color: CustomColors.turquoise)),
+                      padding: EdgeInsets.all(10),
+                      child: Column(
+                        children: [blackInterBold('COLLECTED LINO HISTORY')],
+                      ),
+                    )*/
+                  ],
+                ),
               )),
             ),
           )),
