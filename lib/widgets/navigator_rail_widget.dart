@@ -33,9 +33,12 @@ Widget adminRail(BuildContext context, GlobalKey<ScaffoldState> scaffoldKey,
             NavigationRailDestination(
                 icon: Image.asset(ImagePaths.profile, scale: 20),
                 label: Container()),
+            NavigationRailDestination(
+                icon: Image.asset(ImagePaths.faqs, scale: 20),
+                label: Container()),
           ],
           onDestinationSelected: (value) {
-            if (value == currentPath) {
+            if (value == selectedIndex) {
               return;
             }
             switch (value) {
@@ -44,7 +47,9 @@ Widget adminRail(BuildContext context, GlobalKey<ScaffoldState> scaffoldKey,
                 break;
               case 1:
                 Navigator.of(context).pushNamed(NavigatorRoutes.editProfile);
-
+                break;
+              case 2:
+                Navigator.of(context).pushNamed(NavigatorRoutes.adminFAQ);
                 break;
             }
           },
@@ -83,9 +88,12 @@ Widget teacherRail(BuildContext context, GlobalKey<ScaffoldState> scaffoldKey,
             NavigationRailDestination(
                 icon: Image.asset(ImagePaths.profile, scale: 20),
                 label: Container()),
+            NavigationRailDestination(
+                icon: Image.asset(ImagePaths.faqs, scale: 20),
+                label: Container()),
           ],
           onDestinationSelected: (value) {
-            if (value == currentPath) {
+            if (value == selectedIndex) {
               return;
             }
             switch (value) {
@@ -96,9 +104,11 @@ Widget teacherRail(BuildContext context, GlobalKey<ScaffoldState> scaffoldKey,
                 Navigator.of(context)
                     .pushNamed(NavigatorRoutes.teacherAssignedSection);
                 break;
-
               case 2:
                 Navigator.of(context).pushNamed(NavigatorRoutes.editProfile);
+                break;
+              case 3:
+                Navigator.of(context).pushNamed(NavigatorRoutes.teacherFAQ);
                 break;
             }
           },
@@ -157,6 +167,10 @@ Widget studentRail(BuildContext context, GlobalKey<ScaffoldState> scaffoldKey,
                 icon: vertical10Pix(
                     child: Image.asset(ImagePaths.profile, scale: 20)),
                 label: Container()),
+            NavigationRailDestination(
+                icon: vertical10Pix(
+                    child: Image.asset(ImagePaths.faqs, scale: 20)),
+                label: Container()),
           ],
           onDestinationSelected: (value) {
             if (value == selectedIndex) {
@@ -185,6 +199,9 @@ Widget studentRail(BuildContext context, GlobalKey<ScaffoldState> scaffoldKey,
                 break;
               case 6:
                 Navigator.of(context).pushNamed(NavigatorRoutes.editProfile);
+                break;
+              case 7:
+                Navigator.of(context).pushNamed(NavigatorRoutes.studentFAQ);
                 break;
             }
           },

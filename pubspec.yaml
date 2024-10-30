@@ -88,6 +88,9 @@ flutter:
     - assets/images/teacher.png
     - assets/images/tracing/
     - assets/images/tracing/alphabet/
+    - assets/images/faqs/admin/
+    - assets/images/faqs/student/
+    - assets/images/faqs/teacher/
     - assets/images/icons/
     - assets/documents/
     - assets/vectors/

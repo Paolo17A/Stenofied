@@ -226,3 +226,16 @@ Text sangriaInterBold(String label,
           decoration: textDecoration,
           fontWeight: FontWeight.bold));
 }
+
+Text greyInterBold(String label,
+    {double? fontSize,
+    TextAlign textAlign = TextAlign.center,
+    TextDecoration? textDecoration}) {
+  return Text(label,
+      textAlign: textAlign,
+      style: GoogleFonts.inter(
+          fontSize: fontSize,
+          color: Colors.grey,
+          decoration: textDecoration,
+          fontWeight: FontWeight.bold));
+}

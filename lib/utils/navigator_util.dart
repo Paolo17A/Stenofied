@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:stenofied/models/lesson_model.dart';
+import 'package:stenofied/screens/admin/admin_faq_screen.dart';
 import 'package:stenofied/screens/exercise_result_screen.dart';
 import 'package:stenofied/screens/login_screen.dart';
 import 'package:stenofied/screens/quiz_result_screen.dart';
 import 'package:stenofied/screens/selected_student_summary_screen.dart';
 import 'package:stenofied/screens/student/student_add_note_screen.dart';
 import 'package:stenofied/screens/student/student_edit_note_screen.dart';
+import 'package:stenofied/screens/student/student_faq_screen.dart';
 import 'package:stenofied/screens/student/student_notes_screen.dart';
 import 'package:stenofied/screens/student/student_translate_screen.dart';
+import 'package:stenofied/screens/teacher/teacher_faq_screen.dart';
 import 'package:stenofied/screens/teacher/teacher_register_screen.dart';
 
 import '../screens/admin/admin_add_section_screen.dart';
@@ -84,6 +87,7 @@ class NavigatorRoutes {
   }
 
   static const studentTranslate = 'studentTranslate';
+  static const studentFAQ = 'studentFAQ';
 
   //  TEACHERS
   static const teacherRegister = 'teacherRegister';
@@ -103,6 +107,8 @@ class NavigatorRoutes {
         builder: (context) =>
             TeacherGradeQuizScreen(quizResultID: quizResultID)));
   }
+
+  static const teacherFAQ = 'teacherFAQ';
 
   //  ADMINS
   static const adminHome = 'adminHome';
@@ -140,6 +146,8 @@ class NavigatorRoutes {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => AdminEditSectionScreen(sectionID: sectionID)));
   }
+
+  static const adminFAQ = 'adminFAQ';
 }
 
 final Map<String, WidgetBuilder> routes = {
@@ -160,6 +168,7 @@ final Map<String, WidgetBuilder> routes = {
   NavigatorRoutes.studentNotes: (context) => const StudentNotesScreen(),
   NavigatorRoutes.studentAddNote: (context) => const StudentAddNoteScreen(),
   NavigatorRoutes.studentTranslate: (context) => const StudentTranslateScreen(),
+  NavigatorRoutes.studentFAQ: (context) => const StudentFAQScreen(),
 
   //  TEACHERS
   NavigatorRoutes.teacherRegister: (context) => const TeacherRegisterScreen(),
@@ -167,6 +176,7 @@ final Map<String, WidgetBuilder> routes = {
   NavigatorRoutes.teacherProfile: (context) => const TeacherProfileScreen(),
   NavigatorRoutes.teacherAssignedSection: (context) =>
       const TeacherAssignedSectionScreen(),
+  NavigatorRoutes.teacherFAQ: (context) => TeacherFAQScreen(),
 
   //  ADMIN
   NavigatorRoutes.adminHome: (context) => const AdminHomeScreen(),
@@ -176,5 +186,6 @@ final Map<String, WidgetBuilder> routes = {
       const AdminViewTeachersScreen(),
   NavigatorRoutes.adminViewSections: (context) =>
       const AdminViewSectionsScreen(),
-  NavigatorRoutes.adminAddSection: (context) => const AdminAddSectionScreen()
+  NavigatorRoutes.adminAddSection: (context) => const AdminAddSectionScreen(),
+  NavigatorRoutes.adminFAQ: (context) => const AdminFAQScreen()
 };
