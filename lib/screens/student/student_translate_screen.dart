@@ -118,9 +118,11 @@ class _StudentTranslateScreenState
   }
 
   Widget shortHandedContent() {
-    contentController.text.replaceAll('.', '');
-    contentController.text.replaceAll(',', '');
-    List<String> fragmentedWords = contentController.text.split(' ');
+    String filteredCharacters = contentController.text;
+    filteredCharacters =
+        filteredCharacters.replaceAll(RegExp(r'[^a-zA-Z0-9\s]'), '');
+    filteredCharacters = filteredCharacters.toLowerCase();
+    List<String> fragmentedWords = filteredCharacters.split(' ');
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -141,7 +143,14 @@ class _StudentTranslateScreenState
                 } else {
                   return Wrap(
                       children: getLetters(word)
-                          .map((e) => blackAndadaProBold(e))
+                          .map((letter) => Container(
+                              width: 50,
+                              height: 50,
+                              child: ShortHandUtil.vectorMap[letter] != null
+                                  ? SvgPicture.asset(
+                                      ShortHandUtil.vectorMap[letter]!,
+                                      fit: BoxFit.fill)
+                                  : Text(letter)))
                           .toList());
                 }
               }).toList()),

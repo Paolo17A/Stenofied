@@ -342,15 +342,18 @@ class _StudentEditNoteScreenState extends ConsumerState<StudentEditNoteScreen> {
   }
 
   Widget shortHandedContent() {
-    contentController.text.replaceAll('.', '');
-    contentController.text.replaceAll(',', '');
-    List<String> fragmentedWords = contentController.text.split(' ');
+    String filteredCharacters = contentController.text;
+    filteredCharacters =
+        filteredCharacters.replaceAll(RegExp(r'[^a-zA-Z0-9\s]'), '');
+    filteredCharacters = filteredCharacters.toLowerCase();
+    List<String> fragmentedWords = filteredCharacters.split(' ');
     return SingleChildScrollView(
       child: Wrap(
           spacing: 4,
           runSpacing: 4,
           children: fragmentedWords.map((word) {
             if (ShortHandUtil.vectorMap.keys.contains(word)) {
+              print(word);
               return Container(
                   width: 50,
                   height: 50,
@@ -358,16 +361,16 @@ class _StudentEditNoteScreenState extends ConsumerState<StudentEditNoteScreen> {
                       fit: BoxFit.fill));
             } else {
               return Wrap(
-                  children: getLetters(word)
-                      .map((letter) => Container(
-                          width: 50,
-                          height: 50,
-                          child: ShortHandUtil.vectorMap[letter] != null
-                              ? SvgPicture.asset(
-                                  ShortHandUtil.vectorMap[letter]!,
-                                  fit: BoxFit.fill)
-                              : Text(letter)))
-                      .toList());
+                  children: getLetters(word).map((letter) {
+                print(letter);
+                return Container(
+                    width: 50,
+                    height: 50,
+                    child: ShortHandUtil.vectorMap[letter] != null
+                        ? SvgPicture.asset(ShortHandUtil.vectorMap[letter]!,
+                            fit: BoxFit.fill)
+                        : Text(letter));
+              }).toList());
             }
           }).toList()),
     );

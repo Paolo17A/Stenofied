@@ -34,7 +34,7 @@ class _StudentFAQScreenState extends ConsumerState<StudentFAQScreen> {
             height: MediaQuery.of(context).size.height,
             decoration: BoxDecoration(
                 image: DecorationImage(
-                    fit: BoxFit.fill,
+                    fit: BoxFit.contain,
                     image: AssetImage(
                         'assets/images/faqs/student/student_${currentIndex}.png'))),
             child: Column(
