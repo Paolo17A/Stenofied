@@ -75,6 +75,6 @@ class CountdownTimerWidgetState extends ConsumerState<CountdownTimerWidget> {
         padding: EdgeInsets.all(8),
         child: whiteAndadaProBold(
             'Remaining Time: ${printDuration(_elapsedTime)}',
-            fontSize: 28));
+            fontSize: 24));
   }
 }

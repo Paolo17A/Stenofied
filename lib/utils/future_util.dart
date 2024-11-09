@@ -89,7 +89,7 @@ class UsersCollectionUtil {
         UserFields.profileImageURL: '',
         UserFields.sectionID: '',
         UserFields.accountVerified: false,
-        UserFields.currentLessonIndex: 0,
+        UserFields.currentLessonIndex: 1,
       });
 
       //  Upload proof of employment to Firebase Storage
